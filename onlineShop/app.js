@@ -1,5 +1,6 @@
 // const http = require('http');  R01
 const colors = require('colors')
+const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -15,8 +16,10 @@ const app = express();
 // body -parser, bez ovoga ne salje podatke automatski kroz req.body (npm i body-parser)
 app.use(bodyParser.urlencoded({extended: false}));
 
-app.use(adminRoutes);
-app.use( shopRoutes);
+app.use('/admin',adminRoutes);
+app.use(shopRoutes);
+
+
 
 app.use((req, res, next) => {
     console.log('middleware 01!'.yellow);
@@ -26,9 +29,13 @@ app.use((req, res, next) => {
 
 
 
+app.use((req, res, next)=>{
+    res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
+    // res.status(404).send('<h1>Page not found<h1>')
+});
 
-app.listen(3200, () => {
-    console.log(`App listening on port 3200!`);
+app.listen(5500, () => {
+    console.log(`App listening on port 5500!`);
 });
 
 // // kreiramo server  R01
