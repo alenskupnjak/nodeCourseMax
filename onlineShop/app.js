@@ -16,6 +16,9 @@ const app = express();
 // body -parser, bez ovoga ne salje podatke automatski kroz req.body (npm i body-parser)
 app.use(bodyParser.urlencoded({extended: false}));
 
+// definiranje statičkih tranica za HTML ....
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use('/admin',adminRoutes);
 app.use(shopRoutes);
 
