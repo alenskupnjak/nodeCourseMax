@@ -13,9 +13,9 @@ const shopRoutes = require('./routes/shop')
 // kreiranje express aplikaciju
 const app = express();
 
-// definiramo templete engine koji cemo koristiti u aplikaciji (EJS ili PUG ili express-handlebars)
+// definiramo template engine koji cemo koristiti u aplikaciji (EJS ili PUG ili express-handlebars)
 // app.set('view engine', 'pug'); // za pug
-app.set('view engine', 'ejs');
+app.set('view engine', 'ejs');  // za ejs
 // kreiramo stazu odakle cemo vuci template
 app.set('views', path.join(__dirname, 'views'));
 
@@ -32,7 +32,7 @@ app.use(shopRoutes);
 
 
 app.use((req, res, next) => {
-    console.log('middleware 01!'.yellow);
+    console.log('Pokusni!'.yellow);
     next(); // Allows the request to continue to the next middleware in line
 });
 
