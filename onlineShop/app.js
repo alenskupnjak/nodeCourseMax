@@ -1,51 +1,43 @@
 // const http = require('http');  R01
-const colors = require('colors')
+const colors = require('colors');
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
-// const eje = require('ejs')
+const { err404 } = require('./controllers/error');
 
-
-const adminData = require('./routes/admin')
-const shopRoutes = require('./routes/shop')
-
+// ROUTES
+const adminRoutes = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
 
 // kreiranje express aplikaciju
 const app = express();
 
 // definiramo template engine koji cemo koristiti u aplikaciji (EJS ili PUG ili express-handlebars)
 // app.set('view engine', 'pug'); // za pug
-app.set('view engine', 'ejs');  // za ejs
+app.set('view engine', 'ejs'); // za ejs
 // kreiramo stazu odakle cemo vuci template
 app.set('views', path.join(__dirname, 'views'));
 
 // body -parser, bez ovoga ne salje podatke automatski kroz req.body (npm i body-parser)
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // definiranje statičkih tranica za HTML ....
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 // Rute
-app.use('/admin', adminData.routes);
-app.use(shopRoutes);
-
+app.use('/admin', adminRoutes);
+app.use('/', shopRoutes);
 
 app.use((req, res, next) => {
-    console.log('Pokusni!'.yellow);
-    next(); // Allows the request to continue to the next middleware in line
+  console.log('Pokusni!'.yellow);
+  next(); // Allows the request to continue to the next middleware in line
 });
-
 
 // zadnji middelware koji lovi sve
-app.use((req, res, next)=>{
-    res.render('404',{pageTitle:'Nepoznata stranica !', path:''})
-                // res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
-                // res.status(404).send('<h1>Page not found<h1>')
-});
+app.use('*', err404);
 
 app.listen(5500, () => {
-    console.log(`App listening on port 5500!`);
+  console.log(`App listening on port 5500!`);
 });
 
 // // kreiramo server  R01
