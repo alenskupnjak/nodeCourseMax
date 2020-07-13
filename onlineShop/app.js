@@ -6,12 +6,17 @@ const bodyParser = require('body-parser');
 
 
 
-const adminRoutes = require('./routes/admin')
+const adminData = require('./routes/admin')
 const shopRoutes = require('./routes/shop')
 
 
 // kreiranje express aplikaciju
 const app = express();
+
+// definiramo templete engine koji cemo koristiti u aplikaciji (EJS ili PUG ili express-handlebars)
+app.set('view engine', 'pug');
+// kreiramo stazu odakle cemo vuci template
+app.set('views', path.join(__dirname, 'views'));
 
 // body -parser, bez ovoga ne salje podatke automatski kroz req.body (npm i body-parser)
 app.use(bodyParser.urlencoded({extended: false}));
@@ -19,7 +24,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 // definiranje statičkih tranica za HTML ....
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/admin',adminRoutes);
+app.use('/admin', adminData.routes);
 app.use(shopRoutes);
 
 
@@ -31,10 +36,11 @@ app.use((req, res, next) => {
 
 
 
-
+// zadnji middelware koji lovi sve
 app.use((req, res, next)=>{
-    res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
-    // res.status(404).send('<h1>Page not found<h1>')
+    res.render('404')
+                // res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
+                // res.status(404).send('<h1>Page not found<h1>')
 });
 
 app.listen(5500, () => {

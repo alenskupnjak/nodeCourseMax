@@ -1,13 +1,14 @@
 const path = require('path');
 const express = require('express');
+const adminData = require('./admin')
 
 const router = express.Router();
 
 router.get('/', (req, res, next) => {
-  console.log('middleware! 03'.blue);
-
-  // mora biti apsolutna staza
-  res.sendFile(path.join(__dirname, '../views', 'shop.html'));
+  const prod = adminData.products;
+  res.render('shop', {prod: prod, docTitle:'Shop moj'})
+              // mora biti apsolutna staza R01
+              // res.sendFile(path.join(__dirname, '../views', 'shop.html'));
 });
 
 module.exports = router;
