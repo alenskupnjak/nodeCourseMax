@@ -1,5 +1,5 @@
+const Product = require('../models/products')
 
-const products = [];
 
 exports.getAddProduct =  (req, res, next) => {
   // R01 res.send('<form action="/admin/add-product" method="POST"><input type="text" name="title">
@@ -18,18 +18,15 @@ exports.getAddProduct =  (req, res, next) => {
 
 
 exports.postProduct = (req, res, next) => {
-  console.log('postProduct='.blue,req.body.title);
-  
-  products.push({ title: req.body.title });
-  console.log(req.body);
+  const product = new Product(req.body.title)
+  product.save();
+
   res.redirect('/');
 }
 
 
 exports.getProducts = (req, res, next) => {
-  console.log(products);
-  
-  const prod = products;
+  const prod = Product.fetchAll();
   res.render('shop', {pageTitle:'Proizvodi',prod: prod, path:'/'})
               // mora biti apsolutna staza R01
               // res.sendFile(path.join(__dirname, '../views', 'shop.html'));
