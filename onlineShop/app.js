@@ -3,7 +3,7 @@ const colors = require('colors')
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
-
+// const eje = require('ejs')
 
 
 const adminData = require('./routes/admin')
@@ -14,7 +14,8 @@ const shopRoutes = require('./routes/shop')
 const app = express();
 
 // definiramo templete engine koji cemo koristiti u aplikaciji (EJS ili PUG ili express-handlebars)
-app.set('view engine', 'pug');
+// app.set('view engine', 'pug'); // za pug
+app.set('view engine', 'ejs');
 // kreiramo stazu odakle cemo vuci template
 app.set('views', path.join(__dirname, 'views'));
 
@@ -24,9 +25,10 @@ app.use(bodyParser.urlencoded({extended: false}));
 // definiranje statičkih tranica za HTML ....
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+// Rute
 app.use('/admin', adminData.routes);
 app.use(shopRoutes);
-
 
 
 app.use((req, res, next) => {
@@ -35,10 +37,9 @@ app.use((req, res, next) => {
 });
 
 
-
 // zadnji middelware koji lovi sve
 app.use((req, res, next)=>{
-    res.render('404')
+    res.render('404',{pageTitle:'Nepoznata stranica !', path:''})
                 // res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
                 // res.status(404).send('<h1>Page not found<h1>')
 });
