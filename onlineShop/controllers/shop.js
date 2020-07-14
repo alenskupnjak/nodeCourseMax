@@ -31,6 +31,13 @@ exports.getCart = async (req, res, next) => {
     });
 };
 
+exports.getOrders = async (req, res, next) => {
+    res.render('shop/orders', {
+      pageTitle: 'Vaše narudžbe',
+      path: '/orders',
+    });
+};
+
 exports.getCheckout = async (req, res, next) => {
     res.render('shop/index', {
       pageTitle: 'Check out',
