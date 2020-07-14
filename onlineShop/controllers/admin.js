@@ -27,7 +27,6 @@ exports.postProduct = (req, res, next) => {
 // /admin/add-product => GET
 exports.getEditProduct = (req, res, next) => {
   const prodId = req.params.id;
-  console.log(prodId);
   Product.fetchAll((data) => {
 
     const podatak = data.find((product) => {
@@ -43,6 +42,10 @@ exports.getEditProduct = (req, res, next) => {
     });
   });
 };
+
+exports.updateProduct = (req, res, next) => {
+  
+}
 
 // /admin/products => GET
 exports.getProducts = (req, res, next) => {
