@@ -11,7 +11,7 @@
         <div>
             <img src="<%= prod.imageUrl %>" alt="<%= prod.title %>">
         </div>
-        <h2><%= prod.price %></h2>
+        <h2>$<%= prod.price %></h2>
         <p><%= prod.description %></p>
         <form action="/cart" method="POST">
             <button class="btn" type="submit">Add to Cart</button>
