@@ -19,17 +19,16 @@ module.exports = class Product {
       if (!err) {
         products = JSON.parse(fileContent);
       }
-      
-      
+
       if (this.id) {
         console.log('*****imam id*************'.green);
-        
+
         const indexPostojeceg = products.findIndex((data) => {
           return data.id === this.id;
         });
 
-        console.log('indexPostojeceg'.bgMagenta,indexPostojeceg);
-        
+        console.log('indexPostojeceg'.bgMagenta, indexPostojeceg);
+
         products[indexPostojeceg] = {
           id: this.id,
           title: this.title,
@@ -49,6 +48,29 @@ module.exports = class Product {
         console.log('zapis'.green, zapis);
         products.push(zapis);
       }
+
+      // na kraju pišem u file
+      fs.writeFile(pathFile, JSON.stringify(products), (err) => {
+        console.log(err);
+      });
+    });
+  }
+
+  static delete(id) {
+    console.log('**delete***'.red);
+
+    console.log(id);
+    fs.readFile(pathFile, (err, fileContent) => {
+      let products = [];
+      if (!err) {
+        products = JSON.parse(fileContent);
+      }
+
+      const indexPostojeceg = products.findIndex((data) => {
+        return data.id === id;
+      });
+
+      products.splice(indexPostojeceg, 1);
 
       // na kraju pišem u file
       fs.writeFile(pathFile, JSON.stringify(products), (err) => {

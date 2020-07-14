@@ -59,6 +59,15 @@ exports.postUpdateProduct = (req, res, next) => {
     res.redirect('/');
 }
 
+exports.deleteProduct = (req, res, next) => {
+  const prodId = req.body.productId;  
+  console.log(prodId);
+  
+    // snimamo dobivene podatke u file
+    Product.delete(prodId);
+    res.redirect('/products');
+}
+
 // /admin/products => GET
 exports.getProducts = (req, res, next) => {
   Product.fetchAll((products) => {
