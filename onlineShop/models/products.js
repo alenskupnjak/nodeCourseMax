@@ -3,20 +3,33 @@ const path = require('path');
 
 const products = [];
 
-const p = path.join(__dirname, '../data', 'products.json');
+const pathFile = path.join(__dirname, '../data', 'products.json');
 module.exports = class Product {
-  constructor(title) {
+  constructor(title, imageUrl, description, price ) {
     this.title = title;
+    this.imageUrl = imageUrl;
+    this.description = description;
+    this.price = price;
   }
 
   save() {
-    fs.readFile(p, (err, fileContent) => {
+    fs.readFile(pathFile, (err, fileContent) => {
       let products = [];
       if (!err) {
         products = JSON.parse(fileContent);
       }
-      products.push(this);
-      fs.writeFile(p, JSON.stringify(products), (err) => {
+      
+      
+       const zapis = {
+        title: this.title,
+        imageUrl: this.imageUrl,
+        description:this.description,  
+        price:this.price  
+      }
+      console.log('zapis'.green, zapis);
+      
+      products.push(zapis);
+      fs.writeFile(pathFile, JSON.stringify(products), (err) => {
         console.log(err);
       });
     });
@@ -24,7 +37,7 @@ module.exports = class Product {
 
   static fetchAll(cb) {
     // const p = path.join(__dirname, '../data', 'products.json');
-    fs.readFile(p, (err, fileContent) => {
+    fs.readFile(pathFile, (err, fileContent) => {
       if (err) {
         cb([]);
       }
