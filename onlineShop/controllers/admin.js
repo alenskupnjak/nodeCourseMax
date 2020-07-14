@@ -17,6 +17,7 @@ exports.postProduct = (req, res, next) => {
     req.body.description
   );
 
+
   // snimamo dobivene podatke u file
   product.save();
   res.redirect('/');

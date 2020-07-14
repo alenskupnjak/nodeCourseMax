@@ -193,6 +193,23 @@ form {
   color: white;
 }
 
+.product-detail{
+  display: flex;
+  flex-direction: column;
+  width:80%;
+  text-align: center;
+  align-items: center;
+  /* background-color: blue; */
+  margin: auto;
+}
+.product-detail img{
+  width:200px;
+}
+
+.product-detail hr{
+  width: 100%;
+}
+
 @media (min-width: 768px) {
   .main-header__nav {
     display: flex;

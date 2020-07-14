@@ -5,7 +5,7 @@ const products = [];
 
 const pathFile = path.join(__dirname, '../data', 'products.json');
 module.exports = class Product {
-  constructor(title, imageUrl, description, price ) {
+  constructor(title, imageUrl, price, description) {
     this.title = title;
     this.imageUrl = imageUrl;
     this.description = description;
@@ -18,16 +18,16 @@ module.exports = class Product {
       if (!err) {
         products = JSON.parse(fileContent);
       }
-      
-      
-       const zapis = {
+
+      const zapis = {
+        id: Math.random().toString(),
         title: this.title,
         imageUrl: this.imageUrl,
-        description:this.description,  
-        price:this.price  
-      }
+        description: this.description,
+        price: +this.price,
+      };
       console.log('zapis'.green, zapis);
-      
+
       products.push(zapis);
       fs.writeFile(pathFile, JSON.stringify(products), (err) => {
         console.log(err);

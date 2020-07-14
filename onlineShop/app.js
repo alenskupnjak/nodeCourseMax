@@ -28,10 +28,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/admin', adminRoutes);
 app.use('/', shopRoutes);
 
-app.use((req, res, next) => {
-  console.log('Pokusni!'.yellow);
-  next(); // Allows the request to continue to the next middleware in line
-});
 
 // zadnji middelware koji lovi sve
 app.use('*', err404);
