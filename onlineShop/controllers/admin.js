@@ -13,6 +13,7 @@ exports.getAddProduct = (req, res, next) => {
 // /admin/add-product => POST
 exports.postProduct = (req, res, next) => {
   const product = new Product(
+    null,
     req.body.title,
     req.body.imageUrl,
     req.body.price,
@@ -43,8 +44,19 @@ exports.getEditProduct = (req, res, next) => {
   });
 };
 
-exports.updateProduct = (req, res, next) => {
-  
+exports.postUpdateProduct = (req, res, next) => {
+  const prodId = req.params.productId;  
+  const product = new Product(
+    req.body.productId,
+    req.body.title,
+    req.body.imageUrl,
+    req.body.price,
+    req.body.description
+  );
+
+    // snimamo dobivene podatke u file
+    product.save();
+    res.redirect('/');
 }
 
 // /admin/products => GET
