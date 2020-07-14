@@ -1,10 +1,19 @@
-const path = require('path');
-const express = require('express');
-// const adminData = require('./admin')
-const { getProducts } = require('../controllers/products');
+const express = require('express');   // setup za router
+const {
+  getProducts,
+  getIndex,
+  getCart,
+  getCheckout,
+} = require('../controllers/shop');
 
-const router = express.Router();
+const router = express.Router(); // setup za router
 
-router.get('/', getProducts);
+router.get('/', getIndex);
 
-module.exports = router;
+router.get('/products', getProducts);
+
+router.get('/cart', getCart);
+
+router.get('/checkout', getCheckout);
+
+module.exports = router; // setup za router
