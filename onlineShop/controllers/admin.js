@@ -23,8 +23,12 @@ exports.postProduct = (req, res, next) => {
   );
 
   // snimamo dobivene podatke u file
-  product.save();
-  res.redirect('/');
+  product.save()
+  .then(res.redirect('/'))
+  .catch(err=>{
+    console.log(err);
+  });
+
 };
 
 // /admin/add-product => GET

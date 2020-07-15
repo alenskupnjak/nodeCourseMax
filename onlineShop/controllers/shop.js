@@ -20,17 +20,32 @@ exports.getProducts = async (req, res, next) => {
 // Dohvacanje jednog proizvoda i prikazivanje detalja
 exports.getOneProduct = (req, res, next) => {
   const prodId = req.params.id;
+  Product.fetchOne(prodId)
+    .then(([podatak]) => {
+      console.log('----------------------');
+      
+      console.log(podatak);
+      
+      res.render('shop/product-details', {
+        pageTitle: 'Proizvod',
+        prod: podatak[0],
+        path: '/products',
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 
-  Product.fetchAll((data) => {
-    const podatak = data.find((product) => {
-      return product.id === prodId;
-    });
-    res.render('shop/product-details', {
-      pageTitle: 'Proizvod',
-      prod: podatak,
-      path: '/products',
-    });
-  });
+  // Product.fetchAll((data) => {
+  //   const podatak = data.find((product) => {
+  //     return product.id === prodId;
+  //   });
+  //   res.render('shop/product-details', {
+  //     pageTitle: 'Proizvod',
+  //     prod: podatak,
+  //     path: '/products',
+  //   });
+  // });
 };
 
 // Prikazujemo sve proizvode
