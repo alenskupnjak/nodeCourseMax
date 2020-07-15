@@ -50,6 +50,8 @@ module.exports = class Cart {
   }
 
   static deleteProductItem(id, cijena) {
+    console.log('id=',id,'cijena',cijena);
+    
     fs.readFile(pathFile, (err, fileContent) => {
       try {
         // definiramo polja za zapis na kupovnu listu

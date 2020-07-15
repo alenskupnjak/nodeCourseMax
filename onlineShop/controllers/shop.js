@@ -60,9 +60,6 @@ exports.getCart = (req, res, next) => {
             dataRender.push(podatak)
           });
 
-          console.log(colors.yellow(dataRender));
-          
-
           res.render('shop/cart', {
             pageTitle: 'Your Cart',
             path: '/cart',
@@ -76,6 +73,26 @@ exports.getCart = (req, res, next) => {
   }
 };
 
+// Delete charte artikle iz chart.json ako ih ima
+exports.deleteChart = (req, res, next) => {
+  try {
+    const prodId = req.body.productId;
+    console.log('prodId', prodId);
+    Product.fetchAll((dataFile) => {
+      console.log(dataFile);
+      const cijena = dataFile.find((data)=> {
+        return data.id === prodId
+      })
+      console.log('cijena'.red.underline, cijena.price);
+      Cart.deleteProductItem(prodId,cijena.price)
+      res.redirect('/cart');
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
 exports.postCart = (req, res, next) => {
   const prodId = req.body.productId;
   console.log('prodId'.blue, req.body.productId);
@@ -83,17 +100,12 @@ exports.postCart = (req, res, next) => {
     const podatak = data.find((product) => {
       return product.id === prodId;
     });
-    console.log('price'.blue, podatak);
 
     // dodajem artikal kupovnoj listi
     Cart.addProduct(prodId, podatak.price);
 
+    // odlazimo na stranicu narudbi
     res.redirect('/cart');
-    // res.render('shop/product-details', {
-    //   pageTitle: 'Proizvod',
-    //   prod: podatak,
-    //   path: '/products',
-    // });
   });
 };
 

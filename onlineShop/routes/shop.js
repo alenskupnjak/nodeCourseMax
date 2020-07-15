@@ -7,6 +7,7 @@ const {
   getCheckout,
   getOrders,
   postCart,
+  deleteChart
 } = require('../controllers/shop');
 
 const router = express.Router(); // setup za router
@@ -22,6 +23,7 @@ router.get('/cart', getCart);
 
 // dodajem na listu za kupovanje artikal
 router.post('/cart', postCart);
+router.post('/cart-delete-item', deleteChart);
 
 router.get('/orders', getOrders);
 
