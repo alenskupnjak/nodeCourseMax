@@ -10,9 +10,15 @@ const {
   databaseTestPool
 } = require('./util/database');
 
-const databasePool = require('./util/pooldatabase')
 
 
+const databasePoolMysql2  = require('./util/pooldatabase')
+
+databasePoolMysql2.execute('SELECT * FROM products').then(([podaci, ostalo]) => {
+  // zapis se vraca u obliku polja sa dva zapisa
+  // prvi je sa podacima ostalo je razno
+  console.log(colors.green(podaci, ostalo));
+});
 
 // spajam se na bazu kao admin
 // databaseAdminConn.connect((err) => {
@@ -30,16 +36,16 @@ const databasePool = require('./util/pooldatabase')
 //   console.log('MySql Connected kao user...');
 // });
 
-// // spajam se na bazu kao test   user : 'ucimeu96_test',
-databaseTestPool.query('SELECT * FROM products',function (error, results, fields) {
-  console.log(colors.red(results));
-});
+// // // spajam se na bazu kao test   user : 'ucimeu96_test',
+// databaseTestPool.query('SELECT * FROM products',function (error, results, fields) {
+//   console.log(colors.red(results));
+// });
 
 
-// // spajam se na bazu kao user : 'ucimeu96_pool',
-databasePool.query('SELECT * FROM products',function (error, results, fields) {
-  console.log(results);
-});
+// // // spajam se na bazu kao user : 'ucimeu96_pool',
+// databasePool.query('SELECT * FROM products',function (error, results, fields) {
+//   console.log(results);
+// });
 
 
 // ROUTES

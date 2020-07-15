@@ -4,13 +4,17 @@ const Cart = require('../models/cart');
 
 // Dohvacanje svih proizvoda
 exports.getProducts = async (req, res, next) => {
-  Product.fetchAll((data) => {
-    res.render('shop/product-list', {
-      pageTitle: 'Svi Proizvodi',
-      prod: data,
-      path: '/products',
+  Product.fetchAll()
+    .then(([podaci, ostaliPodaci]) => {
+      res.render('shop/product-list', {
+        pageTitle: 'Svi Proizvodi',
+        prod: podaci,
+        path: '/products',
+      });
+    })
+    .catch((err) => {
+      console.log(err);
     });
-  });
 };
 
 // Dohvacanje jednog proizvoda i prikazivanje detalja
@@ -31,13 +35,17 @@ exports.getOneProduct = (req, res, next) => {
 
 // Prikazujemo sve proizvode
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll((data) => {
-    res.render('shop/index', {
-      pageTitle: 'Proizvodi',
-      prod: data,
-      path: '/',
+  Product.fetchAll()
+    .then(([podaci, ostaliPodaci]) => {
+      res.render('shop/index', {
+        pageTitle: 'Proizvodi',
+        prod: podaci,
+        path: '/',
+      });
+    })
+    .catch((err) => {
+      console.log(err);
     });
-  });
 };
 
 // povlačimo sve artikle iz chart.json ako ih ima
@@ -46,20 +54,20 @@ exports.getCart = (req, res, next) => {
     Cart.getCart((dataChart) => {
       if (dataChart) {
         Product.fetchAll((dataFile) => {
-          const dataRender = []
+          const dataRender = [];
           dataChart.products.forEach((element) => {
             const podatak = dataFile.find((artikl) => {
               return artikl.id == element.id;
             });
-            podatak.kolicina = element.qty
+            podatak.kolicina = element.qty;
             console.log(colors.blue.underline(podatak));
-            dataRender.push(podatak)
+            dataRender.push(podatak);
           });
 
           res.render('shop/cart', {
             pageTitle: 'Your Cart',
             path: '/cart',
-            dataRender: dataRender
+            dataRender: dataRender,
           });
         });
       }
@@ -74,10 +82,10 @@ exports.deleteChart = (req, res, next) => {
   try {
     const prodId = req.body.productId;
     Product.fetchAll((dataFile) => {
-      const cijena = dataFile.find((data)=> {
-        return data.id === prodId
-      })
-      Cart.deleteProductItem(prodId,cijena.price)
+      const cijena = dataFile.find((data) => {
+        return data.id === prodId;
+      });
+      Cart.deleteProductItem(prodId, cijena.price);
       res.redirect('/cart');
     });
   } catch (error) {

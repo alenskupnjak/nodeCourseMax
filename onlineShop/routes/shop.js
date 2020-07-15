@@ -15,6 +15,7 @@ const router = express.Router(); // setup za router
 // prikaz svih artikala na početnoj strani
 router.get('/', getIndex);
 
+//
 router.get('/products', getProducts);
 
 router.get('/products/:id', getOneProduct);

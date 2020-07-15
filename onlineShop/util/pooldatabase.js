@@ -1,8 +1,7 @@
-const mysql = require('mysql');
+const mysql = require('mysql2');
 
 
-
-const databasePool = mysql.createPool({
+const databasePoolMysql2 = mysql.createPool({
   host : 'cp2.infonet.hr',
   user : 'ucimeu96_pool',
   port: '3306',
@@ -11,4 +10,4 @@ const databasePool = mysql.createPool({
 });
 
 
-module.exports = databasePool;
+module.exports = databasePoolMysql2.promise();
