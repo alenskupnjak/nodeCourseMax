@@ -4,6 +4,36 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const { err404 } = require('./controllers/error');
+const {
+  databaseAdminConn,
+  databaseUserConn,
+  databaseTest,
+} = require('./util/database');
+
+// spajam se na bazu kao admin
+databaseAdminConn.connect((err) => {
+  if (err) {
+    throw err;
+  }
+  console.log('MySql Connected kao admin...');
+});
+
+// // spajam se na bazu kao admin
+databaseUserConn.connect((err) => {
+  if (err) {
+    throw err;
+  }
+  console.log('MySql Connected kao user...');
+});
+
+// // spajam se na bazu kao admin
+databaseTest.query('SELECT * FROM products',function (error, results, fields) {
+  console.log(results);
+});
+
+
+// spajam se na bazu kao admin
+// databaseUserPool.execute('SELECT * FROM products')
 
 // ROUTES
 const adminRoutes = require('./routes/admin');
@@ -27,7 +57,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Rute
 app.use('/admin', adminRoutes);
 app.use('/', shopRoutes);
-
 
 // zadnji middelware koji lovi sve
 app.use('*', err404);
