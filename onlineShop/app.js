@@ -7,29 +7,40 @@ const { err404 } = require('./controllers/error');
 const {
   databaseAdminConn,
   databaseUserConn,
-  databaseTest,
+  databaseTestPool
 } = require('./util/database');
 
+const databasePool = require('./util/pooldatabase')
+
+
+
 // spajam se na bazu kao admin
-databaseAdminConn.connect((err) => {
-  if (err) {
-    throw err;
-  }
-  console.log('MySql Connected kao admin...');
+// databaseAdminConn.connect((err) => {
+//   if (err) {
+//     throw err;
+//   }
+//   console.log('MySql Connected kao admin...');
+// });
+
+// // // spajam se na bazu kao User
+// databaseUserConn.connect((err) => {
+//   if (err) {
+//     throw err;
+//   }
+//   console.log('MySql Connected kao user...');
+// });
+
+// // spajam se na bazu kao test user
+databaseTestPool.query('SELECT * FROM products',function (error, results, fields) {
+  console.log(colors.red(results));
 });
 
-// // spajam se na bazu kao admin
-databaseUserConn.connect((err) => {
-  if (err) {
-    throw err;
-  }
-  console.log('MySql Connected kao user...');
-});
 
 // // spajam se na bazu kao admin
-databaseTest.query('SELECT * FROM products',function (error, results, fields) {
+databasePool.query('SELECT * FROM products',function (error, results, fields) {
   console.log(results);
 });
+
 
 
 // spajam se na bazu kao admin

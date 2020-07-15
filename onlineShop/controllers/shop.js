@@ -46,11 +46,8 @@ exports.getCart = (req, res, next) => {
     Cart.getCart((dataChart) => {
       if (dataChart) {
         Product.fetchAll((dataFile) => {
-          console.log(colors.red(dataChart));
-          console.log(colors.green(dataFile));
           const dataRender = []
           dataChart.products.forEach((element) => {
-            console.log(colors.magenta(element));
             const podatak = dataFile.find((artikl) => {
               return artikl.id == element.id;
             });
@@ -76,13 +73,10 @@ exports.getCart = (req, res, next) => {
 exports.deleteChart = (req, res, next) => {
   try {
     const prodId = req.body.productId;
-    console.log('prodId', prodId);
     Product.fetchAll((dataFile) => {
-      console.log(dataFile);
       const cijena = dataFile.find((data)=> {
         return data.id === prodId
       })
-      console.log('cijena'.red.underline, cijena.price);
       Cart.deleteProductItem(prodId,cijena.price)
       res.redirect('/cart');
     });
