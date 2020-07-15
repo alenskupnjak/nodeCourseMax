@@ -2,30 +2,29 @@
 <link rel="stylesheet" href="/css/product.css">
 
 <head>
-
 <body>
   <%- include('../includes/navigation.ejs')%>
   <main>
 
     <% if (dataRender.length > 0) { %>
 
-      <ul>
-        <% for (let data of dataRender) {%>
-          <div>
-            <li>Naslov: <%= data.title %></li>
-            <li><%= data.imageUrl %></li>
-            <li>Opis: <%= data.description %></li>
-            <li>Cijena =<%= data.price %></li>
-            <li>Naručena količina= <%= data.kolicina %></li>
-            <form action="/cart-delete-item" method="POST">
-              <button class="btn" type="submit">Delete a Cart</button>
-              <input type="hidden" name="productId" value="<%= data.id %>">
-            </form>
-          </div>
-        <% } %>
-      </ul>
+    <ul>
+      <% for (let data of dataRender) {%>
+      <div>
+        <li>Naslov: <%= data.title %></li>
+        <li><%= data.imageUrl %></li>
+        <li>Opis: <%= data.description %></li>
+        <li>Cijena =<%= data.price %></li>
+        <li>Naručena količina= <%= data.kolicina %></li>
+        <form action="/cart-delete-item" method="POST">
+          <button class="btn" type="submit">Delete a Cart</button>
+          <input type="hidden" name="productId" value="<%= data.id %>">
+        </form>
+      </div>
+      <% } %>
+    </ul>
     <% } else { %>
-        <h1>Nijedan proizvod nije na kupovnoj listi</h1>
+    <h1>Nijedan proizvod nije na kupovnoj listi</h1>
     <% } %>
 
   </main>

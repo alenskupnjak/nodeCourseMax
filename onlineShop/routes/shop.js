@@ -23,6 +23,7 @@ router.get('/cart', getCart);
 
 // dodajem na listu za kupovanje artikal
 router.post('/cart', postCart);
+// brišem sa liste za kupnju
 router.post('/cart-delete-item', deleteChart);
 
 router.get('/orders', getOrders);

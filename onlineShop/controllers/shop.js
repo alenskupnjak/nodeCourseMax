@@ -27,7 +27,6 @@ exports.getOneProduct = (req, res, next) => {
       path: '/products',
     });
   });
-  // next();
 };
 
 // Prikazujemo sve proizvode
@@ -92,7 +91,7 @@ exports.deleteChart = (req, res, next) => {
   }
 };
 
-
+// dodavanje artikla na kupovnu listu
 exports.postCart = (req, res, next) => {
   const prodId = req.body.productId;
   console.log('prodId'.blue, req.body.productId);
@@ -109,6 +108,7 @@ exports.postCart = (req, res, next) => {
   });
 };
 
+// narubbe
 exports.getOrders = async (req, res, next) => {
   res.render('shop/orders', {
     pageTitle: 'Vaše narudžbe',
@@ -119,6 +119,6 @@ exports.getOrders = async (req, res, next) => {
 exports.getCheckout = async (req, res, next) => {
   res.render('shop/index', {
     pageTitle: 'Check out',
-    path: '/chart',
+    path: '/cart',
   });
 };

@@ -65,7 +65,6 @@ module.exports = class Cart {
           return data.id === id;
         });
 
-
         const novaUkupnaCijena = cartData.totalPrice - kolicina.qty * +cijena;
 
         // console.log(colors.blue('Staracijena=', cartData.totalPrice));
