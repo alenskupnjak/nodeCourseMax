@@ -1,12 +1,13 @@
 const fs = require('fs');
 const path = require('path');
+const colors = require('colors');
 
-const p = path.join(__dirname, '../data', 'cart.json');
+const pathFile = path.join(__dirname, '../data', 'cart.json');
 
 module.exports = class Cart {
   static addProduct(id, productPrice) {
     // Očitavamo sve podatke ako ih ima
-    fs.readFile(p, (err, fileContent) => {
+    fs.readFile(pathFile, (err, fileContent) => {
       // definiramo polja za zapis na kupovnu listu
       let cart = { products: [], totalPrice: 0 };
 
@@ -42,17 +43,62 @@ module.exports = class Cart {
       cart.totalPrice = cart.totalPrice + +productPrice;
 
       // Zapisujem nove podatke u file: chart.json
-      fs.writeFile(p, JSON.stringify(cart), (err) => {
+      fs.writeFile(pathFile, JSON.stringify(cart), (err) => {
         console.log(err);
       });
     });
   }
 
+  static deleteProductItem(id, cijena) {
+    fs.readFile(pathFile, (err, fileContent) => {
+      try {
+        // definiramo polja za zapis na kupovnu listu
+        let cart = { products: [], totalPrice: 0 };
+
+        // radimo kopiju
+        const cartData = { ...JSON.parse(fileContent) };
+
+        // ocitavamo kolicinu iz datoteke
+        const kolicina = cartData.products.find((data) => {
+          return data.id === id;
+        });
+
+
+        const novaUkupnaCijena = cartData.totalPrice - kolicina.qty * +cijena;
+
+        // console.log(colors.blue('Staracijena=', cartData.totalPrice));
+        // console.log(colors.blue(kolicina.qty, cijena, novaUkupnaCijena));
+
+        const indexPostojeceg = cartData.products.findIndex((data) => {
+          return data.id === id;
+        });
+
+        // brišem iz zapisa
+        cartData.products.splice(indexPostojeceg, 1);
+
+        // definiram novi Zapisujem
+        cart.products = cartData.products;
+        cart.totalPrice = +novaUkupnaCijena;
+
+        // console.log(colors.blue.underline(cart));
+
+        // Zapisujem nove podatke u file: chart.json
+        fs.writeFile(pathFile, JSON.stringify(cart), (err) => {
+          console.log(err);
+        });
+      } catch (error) {
+        console.log('greška u deleteProductItem');
+      }
+    });
+  }
+
   static deleteProduct(id, productPrice) {
-    fs.readFile(p, (err, fileContent) => {
+    fs.readFile(pathFile, (err, fileContent) => {
+      // non-blocking
       if (err) {
         return;
       }
+      // prebacujemo zapis u JSON citljiv oblik
       const updatedCart = { ...JSON.parse(fileContent) };
       const product = updatedCart.products.find((prod) => prod.id === id);
       if (!product) {
@@ -65,7 +111,7 @@ module.exports = class Cart {
       updatedCart.totalPrice =
         updatedCart.totalPrice - productPrice * productQty;
 
-      fs.writeFile(p, JSON.stringify(updatedCart), (err) => {
+      fs.writeFile(pathFile, JSON.stringify(updatedCart), (err) => {
         console.log(err);
       });
     });

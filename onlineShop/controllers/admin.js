@@ -1,6 +1,8 @@
 const colors = require('colors');
 const Product = require('../models/products');
 
+
+
 // /admin/add-product => GET
 exports.getAddProduct = (req, res, next) => {
   res.render('admin/edit-product', {
@@ -61,11 +63,14 @@ exports.postUpdateProduct = (req, res, next) => {
 
 exports.deleteProduct = (req, res, next) => {
   const prodId = req.body.productId;  
-  console.log(prodId);
+
   
     // snimamo dobivene podatke u file
     Product.delete(prodId);
-    res.redirect('/products');
+
+
+    // vracamo se na stranicu
+    res.redirect('/admin/products');
 }
 
 // /admin/products => GET

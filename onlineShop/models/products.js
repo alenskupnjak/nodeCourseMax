@@ -1,5 +1,7 @@
 const fs = require('fs');
+const colors = require('colors');
 const path = require('path');
+const Cart = require('../models/cart')
 
 const products = [];
 
@@ -57,9 +59,6 @@ module.exports = class Product {
   }
 
   static delete(id) {
-    console.log('**delete***'.red);
-
-    console.log(id);
     fs.readFile(pathFile, (err, fileContent) => {
       let products = [];
       if (!err) {
@@ -69,6 +68,12 @@ module.exports = class Product {
       const indexPostojeceg = products.findIndex((data) => {
         return data.id === id;
       });
+
+      // povlacimo trenutnu cijenu iz baze koju cemo koristiti kod chart.baze
+      const cijena = products[indexPostojeceg].price;
+
+      // Obrisi podatke iz chart
+      Cart.deleteProductItem(id, cijena);
 
       products.splice(indexPostojeceg, 1);
 
