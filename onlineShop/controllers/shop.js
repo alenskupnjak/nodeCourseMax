@@ -1,3 +1,4 @@
+const colors = require('colors');
 const Product = require('../models/products');
 const Cart = require('../models/cart');
 
@@ -12,7 +13,7 @@ exports.getProducts = async (req, res, next) => {
   });
 };
 
-// Dohvacanje svih proizvoda
+// Dohvacanje jednog proizvoda i prikazivanje detalja
 exports.getOneProduct = (req, res, next) => {
   const prodId = req.params.id;
 
@@ -29,7 +30,7 @@ exports.getOneProduct = (req, res, next) => {
   // next();
 };
 
-//
+// Prikazujemo sve proizvode
 exports.getIndex = (req, res, next) => {
   Product.fetchAll((data) => {
     res.render('shop/index', {
@@ -40,18 +41,45 @@ exports.getIndex = (req, res, next) => {
   });
 };
 
+// povlačimo sve artikle iz chart.json ako ih ima
 exports.getCart = (req, res, next) => {
-  res.render('shop/cart', {
-    pageTitle: 'Your Cart',
-    path: '/cart',
-  });
+  try {
+    Cart.getCart((dataChart) => {
+      if (dataChart) {
+        Product.fetchAll((dataFile) => {
+          console.log(colors.red(dataChart));
+          console.log(colors.green(dataFile));
+          const dataRender = []
+          dataChart.products.forEach((element) => {
+            console.log(colors.magenta(element));
+            const podatak = dataFile.find((artikl) => {
+              return artikl.id == element.id;
+            });
+            podatak.kolicina = element.qty
+            console.log(colors.blue.underline(podatak));
+            dataRender.push(podatak)
+          });
+
+          console.log(colors.yellow(dataRender));
+          
+
+          res.render('shop/cart', {
+            pageTitle: 'Your Cart',
+            path: '/cart',
+            dataRender: dataRender
+          });
+        });
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 exports.postCart = (req, res, next) => {
   const prodId = req.body.productId;
   console.log('prodId'.blue, req.body.productId);
   Product.fetchAll((data) => {
-
     const podatak = data.find((product) => {
       return product.id === prodId;
     });
