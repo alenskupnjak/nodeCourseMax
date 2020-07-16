@@ -12,23 +12,26 @@ exports.getAddProduct = (req, res, next) => {
   });
 };
 
-// /admin/add-product => POST
-exports.postProduct = (req, res, next) => {
-  const product = new Product(
-    null,
-    req.body.title,
-    req.body.imageUrl,
-    req.body.price,
-    req.body.description
-  );
-
-  // snimamo dobivene podatke u file
-  product.save()
-  .then(res.redirect('/'))
-  .catch(err=>{
-    console.log(err);
-  });
-
+// Kreiramo zapis
+exports.postAddProduct = (req, res, next) => {
+  const title = req.body.title;
+  const imageUrl = req.body.imageUrl;
+  const price = req.body.price;
+  const description = req.body.description;
+  Product.create({
+      title: title,
+      price: price,
+      imageUrl: imageUrl,
+      description: description
+    })
+    .then(result => {
+      console.log(result);
+      console.log('Created Product');
+      res.redirect('/admin/products');
+    })
+    .catch(err => {
+      console.log(err);
+    });
 };
 
 // /admin/add-product => GET
@@ -68,14 +71,14 @@ exports.postUpdateProduct = (req, res, next) => {
 exports.deleteProduct = (req, res, next) => {
   const prodId = req.body.productId;  
 
-  
     // snimamo dobivene podatke u file
     Product.delete(prodId);
-
 
     // vracamo se na stranicu
     res.redirect('/admin/products');
 }
+
+
 
 // /admin/products => GET
 exports.getProducts = (req, res, next) => {

@@ -4,48 +4,8 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const { err404 } = require('./controllers/error');
-const {
-  databaseAdminConn,
-  databaseUserConn,
-  databaseTestPool
-} = require('./util/database');
+const sequelize  = require('./util/pooldatabase')
 
-
-
-const databasePoolMysql2  = require('./util/pooldatabase')
-
-databasePoolMysql2.execute('SELECT * FROM products').then(([podaci, ostalo]) => {
-  // zapis se vraca u obliku polja sa dva zapisa
-  // prvi je sa podacima ostalo je razno
-  console.log(colors.green(podaci, ostalo));
-});
-
-// spajam se na bazu kao admin
-// databaseAdminConn.connect((err) => {
-//   if (err) {
-//     throw err;
-//   }
-//   console.log('MySql Connected kao admin...');
-// });
-
-// // // spajam se na bazu kao User
-// databaseUserConn.connect((err) => {
-//   if (err) {
-//     throw err;
-//   }
-//   console.log('MySql Connected kao user...');
-// });
-
-// // // spajam se na bazu kao test   user : 'ucimeu96_test',
-// databaseTestPool.query('SELECT * FROM products',function (error, results, fields) {
-//   console.log(colors.red(results));
-// });
-
-
-// // // spajam se na bazu kao user : 'ucimeu96_pool',
-// databasePool.query('SELECT * FROM products',function (error, results, fields) {
-//   console.log(results);
-// });
 
 
 // ROUTES
@@ -74,6 +34,31 @@ app.use('/', shopRoutes);
 // zadnji middelware koji lovi sve
 app.use('*', err404);
 
+sequelize
+  // .sync({ force: true })
+  .sync()
+  // .then(result => {
+  //   return User.findById(1);
+  //   // console.log(result);
+  // })
+  // .then(user => {
+  //   if (!user) {
+  //     return User.create({ name: 'Max', email: 'test@test.com' });
+  //   }
+  //   return user;
+  // })
+  // .then(user => {
+  //   // console.log(user);
+  //   return user.createCart();
+  // })
+  .then(cart => {
+    // console.log(cart);
+    app.listen(3000);
+  })
+  .catch(err => {
+    console.log(err);
+  });
+
 app.listen(5500, () => {
   console.log(`App listening on port 5500!`);
 });
@@ -81,3 +66,47 @@ app.listen(5500, () => {
 // // kreiramo server  R01
 // const server = http.createServer(app);
 // server.listen(3200);
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+// const {
+//   databaseAdminConn,
+//   databaseUserConn,
+//   databaseTestPool
+// } = require('./util/database');
+
+
+// databasePoolMysql2.execute('SELECT * FROM products').then(([podaci, ostalo]) => {
+//   // zapis se vraca u obliku polja sa dva zapisa
+//   // prvi je sa podacima ostalo je razno
+//   console.log(colors.green(podaci, ostalo));
+// });
+
+// spajam se na bazu kao admin
+// databaseAdminConn.connect((err) => {
+//   if (err) {
+//     throw err;
+//   }
+//   console.log('MySql Connected kao admin...');
+// });
+
+// // // spajam se na bazu kao User
+// databaseUserConn.connect((err) => {
+//   if (err) {
+//     throw err;
+//   }
+//   console.log('MySql Connected kao user...');
+// });
+
+// // // spajam se na bazu kao test   user : 'ucimeu96_test',
+// databaseTestPool.query('SELECT * FROM products',function (error, results, fields) {
+//   console.log(colors.red(results));
+// });
+
+
+// // // spajam se na bazu kao user : 'ucimeu96_pool',
+// databasePool.query('SELECT * FROM products',function (error, results, fields) {
+//   console.log(results);
+// });

@@ -4,38 +4,81 @@ const Cart = require('../models/cart');
 
 // Dohvacanje svih proizvoda
 exports.getProducts = async (req, res, next) => {
-  Product.fetchAll()
-    .then(([podaci, ostaliPodaci]) => {
+  Product.findAll()
+    .then(products => {
       res.render('shop/product-list', {
-        pageTitle: 'Svi Proizvodi',
-        prod: podaci,
-        path: '/products',
+        prod: products,
+        pageTitle: 'All Products',
+        path: '/products'
       });
     })
-    .catch((err) => {
+    .catch(err => {
       console.log(err);
     });
+  
+                // rijesenje sa mysql2, direkno spajanje na bazu
+                // Product.fetchAll()
+                //   .then(([podaci, ostaliPodaci]) => {
+                //     res.render('shop/product-list', {
+                //       pageTitle: 'Svi Proizvodi',
+                //       prod: podaci,
+                //       path: '/products',
+                //     });
+                //   })
+                //   .catch((err) => {
+                //     console.log(err);
+                //   });
 };
 
 // Dohvacanje jednog proizvoda i prikazivanje detalja
 exports.getOneProduct = (req, res, next) => {
   const prodId = req.params.id;
-  Product.fetchOne(prodId)
-    .then(([podatak]) => {
-      console.log('----------------------');
-      
-      console.log(podatak);
-      
-      res.render('shop/product-details', {
-        pageTitle: 'Proizvod',
-        prod: podatak[0],
-        path: '/products',
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  // rijesenje sa find all
+  Product.findAll({ where: { id: prodId } })
+    .then(products => {
+        res.render('shop/product-detail', {
+            prod: products[0],
+            pageTitle: products[0].title,
+            path: '/products'
+          });
+        })
+    .catch(err => console.log(err));
 
+
+              // rijesenje sa find id
+              //   Product.findByPk(prodId)
+              //   .then(product => {
+              //     console.log('hhh***********************************');
+              //   console.log(product.dataValues);
+              //   console.log(product.title);
+                
+              //   res.render('shop/product-detail', {
+              //     prod: product,
+              //     pageTitle: product.title,
+              //     path: '/products'
+              //   });
+              // })
+              // .catch(err => console.log(err));
+
+
+                        // rad sa MSQL bazom, direktan upit  
+                        // Product.fetchOne(prodId)
+                        //   .then(([podatak]) => {
+                        //     console.log('----------------------');
+                            
+                        //     console.log(podatak);
+                            
+                        //     res.render('shop/product-details', {
+                        //       pageTitle: 'Proizvod',
+                        //       prod: podatak[0],
+                        //       path: '/products',
+                        //     });
+                        //   })
+                        //   .catch((err) => {
+                        //     console.log(err);
+                        //   });
+
+  // rad sa datotekama
   // Product.fetchAll((data) => {
   //   const podatak = data.find((product) => {
   //     return product.id === prodId;
@@ -48,19 +91,32 @@ exports.getOneProduct = (req, res, next) => {
   // });
 };
 
-// Prikazujemo sve proizvode
+// Prikazujemo sve proizvode BAZA
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll()
-    .then(([podaci, ostaliPodaci]) => {
+  Product.findAll()
+    .then(products => {
       res.render('shop/index', {
-        pageTitle: 'Proizvodi',
-        prod: podaci,
-        path: '/',
+        prod: products,
+        pageTitle: 'Shop',
+        path: '/'
       });
     })
-    .catch((err) => {
+    .catch(err => {
       console.log(err);
     });
+
+
+  // Product.fetchAll()
+  //   .then(([podaci, ostaliPodaci]) => {
+  //     res.render('shop/index', {
+  //       pageTitle: 'Proizvodi',
+  //       prod: podaci,
+  //       path: '/',
+  //     });
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //   });
 };
 
 // povlačimo sve artikle iz chart.json ako ih ima
