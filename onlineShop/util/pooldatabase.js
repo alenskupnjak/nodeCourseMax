@@ -13,6 +13,7 @@
 // module.exports = databasePoolMysql2.promise();
 
 ////////////////////////////////////////////////////////////
+// Sequelize MORA ici zajedno sa "mysql2" !!!!
 const Sequelize = require('sequelize');
 
 const sequelize = new Sequelize('ucimeu96_onlineShop', 'ucimeu96_pool', 'WXst5ekgGY9%', {

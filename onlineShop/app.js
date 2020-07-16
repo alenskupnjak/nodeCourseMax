@@ -1,12 +1,17 @@
+'use strict';
 // const http = require('http');  R01
 const colors = require('colors');
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const { err404 } = require('./controllers/error');
-const sequelize  = require('./util/pooldatabase')
-
-
+const sequelize = require('./util/pooldatabase');
+const Product = require('./models/products');
+const User = require('./models/user');
+const Cart = require('./models/cart');
+const CartItem = require('./models/cart-item');
+const Order = require('./models/order');
+const OrderItem = require('./models/order-item');
 
 // ROUTES
 const adminRoutes = require('./routes/admin');
@@ -27,6 +32,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // definiranje statičkih tranica za HTML ....
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+
+// omogucavamo pristup useru u cijeloj aplikaciji! (req.user)
+app.use((req, res, next) => {
+  User.findByPk(1)
+    .then(user => {
+      req.user = user;
+      next();
+    })
+    .catch(err => console.log(err));
+});
+
 // Rute
 app.use('/admin', adminRoutes);
 app.use('/', shopRoutes);
@@ -34,28 +51,38 @@ app.use('/', shopRoutes);
 // zadnji middelware koji lovi sve
 app.use('*', err404);
 
+Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
+User.hasMany(Product);
+User.hasOne(Cart);
+Cart.belongsTo(User);
+Cart.belongsToMany(Product, { through: CartItem });
+Product.belongsToMany(Cart, { through: CartItem });
+Order.belongsTo(User);
+User.hasMany(Order);
+Order.belongsToMany(Product, { through: OrderItem });
+
 sequelize
+  // forsiramo u developmentu da pregazi jedni druge podatke
   // .sync({ force: true })
   .sync()
-  // .then(result => {
-  //   return User.findById(1);
-  //   // console.log(result);
-  // })
-  // .then(user => {
-  //   if (!user) {
-  //     return User.create({ name: 'Max', email: 'test@test.com' });
-  //   }
-  //   return user;
-  // })
-  // .then(user => {
-  //   // console.log(user);
-  //   return user.createCart();
-  // })
-  .then(cart => {
-    // console.log(cart);
+  .then((result) => {
+    return User.findByPk(1);
+  })
+  .then((user) => {
+    if (!user) {
+      return User.create({ name: 'Alen', email: 'test@test.com' });
+    }
+    return user;
+  })
+  .then(user => {
+    console.log(user);
+    return user.createCart();
+  })
+  .then((cart) => {
+    console.log(cart);
     app.listen(3000);
   })
-  .catch(err => {
+  .catch((err) => {
     console.log(err);
   });
 
@@ -67,8 +94,6 @@ app.listen(5500, () => {
 // const server = http.createServer(app);
 // server.listen(3200);
 
-
-
 ////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////
 // const {
@@ -76,7 +101,6 @@ app.listen(5500, () => {
 //   databaseUserConn,
 //   databaseTestPool
 // } = require('./util/database');
-
 
 // databasePoolMysql2.execute('SELECT * FROM products').then(([podaci, ostalo]) => {
 //   // zapis se vraca u obliku polja sa dva zapisa
@@ -104,7 +128,6 @@ app.listen(5500, () => {
 // databaseTestPool.query('SELECT * FROM products',function (error, results, fields) {
 //   console.log(colors.red(results));
 // });
-
 
 // // // spajam se na bazu kao user : 'ucimeu96_pool',
 // databasePool.query('SELECT * FROM products',function (error, results, fields) {

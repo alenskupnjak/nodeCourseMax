@@ -7,7 +7,7 @@
   <main>
 
     <% if (dataRender.length > 0) { %>
-
+<h2>LUD SAM</h2>
     <ul>
       <% for (let data of dataRender) {%>
       <div>
@@ -15,7 +15,7 @@
         <li><%= data.imageUrl %></li>
         <li>Opis: <%= data.description %></li>
         <li>Cijena =<%= data.price %></li>
-        <li>Naručena količina= <%= data.kolicina %></li>
+        <li>Naručena količina= <%= data.cartItem.quantity %></li>
         <form action="/cart-delete-item" method="POST">
           <button class="btn" type="submit">Delete a Cart</button>
           <input type="hidden" name="productId" value="<%= data.id %>">

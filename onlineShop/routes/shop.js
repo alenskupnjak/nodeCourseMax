@@ -1,15 +1,4 @@
 const express = require('express'); // setup za router
-// const {
-//   getProducts,
-//   getOneProduct,
-//   getIndex,
-//   getCart,
-//   getCheckout,
-//   getOrders,
-//   postCart,
-//   deleteChart
-// } = require('../controllers/shop');
-
 const shopController = require('../controllers/shop')
 
 const router = express.Router(); // setup za router
