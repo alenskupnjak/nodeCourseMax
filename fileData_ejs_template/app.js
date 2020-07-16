@@ -6,7 +6,7 @@ const app = express();
 
 const users = [];
 
-app.engine('hbs', expressHbs({ defaultLayout: 'main-layout', extname: 'hbs' }));
+// app.engine('hbs', expressHbs({ defaultLayout: 'main-layout', extname: 'hbs' }));
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
