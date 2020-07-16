@@ -127,17 +127,15 @@ exports.getCart = (req, res, next) => {
           .then((products) => {
             console.log(colors.red(products));
 
-            products.forEach(data => {
+            products.forEach((data) => {
               console.log('+++++');
-              
+
               // console.log(data);
               console.log(data.title);
               console.log(data.cartItem.quantity);
-              
-            })
+            });
             // console.log(colors.green(products.cartItem.cartId));
-   
-            
+
             res.render('shop/cart', {
               path: '/cart',
               pageTitle: 'Your Cart',
@@ -193,13 +191,28 @@ exports.getCart = (req, res, next) => {
 exports.deleteChart = (req, res, next) => {
   try {
     const prodId = req.body.productId;
-    Product.fetchAll((dataFile) => {
-      const cijena = dataFile.find((data) => {
-        return data.id === prodId;
-      });
-      Cart.deleteProductItem(prodId, cijena.price);
-      res.redirect('/cart');
-    });
+
+    req.user
+      .getCart()
+      .then((cart) => {
+        return cart.getProducts({ where: { id: prodId } });
+      })
+      .then((products) => {
+        const product = products[0];
+        return product.cartItem.destroy();
+      })
+      .then((result) => {
+        res.redirect('/cart');
+      })
+      .catch((err) => console.log(err));
+    // const prodId = req.body.productId;
+    // Product.fetchAll((dataFile) => {
+    //   const cijena = dataFile.find((data) => {
+    //     return data.id === prodId;
+    //   });
+    //   Cart.deleteProductItem(prodId, cijena.price);
+    //   res.redirect('/cart');
+    // });
   } catch (error) {
     console.log(error);
   }
@@ -253,12 +266,48 @@ exports.postCart = (req, res, next) => {
   // });
 };
 
+exports.postOrder = (req, res, next) => {
+  let fetchedCart;
+  req.user
+    .getCart()
+    .then(cart => {
+      fetchedCart = cart;
+      return cart.getProducts();
+    })
+    .then(products => {
+      return req.user
+        .createOrder()
+        .then(order => {
+          return order.addProducts(
+            products.map(product => {
+              product.orderItem = { quantity: product.cartItem.quantity };
+              return product;
+            })
+          );
+        })
+        .catch(err => console.log(err));
+    })
+    .then(result => {
+      return fetchedCart.setProducts(null);
+    })
+    .then(result => {
+      res.redirect('/orders');
+    })
+    .catch(err => console.log(err));
+};
+
 // narubbe
 exports.getOrders = async (req, res, next) => {
-  res.render('shop/orders', {
-    pageTitle: 'Vaše narudžbe',
-    path: '/orders',
-  });
+  req.user
+    .getOrders({include: ['products']})
+    .then(orders => {
+      res.render('shop/orders', {
+        path: '/orders',
+        pageTitle: 'Your Orders',
+        orders: orders
+      });
+    })
+    .catch(err => console.log(err));
 };
 
 exports.getCheckout = async (req, res, next) => {

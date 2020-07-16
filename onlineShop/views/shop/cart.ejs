@@ -2,12 +2,12 @@
 <link rel="stylesheet" href="/css/product.css">
 
 <head>
+
 <body>
   <%- include('../includes/navigation.ejs')%>
   <main>
 
     <% if (dataRender.length > 0) { %>
-<h2>LUD SAM</h2>
     <ul>
       <% for (let data of dataRender) {%>
       <div>
@@ -23,10 +23,17 @@
       </div>
       <% } %>
     </ul>
+    <hr>
+    <div class="centered">
+      <form action="/create-order" method="POST">
+        <button type="submit" class="btn">Order Now!</button>
+      </form>
+    </div>
     <% } else { %>
     <h1>Nijedan proizvod nije na kupovnoj listi</h1>
     <% } %>
 
   </main>
 </body>
+
 </html>

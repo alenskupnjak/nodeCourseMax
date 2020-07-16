@@ -19,6 +19,9 @@ router.post('/cart', shopController.postCart);
 // brišem sa liste za kupnju
 router.post('/cart-delete-item', shopController.deleteChart);
 
+// kreiranje narudžbe
+router.post('/create-order', shopController.postOrder);
+
 router.get('/orders', shopController.getOrders);
 
 router.get('/checkout', shopController.getCheckout);
