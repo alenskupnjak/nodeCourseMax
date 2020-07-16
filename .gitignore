@@ -10,7 +10,8 @@
 # dependencies
 onlineShop/node_modules
 onlineShop/.vscode
-onlineShop-rad-sa-datotekama_prije baze
+onlineShop-rad-sa-datotekama_prije baze/node_modules
+onlineShop_MSQL_BAZA/node_modules
 
 
 # profiling files
