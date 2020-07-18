@@ -3,9 +3,11 @@ const Product = require('../models/products');
 const Cart = require('../models/cart');
 
 // Dohvacanje svih proizvoda
-exports.getProducts = async (req, res, next) => {
-  Product.findAll()
+exports.getProducts = (req, res, next) => {
+  Product.fetchAll()
     .then((products) => {
+      // console.log(products);
+
       res.render('shop/product-list', {
         prod: products,
         pageTitle: 'All Products',
@@ -15,83 +17,26 @@ exports.getProducts = async (req, res, next) => {
     .catch((err) => {
       console.log(err);
     });
-
-  // rijesenje sa mysql2, direkno spajanje na bazu
-  // Product.fetchAll()
-  //   .then(([podaci, ostaliPodaci]) => {
-  //     res.render('shop/product-list', {
-  //       pageTitle: 'Svi Proizvodi',
-  //       prod: podaci,
-  //       path: '/products',
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
 };
 
 // Dohvacanje jednog proizvoda i prikazivanje detalja
 exports.getOneProduct = (req, res, next) => {
   const prodId = req.params.id;
-  // rijesenje sa find all
-  Product.findAll({ where: { id: prodId } })
-    .then((products) => {
+  Product.findById(prodId)
+    .then((product) => {
+      console.log(product);
       res.render('shop/product-detail', {
-        prod: products[0],
-        pageTitle: products[0].title,
+        prod: product,
+        pageTitle: product.title,
         path: '/products',
       });
     })
     .catch((err) => console.log(err));
-
-  // rijesenje sa find id
-  //   Product.findByPk(prodId)
-  //   .then(product => {
-  //     console.log('hhh***********************************');
-  //   console.log(product.dataValues);
-  //   console.log(product.title);
-
-  //   res.render('shop/product-detail', {
-  //     prod: product,
-  //     pageTitle: product.title,
-  //     path: '/products'
-  //   });
-  // })
-  // .catch(err => console.log(err));
-
-  // rad sa MSQL bazom, direktan upit
-  // Product.fetchOne(prodId)
-  //   .then(([podatak]) => {
-  //     console.log('----------------------');
-
-  //     console.log(podatak);
-
-  //     res.render('shop/product-details', {
-  //       pageTitle: 'Proizvod',
-  //       prod: podatak[0],
-  //       path: '/products',
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
-
-  // rad sa datotekama
-  // Product.fetchAll((data) => {
-  //   const podatak = data.find((product) => {
-  //     return product.id === prodId;
-  //   });
-  //   res.render('shop/product-details', {
-  //     pageTitle: 'Proizvod',
-  //     prod: podatak,
-  //     path: '/products',
-  //   });
-  // });
 };
 
 // Prikazujemo sve proizvode BAZA
 exports.getIndex = (req, res, next) => {
-  Product.findAll()
+  Product.fetchAll()
     .then((products) => {
       res.render('shop/index', {
         prod: products,
@@ -102,18 +47,6 @@ exports.getIndex = (req, res, next) => {
     .catch((err) => {
       console.log(err);
     });
-
-  // Product.fetchAll()
-  //   .then(([podaci, ostaliPodaci]) => {
-  //     res.render('shop/index', {
-  //       pageTitle: 'Proizvodi',
-  //       prod: podaci,
-  //       path: '/',
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
 };
 
 // povlačimo sve artikle iz chart.json ako ih ima
@@ -145,43 +78,6 @@ exports.getCart = (req, res, next) => {
           .catch((err) => console.log(err));
       })
       .catch((err) => console.log(err));
-
-    // Cart.findAll({ where: { userId: req.user.id } })
-    //   .then((products) => {
-    //     console.log('*****************');
-
-    //     console.log(products);
-
-    //     res.render('shop/cart', {
-    //       pageTitle: 'Your Cart',
-    //       path: '/cart',
-    //       dataRender: products,
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-    // Cart.getCart((dataChart) => {
-    //   if (dataChart) {
-    //     Product.fetchAll((dataFile) => {
-    //       const dataRender = [];
-    //       dataChart.products.forEach((element) => {
-    //         const podatak = dataFile.find((artikl) => {
-    //           return artikl.id == element.id;
-    //         });
-    //         podatak.kolicina = element.qty;
-    //         console.log(colors.blue.underline(podatak));
-    //         dataRender.push(podatak);
-    //       });
-
-    //       res.render('shop/cart', {
-    //         pageTitle: 'Your Cart',
-    //         path: '/cart',
-    //         dataRender: dataRender,
-    //       });
-    //     });
-    //   }
-    // });
   } catch (error) {
     console.log(error);
   }
@@ -270,44 +166,44 @@ exports.postOrder = (req, res, next) => {
   let fetchedCart;
   req.user
     .getCart()
-    .then(cart => {
+    .then((cart) => {
       fetchedCart = cart;
       return cart.getProducts();
     })
-    .then(products => {
+    .then((products) => {
       return req.user
         .createOrder()
-        .then(order => {
+        .then((order) => {
           return order.addProducts(
-            products.map(product => {
+            products.map((product) => {
               product.orderItem = { quantity: product.cartItem.quantity };
               return product;
             })
           );
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
     })
-    .then(result => {
+    .then((result) => {
       return fetchedCart.setProducts(null);
     })
-    .then(result => {
+    .then((result) => {
       res.redirect('/orders');
     })
-    .catch(err => console.log(err));
+    .catch((err) => console.log(err));
 };
 
 // narubbe
 exports.getOrders = async (req, res, next) => {
   req.user
-    .getOrders({include: ['products']})
-    .then(orders => {
+    .getOrders({ include: ['products'] })
+    .then((orders) => {
       res.render('shop/orders', {
         path: '/orders',
         pageTitle: 'Your Orders',
-        orders: orders
+        orders: orders,
       });
     })
-    .catch(err => console.log(err));
+    .catch((err) => console.log(err));
 };
 
 exports.getCheckout = async (req, res, next) => {

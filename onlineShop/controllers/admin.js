@@ -16,14 +16,18 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-  Product.create({
-    title: title,
-    price: price,
-    imageUrl: imageUrl,
-    description: description,
-    userId: req.user.id
-  })
+  const product = new Product(
+    title,
+    price,
+    description,
+    imageUrl,
+    null,
+    // req.user._id
+  );
+  product
+    .save()
     .then((result) => {
+      // console.log(result);
       console.log('Created Product');
       res.redirect('/admin/products');
     })
@@ -72,31 +76,31 @@ exports.postUpdateProduct = async (req, res, next) => {
   // const updatedDesc = req.body.description;
 
   await Product.update(
-    { title: req.body.title, 
-      price: req.body.price, 
+    {
+      title: req.body.title,
+      price: req.body.price,
       description: req.body.description,
-      imageUrl: req.body.imageUrl
-     },
+      imageUrl: req.body.imageUrl,
+    },
     { where: { id: prodId } }
   );
   res.redirect('/admin/products');
 
+  // Product.findByPk(prodId)
+  //   .then(product => {
+  //     console.log(colors.green.underline(product));
 
-              // Product.findByPk(prodId)
-              //   .then(product => {
-              //     console.log(colors.green.underline(product));
-
-              //     product.title = updatedTitle;
-              //     product.price = updatedPrice;
-              //     product.description = updatedDesc;
-              //     product.imageUrl = updatedImageUrl;
-              //     return product.save();
-              //   })
-              //   .then(result => {
-              //     console.log('UPDATED PRODUCT!');
-              //     res.redirect('/admin/products');
-              //   })
-              //   .catch(err => console.log(err));
+  //     product.title = updatedTitle;
+  //     product.price = updatedPrice;
+  //     product.description = updatedDesc;
+  //     product.imageUrl = updatedImageUrl;
+  //     return product.save();
+  //   })
+  //   .then(result => {
+  //     console.log('UPDATED PRODUCT!');
+  //     res.redirect('/admin/products');
+  //   })
+  //   .catch(err => console.log(err));
 
   // const product = new Product(
   //   req.body.productId,
@@ -115,8 +119,8 @@ exports.deleteProduct = async (req, res, next) => {
 
   await Product.destroy({
     where: {
-      id: prodId 
-    }
+      id: prodId,
+    },
   });
 
   // vracamo se na stranicu
@@ -124,23 +128,15 @@ exports.deleteProduct = async (req, res, next) => {
 };
 
 // /admin/products => GET
-exports.getProducts = async (req, res, next) => {  
-  await Product.findAll({ where: { userId: req.user.id } })
-    .then((products) => {
-      res.render('admin/products', {
-        prod: products,
-        pageTitle: 'Admin Products',
-        path: '/admin/products',
-      });
-    })
-    .catch((err) => console.log(err));
+exports.getProducts = async (req, res, next) => {
+  // await Product.findAll({ where: { userId: req.user.id } })
+  //   .then((products) => {
+  //     res.render('admin/products', {
+  //       prod: products,
+  //       pageTitle: 'Admin Products',
+  //       path: '/admin/products',
+  //     });
+  //   })
+  //   .catch((err) => console.log(err));
 
-  // rad sa datotakama
-  // Product.fetchAll((products) => {
-  //   res.render('admin/products', {
-  //     prod: products,
-  //     pageTitle: 'Admin Products',
-  //     path: '/admin/products',
-  //   });
-  // });
 };

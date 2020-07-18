@@ -26,7 +26,7 @@
                     <form action="/cart" method="POST">
                         <button class="btn" type="submit">Add to Cart</button>
                         <!-- Skrivamo input da možemo kod Submit imati POST metodu -->
-                        <input type="hidden" name="productId" value="<%= product.id %>">
+                        <input type="hidden" name="productId" value="<%= product._id %>">
                     </form>
                 </div>
             </article>

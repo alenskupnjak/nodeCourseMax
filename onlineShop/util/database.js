@@ -1,59 +1,29 @@
-const mysql = require('mysql');
+const mongodb = require('mongodb');
+const MongoClient = mongodb.MongoClient;
 
+let _db;
 
-// ADMIN Create connection
-exports.databaseAdminConn = mysql.createConnection({
-    host : 'cp2.infonet.hr',
-    user : 'ucimeu96_admin',
-    port: '3306',
-    password : 'amGDVV01U@*q',
-    database : 'ucimeu96_onlineShop'     
-});
+const mongoConnect = callback => {  
+  MongoClient.connect( process.env.SHOP_DATABASE,{
+    useUnifiedTopology: true,
+  })
+    .then(client => {
+      console.log('Connected!');
+      _db = client.db();
+      callback();
+    })
+    .catch(err => {
+      console.log(err);
+      throw err;
+    });
+};
 
-//ADIMN POOL
-exports.databaseAdminPool = mysql.createPool({
-    host : 'cp2.infonet.hr',
-    user : 'ucimeu96_admin',
-    port: '3306',
-    password : 'amGDVV01U@*q',
-    database : 'ucimeu96_onlineShop'     
-});
+const getDb = () => {
+  if (_db) {
+    return _db;
+  }
+  throw 'No database found!';
+};
 
-
-exports.databaseUserConn = mysql.createConnection({
-    host : 'cp2.infonet.hr',
-    user : 'ucimeu96_user',
-    port: '3306',
-    password : 'A82Ale2*#D8m',
-    database : 'ucimeu96_onlineShop'     
-});
-
-exports.databaseTestPool = mysql.createPool({
-    host : 'cp2.infonet.hr',
-    user : 'ucimeu96_test',
-    port: '3306',
-    password : 'sDyuH62p*#M$',
-    database : 'ucimeu96_onlineShop'       
-});
-
-
-
-
-
-
-
-// setInterval(function () {
-//     console.log('Prespajam svakih 15 sekundi');
-//     db.query('SELECT 1');
-// }, 15000);
-
-
-// // Connect
-// db.connect((err) => {
-//     if(err){
-//         throw err;
-//     }
-//     console.log('MySql Connected...');
-// });
-
-// module.exports = db;
+exports.mongoConnect = mongoConnect;
+exports.getDb = getDb;

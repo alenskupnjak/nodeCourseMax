@@ -47,21 +47,6 @@ exports.getEditProduct = (req, res, next) => {
     })
     .catch((err) => console.log(err));
 
-  // Product.fetchAll((data) => {
-
-  //   const podatak = data.find((product) => {
-  //     return product.id === prodId;
-  //   });
-  //   console.log('podatak'.blue, colors.red.underline(podatak));
-
-  //   res.render('admin/edit-product', {
-  //     pageTitle: 'Edit proizvod',
-  //     path: '/admin/edit-product',
-  //     jedanProduct: podatak,
-  //     editing: true
-  //   });
-
-  // });
 };
 
 exports.postUpdateProduct = async (req, res, next) => {
@@ -71,6 +56,7 @@ exports.postUpdateProduct = async (req, res, next) => {
   // const updatedImageUrl = req.body.imageUrl;
   // const updatedDesc = req.body.description;
 
+  console.log('req.body.title=************************'.red,req.body.title);
   await Product.update(
     { title: req.body.title, 
       price: req.body.price, 

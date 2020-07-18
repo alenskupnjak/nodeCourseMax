@@ -1,5 +1,5 @@
 'use strict';
-// const http = require('http');  R01
+const fs = require('fs');
 const colors = require('colors');
 const path = require('path');
 const express = require('express');
@@ -12,6 +12,7 @@ const Cart = require('./models/cart');
 const CartItem = require('./models/cart-item');
 const Order = require('./models/order');
 const OrderItem = require('./models/order-item');
+const morgan = require('morgan');
 
 // ROUTES
 const adminRoutes = require('./routes/admin');
@@ -48,6 +49,13 @@ app.use((req, res, next) => {
 app.use('/admin', adminRoutes);
 app.use('/', shopRoutes);
 
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, 'access.log'),
+  { flags: 'a' }
+);
+
+app.use(morgan('combined', { stream: accessLogStream }));
+
 // zadnji middelware koji lovi sve
 app.use('*', err404);
 
@@ -75,11 +83,11 @@ sequelize
     return user;
   })
   .then(user => {
-    console.log(user);
+    // console.log(user);
     return user.createCart();
   })
   .then((cart) => {
-    console.log(cart);
+    // console.log(cart);
     app.listen(3000);
   })
   .catch((err) => {
