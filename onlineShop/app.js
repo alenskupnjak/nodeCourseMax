@@ -17,10 +17,12 @@ dotenv.config({ path: './config/config.env' });
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
-const accessLogStream = fs.createWriteStream(
-  path.join(__dirname, 'access.log'),
-  { flags: 'a' }
-);
+
+// // za kreiranje logova u   R0000
+// const accessLogStream = fs.createWriteStream(
+//   path.join(__dirname, 'access.log'),
+//   { flags: 'a' }
+// );
 
 // kreiranje express aplikaciju
 const app = express();
@@ -38,7 +40,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // prikazi logove 
-app.use(morgan('combined', { stream: accessLogStream }));
+// app.use(morgan('combined', { stream: accessLogStream }));
 
 
 // Rute
@@ -48,11 +50,7 @@ app.use('/', shopRoutes);
 // zadnji middelware koji lovi sve
 app.use('*', err404);
 
-mongoConnect(() => {
-  // console.log(process.env.port);
-  // console.log(process.env.home);
-  // console.log(process.env.LOGNAME);
-  
+mongoConnect(() => {  
   app.listen(process.env.port || 3000,() => {
     console.log(`App listening on port ${process.env.PORT}`.blue);
     console.log(process.env.NODE_ENV.yellow);

@@ -20,8 +20,8 @@ router.get('/edit-product/:id', adminControler.getEditProduct);
 // /admin/add-product => GET
 router.post('/edit-product', adminControler.postUpdateProduct);
 
-// // /admin/add-product => GET
-// router.post('/delete-product', adminControler.deleteProduct);
+// /admin/add-product => GET
+router.post('/delete-product', adminControler.deleteProduct);
 
 // module.exports = router
 module.exports = router;

@@ -21,7 +21,7 @@ exports.postAddProduct = (req, res, next) => {
     price,
     description,
     imageUrl,
-    null
+    null,
     // req.user._id
   );
   product
@@ -57,17 +57,10 @@ exports.postUpdateProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-  const product = new Product(
-    title,
-    price,
-    description,
-    imageUrl,
-    prodId
-  );
+  const product = new Product(title, price, description, imageUrl, prodId);
   product
     .update()
     .then((result) => {
-      console.log(result);
       console.log('UPDATE Product');
       res.redirect('/admin/products');
     })
@@ -78,9 +71,12 @@ exports.postUpdateProduct = (req, res, next) => {
 
 exports.deleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
-
-  // vracamo se na stranicu
-  res.redirect('/admin/products');
+  Product.deleteById(prodId)
+    .then(() => {
+      console.log('DESTROYED PRODUCT');
+      res.redirect('/admin/products');
+    })
+    .catch(err => console.log(err));
 };
 
 // /admin/products => GET
