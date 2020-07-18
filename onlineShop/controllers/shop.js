@@ -1,11 +1,9 @@
 const colors = require('colors');
 const Product = require('../models/products');
-const Cart = require('../models/cart');
+const User = require('../models/user');
 
 // Dohvacanje svih proizvoda
 exports.getProducts = (req, res, next) => {
-  console.log(colors.blue(req.user));
-  
   Product.fetchAll()
     .then((products) => {
       // console.log(products);
@@ -54,32 +52,22 @@ exports.getIndex = (req, res, next) => {
 // povlačimo sve artikle iz chart.json ako ih ima
 exports.getCart = (req, res, next) => {
   try {
-    req.user
-      .getCart()
-      .then((cart) => {
-        return cart
-          .getProducts()
-          .then((products) => {
-            console.log(colors.red(products));
+    // User.getCart()
+    //   .then((cart) => {
+    //     return cart
+    //       .getProducts()
+    //       .then((products) => {
+    //         console.log(colors.red(products));
 
-            products.forEach((data) => {
-              console.log('+++++');
-
-              // console.log(data);
-              console.log(data.title);
-              console.log(data.cartItem.quantity);
-            });
-            // console.log(colors.green(products.cartItem.cartId));
-
-            res.render('shop/cart', {
-              path: '/cart',
-              pageTitle: 'Your Cart',
-              dataRender: products,
-            });
-          })
-          .catch((err) => console.log(err));
-      })
-      .catch((err) => console.log(err));
+    //         res.render('shop/cart', {
+    //           path: '/cart',
+    //           pageTitle: 'Your Cart',
+    //           dataRender: products,
+    //         });
+    //       })
+    //       .catch((err) => console.log(err));
+    //   })
+    //   .catch((err) => console.log(err));
   } catch (error) {
     console.log(error);
   }
@@ -118,50 +106,17 @@ exports.deleteChart = (req, res, next) => {
 
 // dodavanje artikla na kupovnu listu
 exports.postCart = (req, res, next) => {
+  req.podaci.push('postaCart pronalazim produkt i dodajem na chart listu')
+  console.log(req.podaci);
+  
   const prodId = req.body.productId;
-  let fetchedCart;
-  let newQuantity = 1;
-  req.user
-    .getCart()
-    .then((cart) => {
-      fetchedCart = cart;
-      return cart.getProducts({ where: { id: prodId } });
-    })
-    .then((products) => {
-      let product;
-      if (products.length > 0) {
-        product = products[0];
-      }
-
-      if (product) {
-        const oldQuantity = product.cartItem.quantity;
-        newQuantity = oldQuantity + 1;
-        return product;
-      }
-      return Product.findByPk(prodId);
-    })
+  Product.findById(prodId)
     .then((product) => {
-      return fetchedCart.addProduct(product, {
-        through: { quantity: newQuantity },
-      });
+      return req.user.addToCart(product);
     })
-    .then(() => {
+    .then((result) => {
       res.redirect('/cart');
-    })
-    .catch((err) => console.log(err));
-
-  // console.log('prodId'.blue, req.body.productId);
-  // Product.fetchAll((data) => {
-  //   const podatak = data.find((product) => {
-  //     return product.id === prodId;
-  //   });
-
-  //   // dodajem artikal kupovnoj listi
-  //   Cart.addProduct(prodId, podatak.price);
-
-  // odlazimo na stranicu narudbi
-  res.redirect('/cart');
-  // });
+    });
 };
 
 exports.postOrder = (req, res, next) => {

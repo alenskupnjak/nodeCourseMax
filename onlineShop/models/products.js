@@ -55,7 +55,7 @@ class Product {
       });
   }
 
-  // pronalazim u bazi preko id
+  // pronalazim Proizvod u bazi preko id
   static findById(prodId) {
     const db = getDb();
     return db

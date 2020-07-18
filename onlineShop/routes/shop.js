@@ -12,12 +12,13 @@ router.get('/products', shopController.getProducts);
 // povlačenje jednog podatka
 router.get('/products/:id', shopController.getOneProduct);
 
+// prikazujem sve kartice
 // router.get('/cart', shopController.getCart);
 
-// // dodajem na listu za kupovanje artikal
-// router.post('/cart', shopController.postCart);
-// // brišem sa liste za kupnju
-// router.post('/cart-delete-item', shopController.deleteChart);
+// dodajem na listu za kupovanje artikal
+router.post('/cart', shopController.postCart);
+// brišem sa liste za kupnju
+router.post('/cart-delete-item', shopController.deleteChart);
 
 // // kreiranje narudžbe
 // router.post('/create-order', shopController.postOrder);
