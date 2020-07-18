@@ -15,14 +15,6 @@ class Product {
   // Snimanje novog podatka u bazu
   save() {
     const db = getDb();
-    // let dbOp;
-    // if (this._id) {
-    //   // Zapis postoji radimo update
-    //   dbOp = db
-    //     .collection('products')
-    //     .updateOne({ _id: this._id }, { $set: this });
-    // } else {
-      // Zapis ne postoji ubacijemo u datoteku novi zapis
      return db.collection('products').insertOne(this)
       .then((result) => {
         console.log(result);
@@ -32,10 +24,8 @@ class Product {
       });
   }
 
-  // update
+  // update proizvoda
   update() {
-    console.log(this._id);
-
     const db = getDb();
     return db
       .collection('products')
@@ -48,6 +38,8 @@ class Product {
       });
   }
 
+
+  // dohvaćanje svih proizvoda
   static fetchAll() {
     const db = getDb();
     return db

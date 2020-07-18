@@ -16,13 +16,15 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
+  console.log(req.user.name);
+  
   const product = new Product(
     title,
     price,
     description,
     imageUrl,
     null,
-    // req.user._id
+    req.user._id
   );
   product
     .save()
@@ -76,7 +78,7 @@ exports.deleteProduct = (req, res, next) => {
       console.log('DESTROYED PRODUCT');
       res.redirect('/admin/products');
     })
-    .catch(err => console.log(err));
+    .catch((err) => console.log(err));
 };
 
 // /admin/products => GET

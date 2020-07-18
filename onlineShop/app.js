@@ -8,6 +8,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { err404 } = require('./controllers/error');
 const mongoConnect = require('./util/database').mongoConnect
+const User = require('./models/user')
 
 // Load env vars
 dotenv.config({ path: './config/config.env' });
@@ -41,6 +42,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // prikazi logove 
 // app.use(morgan('combined', { stream: accessLogStream }));
+
+app.use((req, res, next) => {
+  User.findById('5f12c65f5b74cabc30ef2bc5')
+    .then(user => {
+      req.user = new User(user.name, user.email, user.cart, user._id);
+      console.log('*************');
+      
+      console.log(colors.red(req.user));
+      
+      next();
+    })
+    .catch(err => console.log(err));
+});
 
 
 // Rute

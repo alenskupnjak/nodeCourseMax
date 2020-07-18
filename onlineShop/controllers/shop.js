@@ -4,6 +4,8 @@ const Cart = require('../models/cart');
 
 // Dohvacanje svih proizvoda
 exports.getProducts = (req, res, next) => {
+  console.log(colors.blue(req.user));
+  
   Product.fetchAll()
     .then((products) => {
       // console.log(products);
