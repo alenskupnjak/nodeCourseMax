@@ -24,6 +24,6 @@ router.get('/products/:id', shopController.getOneProduct);
 
 // router.get('/orders', shopController.getOrders);
 
-// router.get('/checkout', shopController.getCheckout);
+router.get('/checkout', shopController.getCheckout);
 
 module.exports = router; // setup za router

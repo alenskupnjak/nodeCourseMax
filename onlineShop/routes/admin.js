@@ -14,11 +14,11 @@ router.get('/products', adminControler.getProducts);
 // /admin/add-product => POST
 router.post('/add-product', adminControler.postAddProduct);
 
-// // /admin/add-product => GET
-// router.get('/edit-product/:id', adminControler.getEditProduct);
+// /admin/add-product => GET
+router.get('/edit-product/:id', adminControler.getEditProduct);
 
-// // /admin/add-product => GET
-// router.post('/edit-product', adminControler.postUpdateProduct);
+// /admin/add-product => GET
+router.post('/edit-product', adminControler.postUpdateProduct);
 
 // // /admin/add-product => GET
 // router.post('/delete-product', adminControler.deleteProduct);

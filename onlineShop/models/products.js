@@ -11,21 +11,34 @@ class Product {
     this.userId = userId;
   }
 
-  // snimanje ili update baze..
+  // Snimanje novog podatka u bazu
   save() {
     const db = getDb();
-    let dbOp;
-    if (this._id) {
-      // Zapis postoji radimo update
-      dbOp = db
-        .collection('products')
-        .updateOne({ _id: this._id }, { $set: this });
-    } else {
+    // let dbOp;
+    // if (this._id) {
+    //   // Zapis postoji radimo update
+    //   dbOp = db
+    //     .collection('products')
+    //     .updateOne({ _id: this._id }, { $set: this });
+    // } else {
       // Zapis ne postoji ubacijemo u datoteku novi zapis
+     return db.collection('products').insertOne(this)
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
-      dbOp = db.collection('products').insertOne(this);
-    }
-    return dbOp
+  // update
+  update() {
+    console.log(this._id);
+
+    const db = getDb();
+    return db
+      .collection('products')
+      .updateOne({ _id: this._id }, { $set: this })
       .then((result) => {
         console.log(result);
       })
@@ -65,6 +78,7 @@ class Product {
       });
   }
 
+  // brisanje zapisa
   static deleteById(prodId) {
     const db = getDb();
     return db
