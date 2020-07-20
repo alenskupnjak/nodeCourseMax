@@ -10,18 +10,23 @@
     <% if (dataRender.length > 0) { %>
     <ul class="cart__item-list">
 
-      <% dataRender.forEach(p => { %>
-      <li class="cart__item">
-        <h1><%= p.title %></h1>
-        <h2>Quantity: <%= p.quantity %></h2>
-        <form action="/cart-delete-item" method="POST">
-          <input type="hidden" value="<%= p._id %>" name="productId">
-          <button class="btn danger" type="submit">Delete</button>
-        </form>
-      </li>
-      <% }) %>
 
-    </ul>
+      <% for (let data of dataRender) {%>
+      <div>
+        <li>Naslov: <%= data.title %></li>
+        <li><%= data.imageUrl %></li>
+        <li>Opis: <%= data.description %></li>
+        <li>Cijena =<%= data.price %></li>
+        <!-- <li>Naručena količina= <%= data.cartItem.quantity %></li> -->
+        <form action="/cart-delete-item" method="POST">
+          <button class="btn" type="submit">Delete a Cart</button>
+          <input type="hidden" name="productId" value="<%= data.id %>">
+        </form>
+      </div>
+
+
+      <% } %>
+    </ul >
     <hr>
     <div class="centered">
       <form action="/create-order" method="POST">

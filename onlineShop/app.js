@@ -6,16 +6,16 @@ const colors = require('colors');
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
-const { err404 } = require('./controllers/error');
+const { err404 } = require('./controllers/errorCtrl');
 const mongoConnect = require('./util/database').mongoConnect;
-const User = require('./models/user');
+const User = require('./models/userModel');
 
 // Load env vars
 dotenv.config({ path: './config/config.env' });
 
 // ROUTES
-const adminRoutes = require('./routes/admin');
-const shopRoutes = require('./routes/shop');
+const adminRoutes = require('./routes/adminRouter');
+const shopRoutes = require('./routes/shopRouter');
 
 // // za kreiranje logova u   R0000
 // const accessLogStream = fs.createWriteStream(
@@ -42,22 +42,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 // app.use(morgan('combined', { stream: accessLogStream }));
 
 app.use((req, res, next) => {
-  User.findById('5f12fcfb608615420ca692e2')
+  User.findById('5f12c65f5b74cabc30ef2bc5')
     .then((user) => {
       // definiran user koj se provlaci kroz cijelu aplikaciju
       req.podaci = [
         ' app.js definirana je  app.js-req.user = new User(user.name, user.email, user.cart, user._id);',
       ];
-      req.user = new User(user.name, user.email, user.cart, user._id);
+      req.user = new User(user.name, user.email, user.cart, user._id, user.artikal);
       next();
     })
     .catch((err) => console.log(err));
 });
 
-app.use((req, res, next) => {
-  console.log(req.podaci);
-  next();
-});
 
 // Rute
 app.use('/admin', adminRoutes);

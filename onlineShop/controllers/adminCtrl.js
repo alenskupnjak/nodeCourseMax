@@ -1,7 +1,8 @@
 const colors = require('colors');
-const Product = require('../models/products');
+const Product = require('../models/productsModel');
 
-// /admin/add-product => GET
+// Povlačimo podatke
+// ..admin/add-product => GET
 exports.getAddProduct = (req, res, next) => {
   res.render('admin/edit-product', {
     pageTitle: 'Dodaj proizvod',
@@ -10,7 +11,9 @@ exports.getAddProduct = (req, res, next) => {
   });
 };
 
+/////////////////////////////////////////////
 // Kreiramo zapis u bazi
+// .....admin/add-product => POST
 exports.postAddProduct = (req, res, next) => {
   const title = req.body.title;
   const imageUrl = req.body.imageUrl;
@@ -38,6 +41,7 @@ exports.postAddProduct = (req, res, next) => {
     });
 };
 
+
 // /admin/add-product => GET
 exports.getEditProduct = (req, res, next) => {
   const prodId = req.params.id;
@@ -53,6 +57,8 @@ exports.getEditProduct = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
+
+// UPDATE
 exports.postUpdateProduct = (req, res, next) => {
   const prodId = req.body.productId;
   const title = req.body.title;
@@ -71,6 +77,8 @@ exports.postUpdateProduct = (req, res, next) => {
     });
 };
 
+
+// DELETE
 exports.deleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
   Product.deleteById(prodId)
@@ -80,6 +88,7 @@ exports.deleteProduct = (req, res, next) => {
     })
     .catch((err) => console.log(err));
 };
+
 
 // /admin/products => GET
 exports.getProducts = (req, res, next) => {

@@ -1,6 +1,6 @@
 const path = require('path'); // core nodejs module
 const express = require('express');
-const adminControler = require('../controllers/admin');
+const adminControler = require('../controllers/adminCtrl');
 
 const router = express.Router();
 
@@ -8,11 +8,11 @@ const router = express.Router();
 // /admin/add-product => GET
 router.get('/add-product', adminControler.getAddProduct);
 
-// /admin/products => GET
-router.get('/products', adminControler.getProducts);
-
 // /admin/add-product => POST
 router.post('/add-product', adminControler.postAddProduct);
+
+// /admin/products => GET
+router.get('/products', adminControler.getProducts);
 
 // /admin/add-product => GET
 router.get('/edit-product/:id', adminControler.getEditProduct);
