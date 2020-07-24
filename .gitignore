@@ -13,6 +13,7 @@ onlineShop/.vscode
 onlineShop-rad-sa-datotekama_prije baze/node_modules
 onlineShop/config
 onlineShop_MSQL_BAZA/node_modules
+onlineShop_mongoDB_bez_mongoosa/node_modules
 
 
 # profiling files
