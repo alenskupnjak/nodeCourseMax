@@ -121,12 +121,4 @@ exports.getProducts = async (req, res, next) => {
     })
     .catch((err) => console.log(err));
 
-  // rad sa datotakama
-  // Product.fetchAll((products) => {
-  //   res.render('admin/products', {
-  //     prod: products,
-  //     pageTitle: 'Admin Products',
-  //     path: '/admin/products',
-  //   });
-  // });
 };

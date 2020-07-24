@@ -89,14 +89,16 @@ sequelize
   .then((cart) => {
     // console.log(cart);
     app.listen(3000);
+    console.log('vrtim sa na Portu 3000');
+    
   })
   .catch((err) => {
     console.log(err);
   });
 
-app.listen(5500, () => {
-  console.log(`App listening on port 5500!`);
-});
+// app.listen(5500, () => {
+//   console.log(`App listening on port 5500!`);
+// });
 
 // // kreiramo server  R01
 // const server = http.createServer(app);
