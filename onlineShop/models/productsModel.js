@@ -21,6 +21,12 @@ const productSchema = new Schema({
   imageUrl: {
     type:String,
     required: true
+  },
+  userID: {
+    type: Schema.Types.ObjectId,
+    // Veza sa UserModel-om, biti ime isto kao i u userModel.js: module.exports = mongoose.model('User', userSchema)
+    ref:'User',  
+    required: true
   }
 });
 

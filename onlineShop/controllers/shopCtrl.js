@@ -1,16 +1,14 @@
 const colors = require('colors');
 const Product = require('../models/productsModel');
-const User = require('../models/userModel');
+const Order = require('../models/orderModel');
 
-// mongoose mongoose mongoose mongoose mongoose 
+// mongoose mongoose mongoose mongoose mongoose
 // Dohvacanje svih proizvoda
 exports.getProducts = (req, res, next) => {
-  console.log('Broj zapisa u bazi= ',Product.count());
-  
-  Product.find()  // ugradena mongoose funkcija
-    .then((products) => {
-      console.log(products);
+  console.log('Broj zapisa u bazi= ', Product.count());
 
+  Product.find() // ugradena mongoose funkcija
+    .then((products) => {
       res.render('shop/product-list', {
         prod: products,
         pageTitle: 'Svi proizvodi',
@@ -22,7 +20,7 @@ exports.getProducts = (req, res, next) => {
     });
 };
 
-// mongoose mongoose mongoose mongoose mongoose 
+// mongoose mongoose mongoose mongoose mongoose
 // Dohvacanje jednog proizvoda i prikazivanje detalja
 exports.getOneProduct = (req, res, next) => {
   const prodId = req.params.id;
@@ -38,14 +36,12 @@ exports.getOneProduct = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
-// mongoose mongoose mongoose mongoose mongoose 
+// mongoose mongoose mongoose mongoose mongoose
 // Prikazujemo sve proizvode BAZA
 exports.getIndex = (req, res, next) => {
   const numAdventures = Product.estimatedDocumentCount();
   Product.find()
     .then((products) => {
-      console.log(products);
-      
       res.render('shop/index', {
         prod: products,
         pageTitle: 'Shop',
@@ -57,39 +53,40 @@ exports.getIndex = (req, res, next) => {
     });
 };
 
+// mongoose mongoose mongoose mongoose mongoose
 // povlačimo sve artikle iz chart.json ako ih ima
 // router GET
 exports.getCart = (req, res, next) => {
   req.user
-    .getCart()
-    .then(products => {
-      console.log(colors.red(products));
-      
+    .populate('cart.items.productId')
+    //https://mongoosejs.com/docs/api.html#document_Document-execPopulate
+    .execPopulate() // Explicitly executes population and returns a promise
+    .then((user) => {
+      console.log(colors.red(user.cart.items));
       res.render('shop/cart', {
         path: '/cart',
         pageTitle: 'Your Cart',
-        dataRender : products
+        dataRender: user.cart.items,
       });
     })
-    .catch(err => console.log(err));
+    .catch((err) => console.log(err));
 };
 
-// Delete charte artikle iz chart.json ako ih ima
+// mongoose mongoose mongoose mongoose mongoose
+// Delete cart artikle ako ih ima
 exports.postCartDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
   req.user
-    .deleteItemFromCart(prodId)
-    .then(result => {
+    .removeFromCart(prodId)
+    .then((result) => {
       res.redirect('/cart');
     })
-    .catch(err => console.log(err));
+    .catch((err) => console.log(err));
 };
 
-
-
-
+// mongoose mongoose mongoose mongoose mongoose
 // dodavanje artikla na kupovnu listu
-exports.postCart = (req, res, next) => {  
+exports.postCart = (req, res, next) => {
   const prodId = req.body.productId;
   Product.findById(prodId)
     .then((product) => {
@@ -100,22 +97,41 @@ exports.postCart = (req, res, next) => {
     });
 };
 
-
-//
-exports.postOrder = (req, res, next) => {
-  let fetchedCart;
+// mongoose mongoose mongoose mongoose mongoose
+// create order
+exports.createOrder = (req, res, next) => {
   req.user
-    .addOrder()
-    .then(result => {
+    .populate('cart.items.productId')
+    //https://mongoosejs.com/docs/api.html#document_Document-execPopulate
+    .execPopulate() // Explicitly executes population and returns a promise
+    .then((user) => {
+      const productsData = user.cart.items.map((i) => {
+        // return { quantity: i.quantity, product: i.productId };
+        return { quantity: i.quantity, product: { ...i.productId._doc } };
+      });
+      // kreiramo novu narudžbu
+      const order = new Order({
+        user: {
+          name: req.user.name,
+          userId: req.user._id,
+        },
+        products: productsData,
+      });
+      // snimamo order
+      return order.save();
+    })
+    .then((result) => {
+      return req.user.clearCart();
+    })
+    .then((result) => {
       res.redirect('/orders');
     })
-    .catch(err => console.log(err));
+    .catch((err) => console.log(err));
 };
 
-// narubbe
+// narudzbe
 exports.getOrders = (req, res, next) => {
-  req.user
-    .getOrders()
+  Order.find({ 'user.userId': req.user._id })
     .then((orders) => {
       res.render('shop/orders', {
         path: '/orders',
@@ -125,7 +141,6 @@ exports.getOrders = (req, res, next) => {
     })
     .catch((err) => console.log(err));
 };
-
 
 //
 exports.getCheckout = async (req, res, next) => {
