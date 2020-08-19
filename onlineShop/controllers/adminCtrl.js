@@ -10,6 +10,7 @@ exports.getAddProduct = (req, res, next) => {
     pageTitle: 'Dodaj proizvod',
     path: '/admin/add-product',
     editing: false,
+    isAutoriziran: req.isLoggedIn
   });
 };
 
@@ -57,6 +58,7 @@ exports.getEditProduct = (req, res, next) => {
         path: '/admin/edit-product',
         jedanProduct: products,
         editing: true,
+        isAutoriziran: req.isLoggedIn
       });
     })
     .catch((err) => console.log(err));
@@ -115,6 +117,7 @@ exports.getProducts = (req, res, next) => {
         prod: products,
         pageTitle: 'Admin Products',
         path: '/admin/products',
+        isAutoriziran: req.isLoggedIn
       });
     })
     .catch((err) => console.log(err));

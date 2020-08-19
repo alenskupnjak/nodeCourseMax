@@ -30,6 +30,8 @@ const userSchema = new Schema({
   },
 });
 
+
+////////////////////////////////////
 // ADD METHOD
 // metoda dodavanja kartice
 userSchema.methods.addToCart = function (product) {
@@ -37,14 +39,11 @@ userSchema.methods.addToCart = function (product) {
   const cartProductIndex = this.cart.items.findIndex((cp) => {
     return cp.productId.toString() === product._id.toString();
   });
-
   console.log('cartProductIndex='.red, cartProductIndex);
-
   let newQuantity = 1;
   // stvaram kopiju polja
   const updatedCartItems = [...this.cart.items];
   console.log(updatedCartItems);
-
   // ako je pronasao zapis vec postoji u bazi..
   if (cartProductIndex >= 0) {
     newQuantity = this.cart.items[cartProductIndex].quantity + 1;
@@ -56,14 +55,11 @@ userSchema.methods.addToCart = function (product) {
       quantity: newQuantity, // veza 2 isto ime !!!
     });
   }
-
-  //
   const updatedCart = { items: updatedCartItems };
-
   this.cart = updatedCart;
-
   return this.save();
 };
+
 
 ////////////////////////////////////
 // DELETE cart
@@ -75,6 +71,7 @@ userSchema.methods.removeFromCart = function (productId) {
   return this.save();
 };
 
+
 ////////////////////////////////////
 // Clear cart
 userSchema.methods.clearCart = function () {
@@ -82,7 +79,8 @@ userSchema.methods.clearCart = function () {
   return this.save();
 };
 
-///////////////////////////////////////////////////////////////////
+
+// EXPORT EXPORT EXPORT EXPORT EXPORT EXPORT EXPORT
 // mongosse automatski pretvara 'User' u mala slova =>(user), radi množinu na engleskom i kreira zapis u bazi
 module.exports = mongoose.model('User', userSchema);
 

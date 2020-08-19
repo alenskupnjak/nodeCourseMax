@@ -13,6 +13,7 @@ exports.getProducts = (req, res, next) => {
         prod: products,
         pageTitle: 'Svi proizvodi',
         path: '/products',
+        isAutoriziran: req.isLoggedIn
       });
     })
     .catch((err) => {
@@ -31,6 +32,7 @@ exports.getOneProduct = (req, res, next) => {
         prod: product,
         pageTitle: product.title,
         path: '/products',
+        isAutoriziran: req.isLoggedIn
       });
     })
     .catch((err) => console.log(err));
@@ -46,6 +48,7 @@ exports.getIndex = (req, res, next) => {
         prod: products,
         pageTitle: 'Shop',
         path: '/',
+        isAutoriziran: req.isLoggedIn
       });
     })
     .catch((err) => {
@@ -67,6 +70,7 @@ exports.getCart = (req, res, next) => {
         path: '/cart',
         pageTitle: 'Your Cart',
         dataRender: user.cart.items,
+        isAutoriziran: req.isLoggedIn
       });
     })
     .catch((err) => console.log(err));
@@ -138,6 +142,7 @@ exports.getOrders = (req, res, next) => {
         path: '/orders',  // path nam služi za odredivanje aktivnog menija u navbaru, (navigation.ejs)
         pageTitle: 'Your Orders',
         orders: orders,
+        isAutoriziran: req.isLoggedIn
       });
     })
     .catch((err) => console.log(err));
