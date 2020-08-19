@@ -1,6 +1,9 @@
 const colors = require('colors');
-const Product = require('../models/productsModel');
 
+const BiloKojeImeProduct = require('../models/productsModel');
+
+
+// mongoose mongoose mongoose mongoose mongoose 
 // Povlačimo podatke
 // ..admin/add-product => GET
 exports.getAddProduct = (req, res, next) => {
@@ -11,7 +14,7 @@ exports.getAddProduct = (req, res, next) => {
   });
 };
 
-/////////////////////////////////////////////
+// mongoose mongoose mongoose mongoose mongoose 
 // Kreiramo zapis u bazi
 // .....admin/add-product => POST
 exports.postAddProduct = (req, res, next) => {
@@ -19,18 +22,18 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-  console.log(req.user.name);
-  
-  const product = new Product(
-    title,
-    price,
-    description,
-    imageUrl,
-    null,
-    req.user._id
-  );
+
+  // kreiranje novog
+  const product = new BiloKojeImeProduct ({
+    title: title,
+    price: price,
+    description: description,
+    imageUrl: imageUrl,
+  });
+
+  // kreiramo zapis
   product
-    .save()
+    .save()  // ugradena funkcija mongoose
     .then((result) => {
       // console.log(result);
       console.log('Created Product');
@@ -42,10 +45,11 @@ exports.postAddProduct = (req, res, next) => {
 };
 
 
+// mongoose mongoose mongoose mongoose mongoose 
 // /admin/add-product => GET
 exports.getEditProduct = (req, res, next) => {
   const prodId = req.params.id;
-  Product.findById(prodId)
+  BiloKojeImeProduct.findById(prodId)
     .then((products) => {
       res.render('admin/edit-product', {
         pageTitle: 'Edit proizvod',
@@ -58,6 +62,7 @@ exports.getEditProduct = (req, res, next) => {
 };
 
 
+// mongoose mongoose mongoose mongoose mongoose 
 // UPDATE
 exports.postUpdateProduct = (req, res, next) => {
   const prodId = req.body.productId;
@@ -65,10 +70,15 @@ exports.postUpdateProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-  const product = new Product(title, price, description, imageUrl, prodId);
-  product
-    .update()
-    .then((result) => {
+  // const product = new Product(title, price, description, imageUrl, prodId);
+  BiloKojeImeProduct.findById(prodId).then(product => {
+    product.title = title;
+    product.price = price;
+    product.imageUrl = imageUrl;
+    product.description = description;
+    return product.save()
+
+  }).then((result) => {
       console.log('UPDATE Product');
       res.redirect('/admin/products');
     })
@@ -78,10 +88,11 @@ exports.postUpdateProduct = (req, res, next) => {
 };
 
 
-// DELETE
+// mongoose mongoose mongoose mongoose mongoose 
+// DELETE zapis
 exports.deleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
-  Product.deleteById(prodId)
+  BiloKojeImeProduct.findByIdAndRemove(prodId)
     .then(() => {
       console.log('DESTROYED PRODUCT');
       res.redirect('/admin/products');
@@ -90,9 +101,14 @@ exports.deleteProduct = (req, res, next) => {
 };
 
 
+
+
+
+// mongoose mongoose mongoose mongoose mongoose 
+// dohvacanje svih zapisa iz baze
 // /admin/products => GET
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll()
+  BiloKojeImeProduct.find()
     .then((products) => {
       res.render('admin/products', {
         prod: products,

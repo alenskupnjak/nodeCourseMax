@@ -2,15 +2,18 @@ const colors = require('colors');
 const Product = require('../models/productsModel');
 const User = require('../models/userModel');
 
+// mongoose mongoose mongoose mongoose mongoose 
 // Dohvacanje svih proizvoda
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll()
+  console.log('Broj zapisa u bazi= ',Product.count());
+  
+  Product.find()  // ugradena mongoose funkcija
     .then((products) => {
-      // console.log(products);
+      console.log(products);
 
       res.render('shop/product-list', {
         prod: products,
-        pageTitle: 'All Products',
+        pageTitle: 'Svi proizvodi',
         path: '/products',
       });
     })
@@ -19,10 +22,11 @@ exports.getProducts = (req, res, next) => {
     });
 };
 
+// mongoose mongoose mongoose mongoose mongoose 
 // Dohvacanje jednog proizvoda i prikazivanje detalja
 exports.getOneProduct = (req, res, next) => {
   const prodId = req.params.id;
-  Product.findById(prodId)
+  Product.findById(prodId) // ugradena funkcija mongoose
     .then((product) => {
       console.log(product);
       res.render('shop/product-detail', {
@@ -34,10 +38,14 @@ exports.getOneProduct = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
+// mongoose mongoose mongoose mongoose mongoose 
 // Prikazujemo sve proizvode BAZA
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll()
+  const numAdventures = Product.estimatedDocumentCount();
+  Product.find()
     .then((products) => {
+      console.log(products);
+      
       res.render('shop/index', {
         prod: products,
         pageTitle: 'Shop',

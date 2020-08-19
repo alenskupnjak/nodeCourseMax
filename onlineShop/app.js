@@ -6,9 +6,11 @@ const colors = require('colors');
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose')
 const { err404 } = require('./controllers/errorCtrl');
-const mongoConnect = require('./util/database').mongoConnect;
-const User = require('./models/userModel');
+// izvedba bez mongoose
+// const mongoConnect = require('./util/database').mongoConnect;
+// const User = require('./models/userModel');
 
 // Load env vars
 dotenv.config({ path: './config/config.env' });
@@ -23,7 +25,7 @@ const shopRoutes = require('./routes/shopRouter');
 //   { flags: 'a' }
 // );
 
-// kreiranje express aplikaciju
+// START! Kreiranje express aplikacije! 
 const app = express();
 
 // definiramo template engine koji cemo koristiti u aplikaciji (EJS ili PUG ili express-handlebars)
@@ -41,18 +43,21 @@ app.use(express.static(path.join(__dirname, 'public')));
 // prikazi logove
 // app.use(morgan('combined', { stream: accessLogStream }));
 
-app.use((req, res, next) => {
-  User.findById('5f12c65f5b74cabc30ef2bc5')
-    .then((user) => {
-      // definiran user koj se provlaci kroz cijelu aplikaciju
-      req.podaci = [
-        ' app.js definirana je  app.js-req.user = new User(user.name, user.email, user.cart, user._id);',
-      ];
-      req.user = new User(user.name, user.email, user.cart, user._id, user.artikal);
-      next();
-    })
-    .catch((err) => console.log(err));
-});
+
+
+// // verzija mongoDB
+// app.use((req, res, next) => {
+//   User.findById('5f12c65f5b74cabc30ef2bc5')
+//     .then((user) => {
+//       // definiran user koj se provlaci kroz cijelu aplikaciju
+//       req.podaci = [
+//         ' app.js definirana je  app.js-req.user = new User(user.name, user.email, user.cart, user._id);',
+//       ];
+//       req.user = new User(user.name, user.email, user.cart, user._id, user.artikal);
+//       next();
+//     })
+//     .catch((err) => console.log(err));
+// });
 
 
 // Rute
@@ -63,9 +68,22 @@ app.use('/', shopRoutes);
 app.use('*', err404);
 
 
-mongoConnect(() => {
-  app.listen(process.env.port || 3000, () => {
-    console.log(`App listening on port ${process.env.PORT}`.blue);
-    console.log(process.env.NODE_ENV.yellow);
+// spajanje na databazu
+
+mongoose.connect(process.env.SHOP_DATABASE_MONGOOSE,{ useNewUrlParser: true,useUnifiedTopology: true })
+.then(result=>{
+  app.listen(5500, () => {
+    console.log('App listening on port 5500!');
   });
-});
+})
+.catch((err=>{
+  console.log(err);  
+}))
+
+// Izvedba bez mongoose
+// mongoConnect(() => {
+//   app.listen(process.env.port || 3000, () => {
+//     console.log(`App listening on port ${process.env.PORT}`.blue);
+//     console.log(process.env.NODE_ENV.yellow);
+//   });
+// });
