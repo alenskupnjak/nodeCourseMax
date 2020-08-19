@@ -129,12 +129,13 @@ exports.createOrder = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
+// mongoose mongoose mongoose mongoose mongoose
 // narudzbe
 exports.getOrders = (req, res, next) => {
   Order.find({ 'user.userId': req.user._id })
     .then((orders) => {
       res.render('shop/orders', {
-        path: '/orders',
+        path: '/orders',  // path nam služi za odredivanje aktivnog menija u navbaru, (navigation.ejs)
         pageTitle: 'Your Orders',
         orders: orders,
       });
@@ -142,10 +143,13 @@ exports.getOrders = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
+
+
+
 //
 exports.getCheckout = async (req, res, next) => {
   res.render('shop/index', {
     pageTitle: 'Check out',
-    path: '/cart',
+    path: '/cart', // path nam služi za odredivanje aktivnog menija u navbaru, (navigation.ejs)
   });
 };

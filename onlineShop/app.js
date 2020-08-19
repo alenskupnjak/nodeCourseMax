@@ -18,6 +18,7 @@ dotenv.config({ path: './config/config.env' });
 // ROUTES
 const adminRoutes = require('./routes/adminRouter');
 const shopRoutes = require('./routes/shopRouter');
+const authRoutes = require('./routes/authRouter');
 
 // // za kreiranje logova u   R0000
 // const accessLogStream = fs.createWriteStream(
@@ -62,6 +63,7 @@ app.use((req, res, next) => {
 // Rute
 app.use('/admin', adminRoutes);
 app.use('/', shopRoutes);
+app.use('/', authRoutes);
 
 // zadnji middelware koji lovi sve
 app.use('*', err404);
