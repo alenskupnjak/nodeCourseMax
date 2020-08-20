@@ -17,7 +17,7 @@ const userSchema = new Schema({
   cart: {
     items: [
       {
-        // ovdje je vaza sa productModel!!
+        // ovdje je veza sa productModel!!
         productId: {
           // veza 1 isto ime !!!
           type: Schema.Types.ObjectId,
@@ -30,7 +30,6 @@ const userSchema = new Schema({
   },
 });
 
-
 ////////////////////////////////////
 // ADD METHOD
 // metoda dodavanja kartice
@@ -39,11 +38,10 @@ userSchema.methods.addToCart = function (product) {
   const cartProductIndex = this.cart.items.findIndex((cp) => {
     return cp.productId.toString() === product._id.toString();
   });
-  console.log('cartProductIndex='.red, cartProductIndex);
   let newQuantity = 1;
   // stvaram kopiju polja
   const updatedCartItems = [...this.cart.items];
-  console.log(updatedCartItems);
+
   // ako je pronasao zapis vec postoji u bazi..
   if (cartProductIndex >= 0) {
     newQuantity = this.cart.items[cartProductIndex].quantity + 1;
@@ -60,7 +58,6 @@ userSchema.methods.addToCart = function (product) {
   return this.save();
 };
 
-
 ////////////////////////////////////
 // DELETE cart
 userSchema.methods.removeFromCart = function (productId) {
@@ -71,14 +68,12 @@ userSchema.methods.removeFromCart = function (productId) {
   return this.save();
 };
 
-
 ////////////////////////////////////
 // Clear cart
 userSchema.methods.clearCart = function () {
   this.cart = { items: [] };
   return this.save();
 };
-
 
 // EXPORT EXPORT EXPORT EXPORT EXPORT EXPORT EXPORT
 // mongosse automatski pretvara 'User' u mala slova =>(user), radi množinu na engleskom i kreira zapis u bazi

@@ -9,14 +9,19 @@
                 <h1>Nothing there!</h1>
             <% } else { %>
                 <ul class="orders">
-                    <% orders.forEach(order => { %>
+                    <% orders.forEach((order, index) => { %>
                         <li class="orders__item" >
-                            <h1># <%= order._id %></h1>
+                            <h1>Narudžba broj <%= index+1 %></h1>
+                            <p>Šifra: <%= order._id %></p>
                             <ul class="orders__products">
                                 <% order.products.forEach(data => { %>
-                                    <li class="orders__products-item"><%= data.product.title %> (<%= data.quantity %>)</li>
+                                    <li class="orders__products-item"><%= data.product.title %> Količina: (<%= data.quantity %>)</li>
                                 <% }); %>
                             </ul>
+                            <form action="/delete-order" method="POST">
+                                <input type="hidden" name="productId" value="<%= order._id %>">
+                                  <button class="btn" type="submit">Delete</button>
+                            </form>
                         </li>
                     <% }); %>
                 </ul>

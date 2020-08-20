@@ -10,7 +10,7 @@ exports.getAddProduct = (req, res, next) => {
     pageTitle: 'Dodaj proizvod',
     path: '/admin/add-product',
     editing: false,
-    isAutoriziran: req.isLoggedIn
+    isAutoriziran: req.session.isLoggedIn
   });
 };
 
@@ -22,8 +22,6 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-
-  console.log('req.user'.red, req.user, req.podaci);
 
   // kreiranje novog
   const product = new BiloKojeImeProduct({
@@ -58,7 +56,7 @@ exports.getEditProduct = (req, res, next) => {
         path: '/admin/edit-product',
         jedanProduct: products,
         editing: true,
-        isAutoriziran: req.isLoggedIn
+        isAutoriziran: req.session.isLoggedIn
       });
     })
     .catch((err) => console.log(err));
@@ -107,8 +105,8 @@ exports.deleteProduct = (req, res, next) => {
 // /admin/products => GET
 exports.getProducts = (req, res, next) => {
   BiloKojeImeProduct.find()
-    // .select('title price -_id')  // - minus predstavlja isključivanje
-    // .populate('userID', 'name') 
+    // .select('title price -_id')  // opcija, - minus predstavlja isključivanje
+    // .populate('userID', 'name')  // opcija,
     .populate('userID')
     .then((products) => {
       console.log(products);
@@ -117,7 +115,7 @@ exports.getProducts = (req, res, next) => {
         prod: products,
         pageTitle: 'Admin Products',
         path: '/admin/products',
-        isAutoriziran: req.isLoggedIn
+        isAutoriziran: req.session.isLoggedIn
       });
     })
     .catch((err) => console.log(err));

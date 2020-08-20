@@ -1,6 +1,5 @@
 'use strict';
 const dotenv = require('dotenv');
-const fs = require('fs');
 const morgan = require('morgan');
 const colors = require('colors');
 const path = require('path');
@@ -8,11 +7,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const { err404 } = require('./controllers/errorCtrl');
+const session = require('express-session');
+var MongoDBStore = require('connect-mongodb-session')(session);
 // izvedba bez mongoose
 // const mongoConnect = require('./util/database').mongoConnect;
 const User = require('./models/userModel');
 
-// Load env vars
+// Usnimavanje env vars
 dotenv.config({ path: './config/config.env' });
 
 // ROUTES
@@ -20,14 +21,17 @@ const adminRoutes = require('./routes/adminRouter');
 const shopRoutes = require('./routes/shopRouter');
 const authRoutes = require('./routes/authRouter');
 
-// // za kreiranje logova u   R0000
-// const accessLogStream = fs.createWriteStream(
-//   path.join(__dirname, 'access.log'),
-//   { flags: 'a' }
-// );
-
 // START! Kreiranje express aplikacije!
 const app = express();
+
+// definiranje session veze u bazi
+let store = new MongoDBStore({
+  uri: process.env.SHOP_DATABASE_MONGOOSE,
+  collection: 'mojiSessions',
+  // By default, sessions expire after 2 weeks. The `expires` option lets
+  // you overwrite that by setting the expiration in milliseconds
+  // expires: 1000 * 60 * 60 * 24 * 30, // 30 days in milliseconds
+});
 
 // definiramo template engine koji cemo koristiti u aplikaciji (EJS ili PUG ili express-handlebars)
 // app.set('view engine', 'pug'); // za pug
@@ -38,29 +42,37 @@ app.set('views', path.join(__dirname, 'views'));
 // body -parser, bez ovoga ne salje podatke automatski kroz req.body (npm i body-parser)
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// definiranje statičkih tranica za HTML ....
+// definiranje PATH statičkih tranica za HTML ....
 app.use(express.static(path.join(__dirname, 'public')));
 
-// prikazi logove
-// app.use(morgan('combined', { stream: accessLogStream }));
+// definiranje session-middelware za cookie
+app.use(
+  session({
+    secret: process.env.SHOP_DATABASE_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: store,
+  })
+);
 
-// verzija mongoDB
+// ako smo logirani kreiramo User.model
 app.use((req, res, next) => {
-  User.findById('5f3d0577469cb830c0bbf38c')
+  // ako korisnik logiran preskače kreiranje usera
+  if (!req.session.user) {
+    return next();
+  }
+  User.findById(req.session.user._id)
     .then((user) => {
-      // definiran user koji se provlaci kroz cijelu aplikaciju
-      req.podaci = [
-        ' app.js definirana je  app.js-req.user = new User(user.name, user.email, user.cart, user._id);',
-      ];
-
-      // definicija user-a za daljnji radu u programu
       req.user = user;
       next();
     })
     .catch((err) => console.log(err));
 });
 
-// Rute
+// prikazi logove
+// app.use(morgan('combined', { stream: accessLogStream }));
+
+// Rute u programu
 app.use('/admin', adminRoutes);
 app.use('/', shopRoutes);
 app.use('/', authRoutes);
@@ -69,7 +81,6 @@ app.use('/', authRoutes);
 app.use('*', err404);
 
 // spajanje na databazu
-
 mongoose
   .connect(process.env.SHOP_DATABASE_MONGOOSE, {
     useNewUrlParser: true,
@@ -91,7 +102,6 @@ mongoose
         user.save();
       }
     });
-
     app.listen(5500, () => {
       console.log('App listening on port 5500!');
     });
@@ -99,11 +109,3 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
-
-// Izvedba bez mongoose
-// mongoConnect(() => {
-//   app.listen(process.env.port || 3000, () => {
-//     console.log(`App listening on port ${process.env.PORT}`.blue);
-//     console.log(process.env.NODE_ENV.yellow);
-//   });
-// });

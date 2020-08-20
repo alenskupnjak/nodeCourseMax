@@ -3,10 +3,14 @@ const shopController = require('../controllers/shopCtrl')
 
 const router = express.Router(); // setup za router
 
+
+//////////////////////////////////////////////////////////
+// PATH /
+
 // prikaz svih artikala na početnoj strani
 router.get('/', shopController.getIndex);
 
-//
+// prikaz svih podataka
 router.get('/products', shopController.getProducts);
 
 // povlačenje jednog podatka
@@ -26,6 +30,9 @@ router.post('/create-order', shopController.createOrder);
 
 // povlačenje ordera
 router.get('/orders', shopController.getOrders);
+
+// povlačenje ordera
+router.post('/delete-order', shopController.postDeleteOrders);
 
 // // kreiranje narudžbe
 // router.get('/checkout', shopController.getCheckout);

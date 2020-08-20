@@ -1,19 +1,16 @@
-const colors = require('colors');
 const Product = require('../models/productsModel');
 const Order = require('../models/orderModel');
 
 // mongoose mongoose mongoose mongoose mongoose
 // Dohvacanje svih proizvoda
 exports.getProducts = (req, res, next) => {
-  console.log('Broj zapisa u bazi= ', Product.count());
-
   Product.find() // ugradena mongoose funkcija
     .then((products) => {
       res.render('shop/product-list', {
         prod: products,
         pageTitle: 'Svi proizvodi',
         path: '/products',
-        isAutoriziran: req.isLoggedIn
+        isAutoriziran: req.session.isLoggedIn,
       });
     })
     .catch((err) => {
@@ -32,7 +29,7 @@ exports.getOneProduct = (req, res, next) => {
         prod: product,
         pageTitle: product.title,
         path: '/products',
-        isAutoriziran: req.isLoggedIn
+        isAutoriziran: req.session.isLoggedIn,
       });
     })
     .catch((err) => console.log(err));
@@ -48,7 +45,7 @@ exports.getIndex = (req, res, next) => {
         prod: products,
         pageTitle: 'Shop',
         path: '/',
-        isAutoriziran: req.isLoggedIn
+        isAutoriziran: req.session.isLoggedIn,
       });
     })
     .catch((err) => {
@@ -57,20 +54,18 @@ exports.getIndex = (req, res, next) => {
 };
 
 // mongoose mongoose mongoose mongoose mongoose
-// povlačimo sve artikle iz chart.json ako ih ima
+// povlačimo sve artikle
 // router GET
 exports.getCart = (req, res, next) => {
   req.user
     .populate('cart.items.productId')
-    //https://mongoosejs.com/docs/api.html#document_Document-execPopulate
     .execPopulate() // Explicitly executes population and returns a promise
     .then((user) => {
-      console.log(colors.red(user.cart.items));
       res.render('shop/cart', {
         path: '/cart',
         pageTitle: 'Your Cart',
         dataRender: user.cart.items,
-        isAutoriziran: req.isLoggedIn
+        isAutoriziran: req.session.isLoggedIn,
       });
     })
     .catch((err) => console.log(err));
@@ -138,18 +133,43 @@ exports.createOrder = (req, res, next) => {
 exports.getOrders = (req, res, next) => {
   Order.find({ 'user.userId': req.user._id })
     .then((orders) => {
+      let duljina = orders.length
+      console.log(duljina);
+      
       res.render('shop/orders', {
-        path: '/orders',  // path nam služi za odredivanje aktivnog menija u navbaru, (navigation.ejs)
+        path: '/orders', // path nam služi za odredivanje aktivnog menija u navbaru, (navigation.ejs)
         pageTitle: 'Your Orders',
         orders: orders,
-        isAutoriziran: req.isLoggedIn
+        isAutoriziran: req.session.isLoggedIn,
       });
     })
     .catch((err) => console.log(err));
 };
 
+// mongoose mongoose mongoose mongoose mongoose
+// narudzbe
+exports.postDeleteOrders = (req, res, next) => {
+  console.log(req.body);
 
+  Order.find({ _id: req.body.productId })
+    .then((order) => {
+      console.log(order);
+      // res.render('shop/orders', {
+      //   path: '/orders', // path nam služi za odredivanje aktivnog menija u navbaru, (navigation.ejs)
+      //   pageTitle: 'Your Orders',
+      //   orders: orders,
+      //   isAutoriziran: req.session.isLoggedIn,
+      // });
+    })
+    .catch((err) => console.log(err));
 
+  Order.findByIdAndDelete({ _id: req.body.productId })
+    .then((order) => {
+      console.log(order);
+      res.redirect('/orders');
+    })
+    .catch((err) => console.log(err));
+};
 
 //
 exports.getCheckout = async (req, res, next) => {
