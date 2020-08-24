@@ -19,6 +19,10 @@ form {
   display: inline;
 }
 
+.centered {
+  text-align: center;
+}
+
 .image {
   height: 15rem;
 }

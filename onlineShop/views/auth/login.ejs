@@ -1,5 +1,6 @@
 <%- include('../includes/head.ejs')%>
 <link rel="stylesheet" href="/css/forms.css">
+<link rel="stylesheet" href="/css/main.css">
 </head>
 
 <body>
@@ -21,5 +22,8 @@
             <button class="btn" type="submit">Login</button>
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
         </form>
+        <div class="centered"> 
+            <a href="/auth/reset">Reset password</a>
+        </div>
     </main>
     <%- include('../includes/end.ejs')%>

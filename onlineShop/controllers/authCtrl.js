@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const sgTransport = require('nodemailer-sendgrid-transport');
@@ -10,8 +11,7 @@ const transporter = nodemailer.createTransport(
     // port: 2525,
     // secure: false, // true for 465, false for other ports
     auth: {
-      api_key:
-        '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',
+      api_key:  process.env.API_KEY_SENDGRID
     },
   })
 );
@@ -83,7 +83,9 @@ exports.postLogin = (req, res, next) => {
           // ovimo smo sigurni da se je operacija snimanja u bazi zavrsena
           // zbog toga smo sigurni da ce refres (res.redirect('/');) biti OK.
           req.session.save((err) => {
-            console.log(err);
+            if(err) {
+              console.log(err);
+            }
             res.redirect('/');
           });
         })
@@ -131,7 +133,8 @@ exports.postSignup = (req, res, next) => {
             text: 'Hello world?', // plain text body
             html: '<p>Uspjesna prijava</p>', // html body
           });
-        }).catch((err)=>{
+        })
+        .catch((err) => {
           console.log(err);
         });
     })
@@ -145,5 +148,60 @@ exports.postLogout = (req, res, next) => {
   req.session.destroy((err) => {
     console.log(err);
     res.redirect('/');
+  });
+};
+
+// RESET RESET PASSWORD form
+exports.getReset = (req, res, next) => {
+  let message = req.flash('greska');
+  if (message.length > 0) {
+    message = message[0];
+  } else {
+    message = null;
+  }
+  res.render('auth/reset', {
+    path: '/reset', // path nam služi za odredivanje aktivnog menija u navbaru, (navigation.ejs)
+    pageTitle: 'Reset Password',
+    errorMessage: message,
+  });
+};
+
+// RESET RESET PASSWORD form
+exports.postReset = (req, res, next) => {
+  crypto.randomBytes(32, (err, buffer) => {
+    if (err) {
+      console.log(err);
+      return res.redirect('/auth/reset');
+    }
+    // kreiramo token
+    const token = buffer.toString('hex');
+    // Pronalazimo usera
+    User.findOne({ email: req.body.email })
+      .then((user) => {
+        if (!user) {
+          req.flash('greska', 'Korisnik sa takvim email-om ne postoji!');
+          return res.redirect('/auth/reset');
+        }
+        user.resetToken = token;
+        user.resetTokenExpiration = Date.now() + 1000 * 60 * 60; // jedan sat
+        return user.save();
+      })
+      .then((user) => {
+        console.log('user:'.red, user, 'req.body.email'.red, req.body.email);
+        
+        res.redirect('/');
+        return transporter.sendMail({
+          from: 'skupnjaka@gmail.com', // sender address
+          to: req.body.email, // list of receivers
+          subject: 'Password reset', // Subject line
+          text: 'Hello world?', // plain text body
+          // html: `<p>Resetiraj password<p>
+          //       <p>Klikni <a href="http://localhost:3000/auth/reset/${token}"<p>
+          // `, // html body
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   });
 };

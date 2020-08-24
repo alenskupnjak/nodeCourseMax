@@ -37,7 +37,6 @@ exports.getOneProduct = (req, res, next) => {
 // Prikazujemo sve proizvode BAZA
 exports.getIndex = (req, res, next) => {
   const numAdventures = Product.estimatedDocumentCount();
-  console.log('getIndex-req.session='.red,req.session, );
   Product.find()
     .then((products) => {
       res.render('shop/index', {
