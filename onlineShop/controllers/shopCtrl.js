@@ -39,6 +39,7 @@ exports.getOneProduct = (req, res, next) => {
 // Prikazujemo sve proizvode BAZA
 exports.getIndex = (req, res, next) => {
   const numAdventures = Product.estimatedDocumentCount();
+  console.log('getIndex-req.session='.red,req.session, );
   Product.find()
     .then((products) => {
       res.render('shop/index', {
@@ -131,6 +132,8 @@ exports.createOrder = (req, res, next) => {
 // mongoose mongoose mongoose mongoose mongoose
 // narudzbe
 exports.getOrders = (req, res, next) => {
+  console.log('getOrders - isAutoriziran:= '.red, req.session.isLoggedIn);
+  
   Order.find({ 'user.userId': req.user._id })
     .then((orders) => {
       let duljina = orders.length

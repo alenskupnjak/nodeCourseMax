@@ -6,11 +6,16 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+
+//https://github.com/expressjs/session
+const sessionCart = require('express-session');
+
+// https://www.npmjs.com/package/connect-mongodb-session
+const MongoDBStore = require('connect-mongodb-session')(sessionCart);
+
+
+
 const { err404 } = require('./controllers/errorCtrl');
-const session = require('express-session');
-var MongoDBStore = require('connect-mongodb-session')(session);
-// izvedba bez mongoose
-// const mongoConnect = require('./util/database').mongoConnect;
 const User = require('./models/userModel');
 
 // Usnimavanje env vars
@@ -24,7 +29,7 @@ const authRoutes = require('./routes/authRouter');
 // START! Kreiranje express aplikacije!
 const app = express();
 
-// definiranje session veze u bazi
+// definiranje session veze u bazi, constructor
 let store = new MongoDBStore({
   uri: process.env.SHOP_DATABASE_MONGOOSE,
   collection: 'mojiSessions',
@@ -45,9 +50,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // definiranje PATH statičkih tranica za HTML ....
 app.use(express.static(path.join(__dirname, 'public')));
 
-// definiranje session-middelware za cookie
+// SESSION SESSION SESSION SESSION SESSION SESSION
+// https://www.npmjs.com/package/express-session
 app.use(
-  session({
+  sessionCart({
     secret: process.env.SHOP_DATABASE_SECRET,
     resave: false,
     saveUninitialized: false,
@@ -55,12 +61,13 @@ app.use(
   })
 );
 
-// ako smo logirani kreiramo User.model
+// ako smo logirani kreiramo User.model za pozrebe razvoja programa
 app.use((req, res, next) => {
   // ako korisnik logiran preskače kreiranje usera
   if (!req.session.user) {
     return next();
   }
+  // kreiramo user-a
   User.findById(req.session.user._id)
     .then((user) => {
       req.user = user;
@@ -80,6 +87,12 @@ app.use('/', authRoutes);
 // zadnji middelware koji lovi sve
 app.use('*', err404);
 
+
+// definiranje porta
+const PORT = process.env.PORT || 5500;
+
+// console.log(process.env);
+
 // spajanje na databazu
 mongoose
   .connect(process.env.SHOP_DATABASE_MONGOOSE, {
@@ -87,22 +100,22 @@ mongoose
     useUnifiedTopology: true,
   })
   .then((result) => {
-    // gledamo ima li ijedan zapis u bazi
-    User.findOne().then((user) => {
-      if (!user) {
-        console.log(
-          'Kreiramo za potrebe razvijanja programa novog korisnika ako ne postoji'
-        );
-        const user = new User({
-          name: 'Alen',
-          email: 'alen@test.com',
-          cart: { items: [] },
-        });
-        // snimamo usera
-        user.save();
-      }
-    });
-    app.listen(5500, () => {
+            // // gledamo ima li ijedan zapis u bazi
+            // User.findOne().then((user) => {
+            //   if (!user) {
+            //     console.log(
+            //       'Kreiramo za potrebe razvijanja programa novog korisnika ako ne postoji'
+            //     );
+            //     const user = new User({
+            //       name: 'Alen',
+            //       email: 'alen@test.com',
+            //       cart: { items: [] },
+            //     });
+            //     // snimamo usera
+            //     user.save();
+            //   }
+            // });
+    app.listen(PORT, () => {
       console.log('App listening on port 5500!');
     });
   })

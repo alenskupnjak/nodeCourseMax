@@ -61,6 +61,22 @@ form {
   color: white;
 }
 
+.main-header__item button {
+  background-color:  #00695c; 
+  text-decoration: none;
+  color: white;
+  border:none;
+  font-size: 14px;
+  
+}
+
+.main-header__item_button {
+  background-color: none;
+  text-decoration: none;
+  color: white;
+  
+}
+
 .main-header__item a:hover,
 .main-header__item a:active,
 .main-header__item a.active {
