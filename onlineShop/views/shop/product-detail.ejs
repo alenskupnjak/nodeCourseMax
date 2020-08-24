@@ -17,8 +17,9 @@
         <p><%= prod.description %></p>
         <% if (isAutoriziran) { %>
             <form action="/cart" method="POST">
-                <button class="btn" type="submit">Add to Cart</button>
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <input type="hidden" name="productId" value="<%= prod.id %>">
+                <button class="btn" type="submit">Add to Cart</button>
             </form>
         <% } %>
     </main>

@@ -6,6 +6,7 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const csrf = require('csurf')
 
 //https://github.com/expressjs/session
 const sessionCart = require('express-session');
@@ -28,6 +29,9 @@ const authRoutes = require('./routes/authRouter');
 
 // START! Kreiranje express aplikacije!
 const app = express();
+
+// inicijalizacija za za svaki renderpage, zaštita stranice
+const csrfProtection = csrf();
 
 // definiranje session veze u bazi, constructor
 let store = new MongoDBStore({
@@ -61,6 +65,9 @@ app.use(
   })
 );
 
+// aktivacija zaštite stranice od hakiranja...
+app.use(csrfProtection);
+
 // ako smo logirani kreiramo User.model za pozrebe razvoja programa
 app.use((req, res, next) => {
   // ako korisnik logiran preskače kreiranje usera
@@ -74,6 +81,13 @@ app.use((req, res, next) => {
       next();
     })
     .catch((err) => console.log(err));
+});
+
+// podatci vidljivi za sve VIEWS !!!
+app.use((req, res, next) => {
+  res.locals.isAutoriziran = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+  next();
 });
 
 // prikazi logove

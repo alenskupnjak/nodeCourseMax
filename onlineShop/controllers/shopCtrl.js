@@ -46,7 +46,8 @@ exports.getIndex = (req, res, next) => {
         prod: products,
         pageTitle: 'Shop',
         path: '/',
-        isAutoriziran: req.session.isLoggedIn,
+        // isAutoriziran: req.session.isLoggedIn,  prevbaceno u middlevare
+        // csfrToken: req.csrfToken() // zastita page stranice
       });
     })
     .catch((err) => {
@@ -112,7 +113,7 @@ exports.createOrder = (req, res, next) => {
       // kreiramo novu narudžbu
       const order = new Order({
         user: {
-          name: req.user.name,
+          email: req.user.email,
           userId: req.user._id,
         },
         products: productsData,
