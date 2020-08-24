@@ -9,8 +9,7 @@ exports.getProducts = (req, res, next) => {
       res.render('shop/product-list', {
         prod: products,
         pageTitle: 'Svi proizvodi',
-        path: '/products',
-        isAutoriziran: req.session.isLoggedIn,
+        path: '/products'
       });
     })
     .catch((err) => {
@@ -28,8 +27,7 @@ exports.getOneProduct = (req, res, next) => {
       res.render('shop/product-detail', {
         prod: product,
         pageTitle: product.title,
-        path: '/products',
-        isAutoriziran: req.session.isLoggedIn,
+        path: '/products'
       });
     })
     .catch((err) => console.log(err));
@@ -45,9 +43,7 @@ exports.getIndex = (req, res, next) => {
       res.render('shop/index', {
         prod: products,
         pageTitle: 'Shop',
-        path: '/',
-        // isAutoriziran: req.session.isLoggedIn,  prevbaceno u middlevare
-        // csfrToken: req.csrfToken() // zastita page stranice
+        path: '/'
       });
     })
     .catch((err) => {
@@ -66,8 +62,7 @@ exports.getCart = (req, res, next) => {
       res.render('shop/cart', {
         path: '/cart',
         pageTitle: 'Your Cart',
-        dataRender: user.cart.items,
-        isAutoriziran: req.session.isLoggedIn,
+        dataRender: user.cart.items
       });
     })
     .catch((err) => console.log(err));
@@ -143,8 +138,7 @@ exports.getOrders = (req, res, next) => {
       res.render('shop/orders', {
         path: '/orders', // path nam služi za odredivanje aktivnog menija u navbaru, (navigation.ejs)
         pageTitle: 'Your Orders',
-        orders: orders,
-        isAutoriziran: req.session.isLoggedIn,
+        orders: orders
       });
     })
     .catch((err) => console.log(err));
@@ -153,20 +147,6 @@ exports.getOrders = (req, res, next) => {
 // mongoose mongoose mongoose mongoose mongoose
 // narudzbe
 exports.postDeleteOrders = (req, res, next) => {
-  console.log(req.body);
-
-  Order.find({ _id: req.body.productId })
-    .then((order) => {
-      console.log(order);
-      // res.render('shop/orders', {
-      //   path: '/orders', // path nam služi za odredivanje aktivnog menija u navbaru, (navigation.ejs)
-      //   pageTitle: 'Your Orders',
-      //   orders: orders,
-      //   isAutoriziran: req.session.isLoggedIn,
-      // });
-    })
-    .catch((err) => console.log(err));
-
   Order.findByIdAndDelete({ _id: req.body.productId })
     .then((order) => {
       console.log(order);

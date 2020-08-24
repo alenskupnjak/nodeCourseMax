@@ -9,8 +9,7 @@ exports.getAddProduct = (req, res, next) => {
   res.render('admin/edit-product', {
     pageTitle: 'Dodaj proizvod',
     path: '/admin/add-product',
-    editing: false,
-    isAutoriziran: req.session.isLoggedIn
+    editing: false
   });
 };
 
@@ -55,8 +54,7 @@ exports.getEditProduct = (req, res, next) => {
         pageTitle: 'Edit proizvod',
         path: '/admin/edit-product',
         jedanProduct: products,
-        editing: true,
-        isAutoriziran: req.session.isLoggedIn
+        editing: true
       });
     })
     .catch((err) => console.log(err));
@@ -114,8 +112,7 @@ exports.getProducts = (req, res, next) => {
       res.render('admin/products', {
         prod: products,
         pageTitle: 'Admin Products',
-        path: '/admin/products',
-        isAutoriziran: req.session.isLoggedIn
+        path: '/admin/products'
       });
     })
     .catch((err) => console.log(err));

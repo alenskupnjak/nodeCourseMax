@@ -62,19 +62,17 @@ form {
 }
 
 .main-header__item button {
-  background-color:  #00695c; 
+  background-color: #00695c;
   text-decoration: none;
   color: white;
-  border:none;
+  border: none;
   font-size: 14px;
-  
 }
 
 .main-header__item_button {
   background-color: none;
   text-decoration: none;
   color: white;
-  
 }
 
 .main-header__item a:hover,
@@ -215,25 +213,40 @@ form {
 
 .btn:hover,
 .btn:active {
-  background-color: #B52E31;
+  background-color: #b52e31;
   color: white;
 }
 
-.product-detail{
+.product-detail {
   display: flex;
   flex-direction: column;
-  width:80%;
+  width: 80%;
   text-align: center;
   align-items: center;
   /* background-color: blue; */
   margin: auto;
 }
-.product-detail img{
-  width:200px;
+.product-detail img {
+  width: 200px;
 }
 
-.product-detail hr{
+.product-detail hr {
   width: 100%;
+}
+
+.user-message {
+  margin: auto;
+  width: 80%;
+  border: 1px solid;
+  background: rgb(81, 81, 204);
+  padding: 1rem;
+  border-radius: 3px;
+  text-align: center;
+}
+
+.user-message--error {
+  border-color: red;
+  background: rgb(211, 176, 176)
 }
 
 @media (min-width: 768px) {

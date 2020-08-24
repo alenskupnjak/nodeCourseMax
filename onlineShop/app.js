@@ -6,13 +6,10 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const csrf = require('csurf')
-
-//https://github.com/expressjs/session
-const sessionCart = require('express-session');
-
-// https://www.npmjs.com/package/connect-mongodb-session
-const MongoDBStore = require('connect-mongodb-session')(sessionCart);
+const csrf = require('csurf') // https://www.npmjs.com/package/csurf
+const sessionCart = require('express-session'); //https://github.com/expressjs/session
+const MongoDBStore = require('connect-mongodb-session')(sessionCart); // https://www.npmjs.com/package/connect-mongodb-session
+const flash = require('connect-flash'); // https://www.npmjs.com/package/connect-flash
 
 
 
@@ -68,6 +65,9 @@ app.use(
 // aktivacija zaštite stranice od hakiranja...
 app.use(csrfProtection);
 
+//T he flash is a special area of the session used for storing messages.
+app.use(flash())
+
 // ako smo logirani kreiramo User.model za pozrebe razvoja programa
 app.use((req, res, next) => {
   // ako korisnik logiran preskače kreiranje usera
@@ -83,7 +83,7 @@ app.use((req, res, next) => {
     .catch((err) => console.log(err));
 });
 
-// podatci vidljivi za sve VIEWS !!!
+// podaci vidljivi za sve VIEWS !!!
 app.use((req, res, next) => {
   res.locals.isAutoriziran = req.session.isLoggedIn;
   res.locals.csrfToken = req.csrfToken();

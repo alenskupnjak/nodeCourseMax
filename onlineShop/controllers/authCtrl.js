@@ -5,29 +5,38 @@ const User = require('../models/userModel');
 //
 // prikaz LOGIN forme
 exports.getLogin = (req, res, next) => {
-  // const isLoggedIn = req.get('Cookie').split(';')[1].trim().split('=')[1];
+  let message = req.flash('greska');
+  if (message.length > 0) {
+    message = message[0];
+  } else {
+    message = null;
+  }
   res.render('auth/login', {
     path: '/login', // path nam služi za odredivanje aktivnog menija u navbaru, (navigation.ejs)
     pageTitle: 'Login',
-    isAutoriziran: req.session.isLoggedIn,
+    errorMessage: message,
   });
 };
 
 //
 // GET_SIGNUP GET_SIGNUP GET_SIGNUP GET_SIGNUP GET_SIGNUP
 exports.getSignup = (req, res, next) => {
+  let message = req.flash('greska');
+  if (message.length > 0) {
+    message = message[0];
+  } else {
+    message = null;
+  }
   res.render('auth/signup', {
     path: '/signup', // path nam služi za odredivanje aktivnog menija u navbaru, (navigation.ejs)
     pageTitle: 'SignUp',
-    isAutoriziran: req.session.isLoggedIn,
+    errorMessage: message
   });
 };
 
 // LOGIN LOGIN LOGIN LOGIN LOGIN LOGIN LOGIN
 // Logiranje na WEB-stranicu
 exports.postLogin = (req, res, next) => {
-  // res.setHeader('Set-Cookie', 'PokusniSetCookie=true');
-  console.log('req.body'.blue, req.body);
   const email = req.body.email;
   const password = req.body.password;
 
@@ -35,6 +44,7 @@ exports.postLogin = (req, res, next) => {
     .then((user) => {
       // user ne postoji vracamo ga na login
       if (!user) {
+        req.flash('greska', 'Invalid email or password.');
         return res.redirect('/auth/login');
       }
 
@@ -44,6 +54,7 @@ exports.postLogin = (req, res, next) => {
         .then((tocanPassword) => {
           // invalid password vracamo na login stranicu
           if (!tocanPassword) {
+            req.flash('greska', 'Invalid email or password.');
             return res.redirect('/auth/login');
           }
           // password je točan...
@@ -80,6 +91,7 @@ exports.postSignup = (req, res, next) => {
     .then((userDoc) => {
       // ako korisnik postoji, vracamo ga na /signup
       if (userDoc) {
+        req.flash('greska', 'Korisnik već postoji!');
         return res.redirect('/auth/signup');
       }
 
