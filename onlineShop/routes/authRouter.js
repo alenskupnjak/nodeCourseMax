@@ -4,7 +4,7 @@ const authController = require('../controllers/authCtrl')
 const router = express.Router(); // setup za router
 
 //////////////////////////////////////////////////////////
-// PATH /
+// PATH  /auth
 
 router.get('/login', authController.getLogin);
 router.get('/signup', authController.getSignup);

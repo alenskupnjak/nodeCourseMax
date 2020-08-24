@@ -2,7 +2,8 @@ const bcrypt = require('bcryptjs');
 
 const User = require('../models/userModel');
 
-// LOGIN LOGIN LOGIN LOGIN LOGIN
+//
+// prikaz LOGIN forme
 exports.getLogin = (req, res, next) => {
   // const isLoggedIn = req.get('Cookie').split(';')[1].trim().split('=')[1];
   res.render('auth/login', {
@@ -34,7 +35,7 @@ exports.postLogin = (req, res, next) => {
     .then((user) => {
       // user ne postoji vracamo ga na login
       if (!user) {
-        return res.redirect('/login');
+        return res.redirect('/auth/login');
       }
 
       // user postoji, provjera da li je password OK
@@ -43,7 +44,7 @@ exports.postLogin = (req, res, next) => {
         .then((tocanPassword) => {
           // invalid password vracamo na login stranicu
           if (!tocanPassword) {
-            return res.redirect('/login');
+            return res.redirect('/auth/login');
           }
           // password je točan...
           // definicija user-a za daljnji radu u programu
@@ -61,7 +62,8 @@ exports.postLogin = (req, res, next) => {
             res.redirect('/');
           });
         })
-        .catch((err) => {console.log(err);
+        .catch((err) => {
+          console.log(err);
         });
     })
     .catch((err) => console.log(err));
@@ -78,7 +80,7 @@ exports.postSignup = (req, res, next) => {
     .then((userDoc) => {
       // ako korisnik postoji, vracamo ga na /signup
       if (userDoc) {
-        return res.redirect('/signup');
+        return res.redirect('/auth/signup');
       }
 
       // enkripcija passworda
@@ -95,7 +97,7 @@ exports.postSignup = (req, res, next) => {
           return user.save();
         })
         .then((result) => {
-          res.redirect('/login');
+          res.redirect('/auth/login');
         });
     })
     .catch((err) => {

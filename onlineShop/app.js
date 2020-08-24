@@ -81,8 +81,8 @@ app.use((req, res, next) => {
 
 // Rute u programu
 app.use('/admin', adminRoutes);
+app.use('/auth', authRoutes);
 app.use('/', shopRoutes);
-app.use('/', authRoutes);
 
 // zadnji middelware koji lovi sve
 app.use('*', err404);
