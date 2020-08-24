@@ -1,6 +1,20 @@
 const bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer');
+const sgTransport = require('nodemailer-sendgrid-transport');
 
 const User = require('../models/userModel');
+
+const transporter = nodemailer.createTransport(
+  sgTransport({
+    // host: 'smtp.mailtrap.io',
+    // port: 2525,
+    // secure: false, // true for 465, false for other ports
+    auth: {
+      api_key:
+        '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',
+    },
+  })
+);
 
 //
 // prikaz LOGIN forme
@@ -30,7 +44,7 @@ exports.getSignup = (req, res, next) => {
   res.render('auth/signup', {
     path: '/signup', // path nam služi za odredivanje aktivnog menija u navbaru, (navigation.ejs)
     pageTitle: 'SignUp',
-    errorMessage: message
+    errorMessage: message,
   });
 };
 
@@ -110,6 +124,15 @@ exports.postSignup = (req, res, next) => {
         })
         .then((result) => {
           res.redirect('/auth/login');
+          return transporter.sendMail({
+            from: 'skupnjaka@gmail.com', // sender address
+            to: email, // list of receivers
+            subject: 'Kreiran account', // Subject line
+            text: 'Hello world?', // plain text body
+            html: '<p>Uspjesna prijava</p>', // html body
+          });
+        }).catch((err)=>{
+          console.log(err);
         });
     })
     .catch((err) => {
