@@ -4,17 +4,27 @@ const nodemailer = require('nodemailer');
 const sgTransport = require('nodemailer-sendgrid-transport');
 
 const User = require('../models/userModel');
+const { reset } = require('colors');
 
-const transporter = nodemailer.createTransport(
-  sgTransport({
-    // host: 'smtp.mailtrap.io',
-    // port: 2525,
-    // secure: false, // true for 465, false for other ports
-    auth: {
-      api_key:  process.env.API_KEY_SENDGRID
-    },
-  })
-);
+// TRANSPORTER SENDGRID setup
+// const transporter = nodemailer.createTransport(
+//   sgTransport({
+//     auth: {
+//       api_key: process.env.API_KEY_SENDGRID,
+//     },
+//   })
+// );
+
+//
+// TRANSPORTER MAILTRAP setup
+const transporter = nodemailer.createTransport({
+  host: process.env.EMAIL_HOST_MAILTRAP,
+  port: process.env.EMAIL_PORT_MAILTRAP,
+  auth: {
+    user: process.env.EMAIL_USERNAME_MAILTRAP,
+    pass: process.env.EMAIL_PASSWORD_MAILTRAP,
+  },
+});
 
 //
 // prikaz LOGIN forme
@@ -83,7 +93,7 @@ exports.postLogin = (req, res, next) => {
           // ovimo smo sigurni da se je operacija snimanja u bazi zavrsena
           // zbog toga smo sigurni da ce refres (res.redirect('/');) biti OK.
           req.session.save((err) => {
-            if(err) {
+            if (err) {
               console.log(err);
             }
             res.redirect('/');
@@ -188,20 +198,83 @@ exports.postReset = (req, res, next) => {
       })
       .then((user) => {
         console.log('user:'.red, user, 'req.body.email'.red, req.body.email);
-        
+
         res.redirect('/');
         return transporter.sendMail({
           from: 'skupnjaka@gmail.com', // sender address
           to: req.body.email, // list of receivers
           subject: 'Password reset', // Subject line
-          text: 'Hello world?', // plain text body
-          // html: `<p>Resetiraj password<p>
-          //       <p>Klikni <a href="http://localhost:3000/auth/reset/${token}"<p>
-          // `, // html body
+          // text: 'Hello world?', // plain text body
+          html: `<p>Resetiraj password<p>
+                <p>Klikni <a href="http://localhost:5500/auth/new-password/${token}">link</a><p>
+          `, // html body
         });
       })
       .catch((err) => {
         console.log(err);
       });
   });
+};
+
+// hohvacanje linka
+exports.getNewPassword = (req, res, next) => {
+  const token = req.params.token;
+  User.findOne({
+    resetToken: token,
+    resetTokenExpiration: { $gt: Date.now() },
+  })
+    .then((user) => {
+      console.log('user'.red, user);
+      
+      let message = req.flash('greska');
+      if (message.length > 0) {
+        message = message[0];
+      } else {
+        message = null;
+      }
+      res.render('auth/new-password', {
+        path: '/new-password', // path nam služi za odredivanje aktivnog menija u navbaru, (navigation.ejs)
+        pageTitle: 'New password',
+        errorMessage: message,
+        userId: user._id.toString(),
+        passwordToken: token,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+// hohvacanje linka
+exports.postNewPassword = (req, res, next) => {
+  const userId = req.body.userId;
+  const newPassword = req.body.password;
+  const confirmPassword = req.body.confirmPassword;
+  const passwordToken = req.body.passwordToken;
+  let resetUser;
+console.log('userId= ',userId);
+
+  User.findOne({
+    resetToken: passwordToken,
+    resetTokenExpiration: { $gt: Date.now() },
+    _id: userId,
+  })
+    .then((user) => {
+      console.log('user'.red, user);
+      
+      resetUser = user;
+      return bcrypt.hash(newPassword, 12);
+    })
+    .then((hashedPassword) => {
+      resetUser.password = hashedPassword;
+      resetUser.resetToken = undefined;
+      resetUser.resetTokenExpiration = undefined;
+      return resetUser.save();
+    })
+    .then((result) => {
+      res.redirect('/auth/login');
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
