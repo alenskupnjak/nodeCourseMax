@@ -52,7 +52,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // SESSION SESSION SESSION SESSION SESSION SESSION
-// https://www.npmjs.com/package/express-session
 app.use(
   sessionCart({
     secret: process.env.SHOP_DATABASE_SECRET,
@@ -70,11 +69,11 @@ app.use(flash())
 
 // ako smo logirani kreiramo User.model za pozrebe razvoja programa
 app.use((req, res, next) => {
-  // ako korisnik logiran preskače kreiranje usera
+  // ako korisnik NIJE logiran preskače kreiranje usera
   if (!req.session.user) {
     return next();
   }
-  // kreiramo user-a
+  // kreiramo user-a za rad u programu
   User.findById(req.session.user._id)
     .then((user) => {
       req.user = user;
@@ -89,6 +88,7 @@ app.use((req, res, next) => {
   res.locals.csrfToken = req.csrfToken();
   next();
 });
+
 
 // prikazi logove
 // app.use(morgan('combined', { stream: accessLogStream }));
@@ -105,7 +105,6 @@ app.use('*', err404);
 // definiranje porta
 const PORT = process.env.PORT || 5500;
 
-// console.log(process.env);
 
 // spajanje na databazu
 mongoose

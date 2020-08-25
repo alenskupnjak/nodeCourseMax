@@ -111,6 +111,7 @@ exports.createOrder = (req, res, next) => {
           userId: req.user._id,
         },
         products: productsData,
+        created: Date.now()
       });
       // snimamo order
       return order.save();
