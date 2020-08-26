@@ -6,12 +6,10 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const csrf = require('csurf') // https://www.npmjs.com/package/csurf
+const csrf = require('csurf'); // https://www.npmjs.com/package/csurf
 const sessionCart = require('express-session'); //https://github.com/expressjs/session
 const MongoDBStore = require('connect-mongodb-session')(sessionCart); // https://www.npmjs.com/package/connect-mongodb-session
 const flash = require('connect-flash'); // https://www.npmjs.com/package/connect-flash
-
-
 
 const { err404 } = require('./controllers/errorCtrl');
 const User = require('./models/userModel');
@@ -26,6 +24,12 @@ const authRoutes = require('./routes/authRouter');
 
 // START! Kreiranje express aplikacije!
 const app = express();
+
+// START START START START
+app.use((req, res, next) => {
+  console.log('START-------------------------------'.yellow);
+  next();
+});
 
 // inicijalizacija za za svaki renderpage, zaštita stranice
 const csrfProtection = csrf();
@@ -65,8 +69,7 @@ app.use(
 app.use(csrfProtection);
 
 // The flash is a special area of the session used for storing messages.
-app.use(flash())
-
+app.use(flash());
 
 // ako smo logirani kreiramo User.model za pozrebe razvoja programa
 app.use((req, res, next) => {
@@ -88,7 +91,7 @@ app.use((req, res, next) => {
   res.locals.isAutoriziran = req.session.isLoggedIn;
   res.locals.csrfToken = req.csrfToken();
   // req.mojflash = req.flash('poruka');
-  if(req.user) {
+  if (req.user) {
     res.locals.user = req.user;
     res.locals.userEmail = req.user.email;
   }
@@ -97,15 +100,13 @@ app.use((req, res, next) => {
 
 // Printaj SVE
 app.use((req, res, next) => {
-
-  console.log('Printaj SVE- req.session'.green,req.session);
-  console.log('Printaj SVE- req.csrfToken()'.blue,req.csrfToken());
+  console.log('Printaj SVE- req.session'.green, req.session);
+  console.log('Printaj SVE- req.csrfToken()'.blue, req.csrfToken());
   // console.log('Printaj SVE- req.flash()'.blue,req.mojflash ); // flash se ne smije niti printati ovako odmah je aktiviran
-  console.log('Printaj SVE- req.user-'.blue,req.user);
-  console.log('Printaj SVE- res.locals.userEmail'.blue,res.locals.userEmail );
+  console.log('Printaj SVE- req.user-'.blue, req.user);
+  console.log('Printaj SVE- res.locals.userEmail'.blue, res.locals.userEmail);
   next();
 });
-
 
 // prikazi logove
 // app.use(morgan('combined', { stream: accessLogStream }));
@@ -118,10 +119,8 @@ app.use('/', shopRoutes);
 // zadnji middelware koji lovi sve
 app.use('*', err404);
 
-
 // definiranje porta
 const PORT = process.env.PORT || 5500;
-
 
 // spajanje na databazu
 mongoose
@@ -130,21 +129,21 @@ mongoose
     useUnifiedTopology: true,
   })
   .then((result) => {
-            // // gledamo ima li ijedan zapis u bazi
-            // User.findOne().then((user) => {
-            //   if (!user) {
-            //     console.log(
-            //       'Kreiramo za potrebe razvijanja programa novog korisnika ako ne postoji'
-            //     );
-            //     const user = new User({
-            //       name: 'Alen',
-            //       email: 'alen@test.com',
-            //       cart: { items: [] },
-            //     });
-            //     // snimamo usera
-            //     user.save();
-            //   }
-            // });
+    // // gledamo ima li ijedan zapis u bazi
+    // User.findOne().then((user) => {
+    //   if (!user) {
+    //     console.log(
+    //       'Kreiramo za potrebe razvijanja programa novog korisnika ako ne postoji'
+    //     );
+    //     const user = new User({
+    //       name: 'Alen',
+    //       email: 'alen@test.com',
+    //       cart: { items: [] },
+    //     });
+    //     // snimamo usera
+    //     user.save();
+    //   }
+    // });
     app.listen(PORT, () => {
       console.log('App listening on port 5500!');
     });

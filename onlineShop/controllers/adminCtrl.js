@@ -62,7 +62,7 @@ exports.getEditProduct = (req, res, next) => {
 
 // mongoose mongoose mongoose mongoose mongoose
 // UPDATE
-exports.postUpdateProduct = (req, res, next) => {
+exports.postEditProduct = (req, res, next) => {
   const prodId = req.body.productId;
   const title = req.body.title;
   const imageUrl = req.body.imageUrl;
@@ -71,26 +71,37 @@ exports.postUpdateProduct = (req, res, next) => {
   // const product = new Product(title, price, description, imageUrl, prodId);
   BiloKojeImeProduct.findById(prodId)
     .then((product) => {
+      // korisnik nije keator producta
+      // alert(`product.userID= ${product.userID}, product.userID.toString()= ${product.userID.toString()}`);
+      console.log('product.userID=', product.userID, product.userID.toString());
+      console.log('req.user._id=', req.user._id, req.user._id.toString());
+
+      if (product.userID.toString() !== req.user._id.toString()) {
+        console.log('-------------------------xxxx');
+
+        console.log('Korisnik nije kreator ovog proizvoda.');
+        return res.redirect('/');
+      }
       product.title = title;
       product.price = price;
       product.imageUrl = imageUrl;
       product.description = description;
-      return product.save();
-    })
-    .then((result) => {
-      console.log('UPDATE Product');
-      res.redirect('/admin/products');
+      return product.save().then((result) => {
+        console.log('UPDATE Product');
+        res.redirect('/admin/products');
+      });
     })
     .catch((err) => {
       console.log(err);
     });
 };
 
-// mongoose mongoose mongoose mongoose mongoose
+//
 // DELETE zapis
 exports.deleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
-  BiloKojeImeProduct.findByIdAndRemove(prodId)
+  // BiloKojeImeProduct.findByIdAndRemove(prodId)
+  BiloKojeImeProduct.deleteOne({ _id: prodId, userID: req.user._id })
     .then(() => {
       console.log('DESTROYED PRODUCT');
       res.redirect('/admin/products');
@@ -98,7 +109,7 @@ exports.deleteProduct = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
-// mongoose mongoose mongoose mongoose mongoose
+//
 // dohvacanje svih zapisa iz baze
 // /admin/products => GET
 exports.getProducts = (req, res, next) => {
@@ -110,7 +121,7 @@ exports.getProducts = (req, res, next) => {
     .populate('userID')
     .then((products) => {
       console.log('tutut');
-      
+
       console.log(products);
 
       res.render('admin/products', {

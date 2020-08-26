@@ -1,10 +1,10 @@
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
+const { validationResult } = require('express-validator');
 const sgTransport = require('nodemailer-sendgrid-transport');
 
 const User = require('../models/userModel');
-
 
 // TRANSPORTER SENDGRID setup
 // const transporter = nodemailer.createTransport(
@@ -112,7 +112,18 @@ exports.postSignup = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
-  console.log(req.body);
+  // sve hreške iz rutera skuplaju se u ovoj finkciji
+  errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.log('errors.array()= ',errors.array()[0]);
+    
+    // renderiramo postojeću stranicu
+    return res.status(422).render('auth/signup', {
+      path: '/signup', 
+      pageTitle: 'SignUp',
+      errorMessage: errors.array()[0].msg,
+    });
+  }
   User.findOne({ email: email })
     .then((userDoc) => {
       // ako korisnik postoji, vracamo ga na /signup
@@ -228,7 +239,7 @@ exports.getNewPassword = (req, res, next) => {
   })
     .then((user) => {
       console.log('user'.red, user);
-      
+
       let message = req.flash('poruka');
       if (message.length > 0) {
         message = message[0];
@@ -255,7 +266,7 @@ exports.postNewPassword = (req, res, next) => {
   const confirmPassword = req.body.confirmPassword;
   const passwordToken = req.body.passwordToken;
   let resetUser;
-console.log('userId= ',userId);
+  console.log('userId= ', userId);
 
   User.findOne({
     resetToken: passwordToken,
@@ -264,13 +275,13 @@ console.log('userId= ',userId);
   })
     .then((user) => {
       console.log('user'.red, user);
-      
+
       resetUser = user;
       return bcrypt.hash(newPassword, 12);
     })
     .then((hashedPassword) => {
       resetUser.password = hashedPassword;
-      resetUser.passwordTemp = newPassword ;
+      resetUser.passwordTemp = newPassword;
       resetUser.resetToken = undefined;
       resetUser.resetTokenExpiration = undefined;
       return resetUser.save();

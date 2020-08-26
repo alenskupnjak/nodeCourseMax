@@ -20,7 +20,7 @@ router.get('/products', isAuth, adminControler.getProducts);
 router.get('/edit-product/:id', isAuth, adminControler.getEditProduct);
 
 // /edit-product => POST
-router.post('/edit-product', isAuth, adminControler.postUpdateProduct);
+router.post('/edit-product', isAuth, adminControler.postEditProduct);
 
 // /delete-product => POST
 router.post('/delete-product', isAuth, adminControler.deleteProduct);

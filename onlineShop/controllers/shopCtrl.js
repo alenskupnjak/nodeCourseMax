@@ -9,7 +9,7 @@ exports.getProducts = (req, res, next) => {
       res.render('shop/product-list', {
         prod: products,
         pageTitle: 'Svi proizvodi',
-        path: '/products'
+        path: '/products',
       });
     })
     .catch((err) => {
@@ -27,7 +27,7 @@ exports.getOneProduct = (req, res, next) => {
       res.render('shop/product-detail', {
         prod: product,
         pageTitle: product.title,
-        path: '/products'
+        path: '/products',
       });
     })
     .catch((err) => console.log(err));
@@ -42,7 +42,7 @@ exports.getIndex = (req, res, next) => {
       res.render('shop/index', {
         prod: products,
         pageTitle: 'Shop',
-        path: '/'
+        path: '/',
       });
     })
     .catch((err) => {
@@ -50,7 +50,7 @@ exports.getIndex = (req, res, next) => {
     });
 };
 
-// mongoose mongoose mongoose mongoose mongoose
+// -----------------------------------
 // povlačimo sve artikle
 // router GET
 exports.getCart = (req, res, next) => {
@@ -61,10 +61,24 @@ exports.getCart = (req, res, next) => {
       res.render('shop/cart', {
         path: '/cart',
         pageTitle: 'Your Cart',
-        dataRender: user.cart.items
+        dataRender: user.cart.items,
       });
     })
     .catch((err) => console.log(err));
+};
+
+//------------------------------------------
+// dodavanje artikla na kupovnu listu
+// router POST
+exports.postCart = (req, res, next) => {
+  const prodId = req.body.productId;
+  Product.findById(prodId)
+    .then((product) => {
+      return req.user.addToCart(product);
+    })
+    .then((result) => {
+      res.redirect('/cart');
+    });
 };
 
 // mongoose mongoose mongoose mongoose mongoose
@@ -77,19 +91,6 @@ exports.postCartDeleteProduct = (req, res, next) => {
       res.redirect('/cart');
     })
     .catch((err) => console.log(err));
-};
-
-// mongoose mongoose mongoose mongoose mongoose
-// dodavanje artikla na kupovnu listu
-exports.postCart = (req, res, next) => {
-  const prodId = req.body.productId;
-  Product.findById(prodId)
-    .then((product) => {
-      return req.user.addToCart(product);
-    })
-    .then((result) => {
-      res.redirect('/cart');
-    });
 };
 
 // mongoose mongoose mongoose mongoose mongoose
@@ -111,7 +112,7 @@ exports.createOrder = (req, res, next) => {
           userId: req.user._id,
         },
         products: productsData,
-        created: Date.now()
+        created: Date.now(),
       });
       // snimamo order
       return order.save();
@@ -131,12 +132,12 @@ exports.getOrders = (req, res, next) => {
   console.log('getOrders - isAutoriziran:= '.red, req.session.isLoggedIn);
   Order.find({ 'user.userId': req.user._id })
     .then((orders) => {
-      console.log( 'brojNarudbi='.green, orders.length);
-      
+      console.log('brojNarudbi='.green, orders.length);
+
       res.render('shop/orders', {
         path: '/orders', // path nam služi za odredivanje aktivnog menija u navbaru, (navigation.ejs)
         pageTitle: 'Your Orders',
-        orders: orders
+        orders: orders,
       });
     })
     .catch((err) => console.log(err));
