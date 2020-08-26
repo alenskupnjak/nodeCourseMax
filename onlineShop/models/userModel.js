@@ -14,6 +14,9 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  passwordTemp: {
+    type: String,
+  },
   name: {
     type: String,
   },

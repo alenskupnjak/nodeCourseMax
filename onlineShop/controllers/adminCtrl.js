@@ -6,10 +6,10 @@ const BiloKojeImeProduct = require('../models/productsModel');
 // Povlačimo podatke
 // ..admin/add-product => GET
 exports.getAddProduct = (req, res, next) => {
-  res.render('admin/edit-product', {
+  res.render('admin/edit-add-product', {
     pageTitle: 'Dodaj proizvod',
     path: '/admin/add-product',
-    editing: false
+    editing: false,
   });
 };
 
@@ -50,11 +50,11 @@ exports.getEditProduct = (req, res, next) => {
   const prodId = req.params.id;
   BiloKojeImeProduct.findById(prodId)
     .then((products) => {
-      res.render('admin/edit-product', {
+      res.render('admin/edit-add-product', {
         pageTitle: 'Edit proizvod',
         path: '/admin/edit-product',
         jedanProduct: products,
-        editing: true
+        editing: true,
       });
     })
     .catch((err) => console.log(err));
@@ -102,17 +102,21 @@ exports.deleteProduct = (req, res, next) => {
 // dohvacanje svih zapisa iz baze
 // /admin/products => GET
 exports.getProducts = (req, res, next) => {
-  BiloKojeImeProduct.find()
+  console.log('req.user._id=', req.user._id);
+
+  BiloKojeImeProduct.find({ userID: req.user._id })
     // .select('title price -_id')  // opcija, - minus predstavlja isključivanje
     // .populate('userID', 'name')  // opcija,
     .populate('userID')
     .then((products) => {
+      console.log('tutut');
+      
       console.log(products);
 
       res.render('admin/products', {
         prod: products,
         pageTitle: 'Admin Products',
-        path: '/admin/products'
+        path: '/admin/products',
       });
     })
     .catch((err) => console.log(err));

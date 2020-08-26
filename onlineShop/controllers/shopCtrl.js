@@ -129,11 +129,9 @@ exports.createOrder = (req, res, next) => {
 // narudzbe
 exports.getOrders = (req, res, next) => {
   console.log('getOrders - isAutoriziran:= '.red, req.session.isLoggedIn);
-  
   Order.find({ 'user.userId': req.user._id })
     .then((orders) => {
-      let duljina = orders.length
-      console.log(duljina);
+      console.log( 'brojNarudbi='.green, orders.length);
       
       res.render('shop/orders', {
         path: '/orders', // path nam služi za odredivanje aktivnog menija u navbaru, (navigation.ejs)

@@ -19,10 +19,10 @@ router.get('/products', isAuth, adminControler.getProducts);
 // add-product => GET
 router.get('/edit-product/:id', isAuth, adminControler.getEditProduct);
 
-// add-product => POST
+// /edit-product => POST
 router.post('/edit-product', isAuth, adminControler.postUpdateProduct);
 
-// add-product => POST
+// /delete-product => POST
 router.post('/delete-product', isAuth, adminControler.deleteProduct);
 
 // EXPORT EXPORT EXPORT EXPORT EXPORT

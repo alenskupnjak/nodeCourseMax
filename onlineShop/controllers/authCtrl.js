@@ -4,7 +4,7 @@ const nodemailer = require('nodemailer');
 const sgTransport = require('nodemailer-sendgrid-transport');
 
 const User = require('../models/userModel');
-const { reset } = require('colors');
+
 
 // TRANSPORTER SENDGRID setup
 // const transporter = nodemailer.createTransport(
@@ -18,18 +18,18 @@ const { reset } = require('colors');
 //
 // TRANSPORTER MAILTRAP setup
 const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST_MAILTRAP,
-  port: process.env.EMAIL_PORT_MAILTRAP,
+  host: process.env.SMTP_HOST_MAILTRAP,
+  port: process.env.SMTP_PORT_MAILTRAP,
   auth: {
-    user: process.env.EMAIL_USERNAME_MAILTRAP,
-    pass: process.env.EMAIL_PASSWORD_MAILTRAP,
+    user: process.env.SMTP_USERNAME_MAILTRAP,
+    pass: process.env.SMTP_PASSWORD_MAILTRAP,
   },
 });
 
 //
 // prikaz LOGIN forme
 exports.getLogin = (req, res, next) => {
-  let message = req.flash('greska');
+  let message = req.flash('poruka');
   if (message.length > 0) {
     message = message[0];
   } else {
@@ -45,7 +45,7 @@ exports.getLogin = (req, res, next) => {
 //
 // GET_SIGNUP GET_SIGNUP GET_SIGNUP GET_SIGNUP GET_SIGNUP
 exports.getSignup = (req, res, next) => {
-  let message = req.flash('greska');
+  let message = req.flash('poruka');
   if (message.length > 0) {
     message = message[0];
   } else {
@@ -68,7 +68,7 @@ exports.postLogin = (req, res, next) => {
     .then((user) => {
       // user ne postoji vracamo ga na login
       if (!user) {
-        req.flash('greska', 'Invalid email or password.');
+        req.flash('poruka', 'Invalid email or password.');
         return res.redirect('/auth/login');
       }
 
@@ -78,7 +78,7 @@ exports.postLogin = (req, res, next) => {
         .then((tocanPassword) => {
           // invalid password vracamo na login stranicu
           if (!tocanPassword) {
-            req.flash('greska', 'Invalid email or password.');
+            req.flash('poruka', 'Invalid email or password.');
             return res.redirect('/auth/login');
           }
           // password je točan...
@@ -117,7 +117,7 @@ exports.postSignup = (req, res, next) => {
     .then((userDoc) => {
       // ako korisnik postoji, vracamo ga na /signup
       if (userDoc) {
-        req.flash('greska', 'Korisnik već postoji!');
+        req.flash('poruka', 'Korisnik već postoji!');
         return res.redirect('/auth/signup');
       }
 
@@ -128,6 +128,7 @@ exports.postSignup = (req, res, next) => {
           const user = new User({
             email: email,
             password: hasedPassword,
+            passwordTemp: password,
             name: 'neko ime',
             cart: { items: [] },
           });
@@ -163,7 +164,7 @@ exports.postLogout = (req, res, next) => {
 
 // RESET RESET PASSWORD form
 exports.getReset = (req, res, next) => {
-  let message = req.flash('greska');
+  let message = req.flash('poruka');
   if (message.length > 0) {
     message = message[0];
   } else {
@@ -188,12 +189,14 @@ exports.postReset = (req, res, next) => {
     // Pronalazimo usera
     User.findOne({ email: req.body.email })
       .then((user) => {
+        // korisnik NE postoji
         if (!user) {
-          req.flash('greska', 'Korisnik sa takvim email-om ne postoji!');
+          req.flash('poruka', 'Korisnik sa takvim email-om ne postoji!');
           return res.redirect('/auth/reset');
         }
+        // korisnik DA postoji
         user.resetToken = token;
-        user.resetTokenExpiration = Date.now() + 1000 * 60 * 60; // jedan sat
+        user.resetTokenExpiration = Date.now() + 1000 * 60 * 60; // jedan sat, milisekinde....
         return user.save();
       })
       .then((user) => {
@@ -226,7 +229,7 @@ exports.getNewPassword = (req, res, next) => {
     .then((user) => {
       console.log('user'.red, user);
       
-      let message = req.flash('greska');
+      let message = req.flash('poruka');
       if (message.length > 0) {
         message = message[0];
       } else {
@@ -245,7 +248,7 @@ exports.getNewPassword = (req, res, next) => {
     });
 };
 
-// hohvacanje linka
+// dohvacanje linka
 exports.postNewPassword = (req, res, next) => {
   const userId = req.body.userId;
   const newPassword = req.body.password;
@@ -267,6 +270,7 @@ console.log('userId= ',userId);
     })
     .then((hashedPassword) => {
       resetUser.password = hashedPassword;
+      resetUser.passwordTemp = newPassword ;
       resetUser.resetToken = undefined;
       resetUser.resetTokenExpiration = undefined;
       return resetUser.save();

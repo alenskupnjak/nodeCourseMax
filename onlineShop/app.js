@@ -64,8 +64,9 @@ app.use(
 // aktivacija zaštite stranice od hakiranja...
 app.use(csrfProtection);
 
-//T he flash is a special area of the session used for storing messages.
+// The flash is a special area of the session used for storing messages.
 app.use(flash())
+
 
 // ako smo logirani kreiramo User.model za pozrebe razvoja programa
 app.use((req, res, next) => {
@@ -73,7 +74,7 @@ app.use((req, res, next) => {
   if (!req.session.user) {
     return next();
   }
-  // kreiramo user-a za rad u programu
+  // kreiramo USERA-a za rad u programu
   User.findById(req.session.user._id)
     .then((user) => {
       req.user = user;
@@ -86,6 +87,22 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
   res.locals.isAutoriziran = req.session.isLoggedIn;
   res.locals.csrfToken = req.csrfToken();
+  // req.mojflash = req.flash('poruka');
+  if(req.user) {
+    res.locals.user = req.user;
+    res.locals.userEmail = req.user.email;
+  }
+  next();
+});
+
+// Printaj SVE
+app.use((req, res, next) => {
+
+  console.log('Printaj SVE- req.session'.green,req.session);
+  console.log('Printaj SVE- req.csrfToken()'.blue,req.csrfToken());
+  // console.log('Printaj SVE- req.flash()'.blue,req.mojflash ); // flash se ne smije niti printati ovako odmah je aktiviran
+  console.log('Printaj SVE- req.user-'.blue,req.user);
+  console.log('Printaj SVE- res.locals.userEmail'.blue,res.locals.userEmail );
   next();
 });
 
