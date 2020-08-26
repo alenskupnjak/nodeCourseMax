@@ -4,26 +4,28 @@
 </head>
 
 <body>
-    <%- include('../includes/navigation.ejs')%>
+  <%- include('../includes/navigation.ejs')%>
 
-    <main>
-        <% if ( errorMessage ) { %>
-        <div class="user-message user-message--error" ><%= errorMessage %></div>
-        <% } %>
-        <form class="login-form" action="/auth/login" method="POST">
-            <div class="form-control">
-                <label for="email">E-mail</label>
-                <input type="email" name="email" id="email" value="test01@mailsac.com">
-            </div>
-            <div class="form-control">
-                <label for="password">Image URL</label>
-                <input type="text" name="password" id="password" value="123456" >
-            </div>
-            <button class="btn" type="submit">Login</button>
-            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-        </form>
-        <div class="centered"> 
-            <a href="/auth/reset">Reset password</a>
-        </div>
-    </main>
-    <%- include('../includes/end.ejs')%>
+  <main>
+    <% if ( errorMessage ) { %>
+    <div class="user-message user-message--error"><%= errorMessage %></div>
+    <% } %>
+    <form class="login-form" action="/auth/login" method="POST">
+      <div class="form-control">
+        <label for="email">E-mail</label>
+        <input class="<%= validationErrors.find(e=> e.param === 'email') ? 'invalid' : '' %>" type="email" name="email"
+          id="email" value="<%= oldInput.email %>">
+      </div>
+      <div class="form-control">
+        <label for="password">Password</label>
+        <input class="<%= validationErrors.find(e=> e.param === 'password') ? 'invalid' : '' %>" type="text"
+          name="password" id="password" value="<%= oldInput.password %>">
+      </div>
+      <button class="btn" type="submit">Login</button>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    </form>
+    <div class="centered">
+      <a href="/auth/reset">Reset password</a>
+    </div>
+  </main>
+  <%- include('../includes/end.ejs')%>

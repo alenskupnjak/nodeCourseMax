@@ -1,5 +1,18 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
 
+
+/* $blue:    #007bff !default;
+$indigo:  #6610f2 !default;
+$purple:  #6f42c1 !default;
+$pink:    #e83e8c !default;
+$red:     #dc3545 !default;
+$orange:  #E05433 !default;
+$yellow:  #ffc107 !default;
+$green:   #28a745 !default;
+$teal:    #20c997 !default;
+$cyan:    #17a2b8 !default; */
+
+
 * {
   box-sizing: border-box;
 }
@@ -34,7 +47,7 @@ form {
 .main-header {
   width: 100%;
   height: 3.5rem;
-  background-color:#0284d0;
+  background-color:#6610f2;
   /* background-color:#00695c; */
   padding: 0 1.5rem;
   display: flex;

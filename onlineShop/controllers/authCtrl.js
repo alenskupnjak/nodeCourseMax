@@ -39,6 +39,11 @@ exports.getLogin = (req, res, next) => {
     path: '/login', // path nam služi za odredivanje aktivnog menija u navbaru, (navigation.ejs)
     pageTitle: 'Login',
     errorMessage: message,
+    oldInput: {
+      email: 'test02@mailsac.com',
+      password: '123456',
+    },
+    validationErrors: [],
   });
 };
 
@@ -55,14 +60,36 @@ exports.getSignup = (req, res, next) => {
     path: '/signup', // path nam služi za odredivanje aktivnog menija u navbaru, (navigation.ejs)
     pageTitle: 'SignUp',
     errorMessage: message,
+    oldInput: {
+      email: 'test0x@mailsac.com',
+      password: '123456',
+      confirmPassword: '123456',
+    },
+    validationErrors: [],
   });
 };
 
-// LOGIN LOGIN LOGIN LOGIN LOGIN LOGIN LOGIN
+// POST_LOGIN POST_LOGIN POST_LOGIN POST_LOGIN 
 // Logiranje na WEB-stranicu
 exports.postLogin = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
+
+  // sve greške iz rutera skuplaju se u ovoj finkciji
+  errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    // renderiramo postojeću stranicu
+    return res.status(422).render('auth/login', {
+      path: '/login', // path nam služi za odredivanje aktivnog menija u navbaru, (navigation.ejs)
+      pageTitle: 'Login',
+      errorMessage: errors.array()[0].msg,
+      oldInput: {
+        email: email,
+        password: password,
+      },
+      validationErrors: errors.array(),
+    });
+  }
 
   User.findOne({ email: email })
     .then((user) => {
@@ -79,7 +106,17 @@ exports.postLogin = (req, res, next) => {
           // invalid password vracamo na login stranicu
           if (!tocanPassword) {
             req.flash('poruka', 'Invalid email or password.');
-            return res.redirect('/auth/login');
+            // return res.redirect('/auth/login');
+            return res.status(422).render('auth/login', {
+              path: '/login',
+              pageTitle: 'Login',
+              errorMessage: 'Invalid email or password.',
+              oldInput: {
+                email: email,
+                password: password,
+              },
+              validationErrors: [],
+            });
           }
           // password je točan...
           // definicija user-a za daljnji radu u programu
@@ -112,16 +149,20 @@ exports.postSignup = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
-  // sve hreške iz rutera skuplaju se u ovoj finkciji
+  // sve greške iz rutera skuplaju se u ovoj finkciji
   errors = validationResult(req);
   if (!errors.isEmpty()) {
-    console.log('errors.array()= ',errors.array()[0]);
-    
     // renderiramo postojeću stranicu
     return res.status(422).render('auth/signup', {
-      path: '/signup', 
+      path: '/signup',
       pageTitle: 'SignUp',
       errorMessage: errors.array()[0].msg,
+      oldInput: {
+        email: req.body.email,
+        password: req.body.password,
+        confirmPassword: req.body.confirmPassword,
+      },
+      validationErrors: errors.array(),
     });
   }
   User.findOne({ email: email })
@@ -230,7 +271,7 @@ exports.postReset = (req, res, next) => {
   });
 };
 
-// hohvacanje linka
+// dohvacanje linka
 exports.getNewPassword = (req, res, next) => {
   const token = req.params.token;
   User.findOne({
