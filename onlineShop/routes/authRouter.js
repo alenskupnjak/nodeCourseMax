@@ -12,13 +12,16 @@ router.get('/signup', authController.getSignup);
 router.post(
   '/login',
   [
-    body('email').isEmail().withMessage('Molim unesite ispravni email.'),
-    body(
-      'password',
-      'Pasword mora biti ispravan, imati minimalno 4 slova'
-    ).isLength({
-      min: 4,
-    }),
+    body('email')
+      .isEmail()
+      .withMessage('Molim unesite ispravni email.')
+      .normalizeEmail(),
+    body('password', 'Pasword mora biti ispravan, imati minimalno 4 slova')
+      .isLength({
+        min: 4,
+      })
+      .isAlphanumeric()
+      .trim(),
   ],
   authController.postLogin
 );
@@ -34,19 +37,23 @@ router.post(
           throw new Error('Ova email-addressa je zabranjenja.');
         }
         return true; // bez ovoga program ne moze nastaviti raditi
-      }),
+      })
+      .normalizeEmail(),
     body(
       'password',
       'Pasword mora imati minimalno 4 slova, mora sadrzavati brojke ili slova, ne specijalne znakove.'
     )
       .isLength({ min: 4 })
-      .isAlphanumeric(),
-    body('confirmPassword').custom((value, { req }) => {
-      if (value !== req.body.password) {
-        throw new Error('Password-i se moraju podudarati!');
-      }
-      return true;
-    }),
+      .isAlphanumeric()
+      .trim(),
+    body('confirmPassword')
+      .custom((value, { req }) => {
+        if (value !== req.body.password) {
+          throw new Error('Password-i se moraju podudarati!');
+        }
+        return true;
+      })
+      .trim(),
   ],
   authController.postSignup
 );

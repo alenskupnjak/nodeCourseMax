@@ -11,7 +11,7 @@ const sessionCart = require('express-session'); //https://github.com/expressjs/s
 const MongoDBStore = require('connect-mongodb-session')(sessionCart); // https://www.npmjs.com/package/connect-mongodb-session
 const flash = require('connect-flash'); // https://www.npmjs.com/package/connect-flash
 
-const { err404 } = require('./controllers/errorCtrl');
+const errorController = require('./controllers/errorCtrl');
 const User = require('./models/userModel');
 
 // Usnimavanje env vars
@@ -24,12 +24,6 @@ const authRoutes = require('./routes/authRouter');
 
 // START! Kreiranje express aplikacije!
 const app = express();
-
-// START START START START
-app.use((req, res, next) => {
-  console.log('START-------------------------------'.yellow);
-  next();
-});
 
 // inicijalizacija za za svaki renderpage, zaštita stranice
 const csrfProtection = csrf();
@@ -58,6 +52,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // SESSION SESSION SESSION SESSION SESSION SESSION
 app.use(
   sessionCart({
+    name: 'onlineShopProduct',
     secret: process.env.SHOP_DATABASE_SECRET,
     resave: false,
     saveUninitialized: false,
@@ -73,6 +68,7 @@ app.use(flash());
 
 // ako smo logirani kreiramo User.model za pozrebe razvoja programa
 app.use((req, res, next) => {
+  res.locals.isAutoriziran = false;
   // ako korisnik NIJE logiran preskače kreiranje usera
   if (!req.session.user) {
     return next();
@@ -80,10 +76,20 @@ app.use((req, res, next) => {
   // kreiramo USERA-a za rad u programu
   User.findById(req.session.user._id)
     .then((user) => {
+            // Za potrebe testitranja programa
+            // throw new Error('Glupa greška 001' )
+      if (!user) {
+        return next();
+      }
       req.user = user;
       next();
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      error.opis = ' Greška u app.js';
+      return next(error);
+    });
 });
 
 // podaci vidljivi za sve VIEWS !!!
@@ -104,7 +110,7 @@ app.use((req, res, next) => {
   console.log('Printaj SVE- req.csrfToken()'.blue, req.csrfToken());
   // console.log('Printaj SVE- req.flash()'.blue,req.mojflash ); // flash se ne smije niti printati ovako odmah je aktiviran
   console.log('Printaj SVE- req.user-'.blue, req.user);
-  console.log('Printaj SVE- res.locals.userEmail'.blue, res.locals.userEmail);
+  console.log('Printaj SVE- res.locals'.blue, res.locals);
   next();
 });
 
@@ -116,8 +122,21 @@ app.use('/admin', adminRoutes);
 app.use('/auth', authRoutes);
 app.use('/', shopRoutes);
 
+app.get('/500', errorController.err500);
 // zadnji middelware koji lovi sve
-app.use('*', err404);
+app.use('*', errorController.err404);
+
+// centralna točka za sve greške..
+// funkcija sa 4 argumenta , za greške koja je ugradena u expressss
+app.use((error, req, res, next) => {
+  console.log(error);
+  res.status(500).render('500', {
+    pageTitle: 'Greška',
+    path: '/500',
+    error: error,
+    opis: error.opis,
+  });
+});
 
 // definiranje porta
 const PORT = process.env.PORT || 5500;

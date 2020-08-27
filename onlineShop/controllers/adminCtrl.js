@@ -1,4 +1,5 @@
 const colors = require('colors');
+const { validationResult } = require('express-validator');
 
 const BiloKojeImeProduct = require('../models/productsModel');
 
@@ -9,11 +10,13 @@ exports.getAddProduct = (req, res, next) => {
   res.render('admin/edit-add-product', {
     pageTitle: 'Dodaj proizvod',
     path: '/admin/add-product',
+    errorMessage: null,
     editing: false,
+    hasError: false,
+    validationErrors: [],
   });
 };
 
-// mongoose mongoose mongoose mongoose mongoose
 // Kreiramo zapis u bazi
 // .....admin/add-product => POST
 exports.postAddProduct = (req, res, next) => {
@@ -22,7 +25,28 @@ exports.postAddProduct = (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
 
-  // kreiranje novog
+  // sve greške iz rutera skuplaju se u ovoj finkciji
+  errors = validationResult(req);
+  console.log(errors.array());
+
+  if (!errors.isEmpty()) {
+    return res.status(422).render('admin/edit-add-product', {
+      pageTitle: 'Add proizvod',
+      path: '/admin/edit-product',
+      errorMessage: errors.array()[0].msg,
+      editing: false,
+      hasError: true,
+      jedanProduct: {
+        title: title,
+        price: price,
+        imageUrl: imageUrl,
+        description: description,
+      },
+      validationErrors: errors.array(),
+    });
+  }
+
+  // kreiranje novog producta
   const product = new BiloKojeImeProduct({
     title: title,
     price: price,
@@ -40,7 +64,10 @@ exports.postAddProduct = (req, res, next) => {
       res.redirect('/admin/products');
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error(err)
+      error.httpStatusCode = 500;
+      error.opis =' Greška u postAddProduct '
+      return next(error)
     });
 };
 
@@ -50,17 +77,31 @@ exports.getEditProduct = (req, res, next) => {
   const prodId = req.params.id;
   BiloKojeImeProduct.findById(prodId)
     .then((products) => {
+      // // Za potrebe testitranja programa
+      // throw new Error('Glupa greška')
+
+      if (!products) {
+        return res.redirect('/');
+      }
       res.render('admin/edit-add-product', {
         pageTitle: 'Edit proizvod',
         path: '/admin/edit-product',
+        errorMessage: null,
+        hasError: false,
         jedanProduct: products,
         editing: true,
+        validationErrors: [],
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      error.opis = ' Greška u getEditProduct ';
+      return next(error);
+    });
 };
 
-// mongoose mongoose mongoose mongoose mongoose
+// POST
 // UPDATE
 exports.postEditProduct = (req, res, next) => {
   const prodId = req.body.productId;
@@ -68,6 +109,28 @@ exports.postEditProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
+  // sve greške iz rutera skuplaju se u ovoj finkciji
+  errors = validationResult(req);
+  console.log(errors.array());
+
+  if (!errors.isEmpty()) {
+    return res.status(422).render('admin/edit-add-product', {
+      pageTitle: 'Edit proizvod',
+      path: '/admin/edit-product',
+      errorMessage: errors.array()[0].msg,
+      editing: true,
+      hasError: true,
+      jedanProduct: {
+        title: title,
+        price: price,
+        imageUrl: imageUrl,
+        description: description,
+        _id: prodId,
+      },
+      validationErrors: errors.array(),
+    });
+  }
+
   // const product = new Product(title, price, description, imageUrl, prodId);
   BiloKojeImeProduct.findById(prodId)
     .then((product) => {
@@ -92,7 +155,10 @@ exports.postEditProduct = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      error.opis = ' Greška u postEditProduct';
+      return next(error);
     });
 };
 
@@ -106,7 +172,12 @@ exports.deleteProduct = (req, res, next) => {
       console.log('DESTROYED PRODUCT');
       res.redirect('/admin/products');
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      error.opis = ' Greška u deleteProduct';
+      return next(error);
+    });
 };
 
 //
@@ -130,5 +201,10 @@ exports.getProducts = (req, res, next) => {
         path: '/admin/products',
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      error.opis = ' Greška u getProducts';
+      return next(error);
+    });
 };

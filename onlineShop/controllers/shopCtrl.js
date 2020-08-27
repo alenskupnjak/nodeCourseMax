@@ -13,7 +13,10 @@ exports.getProducts = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      error.opis = ' Greška xxx';
+      return next(error);
     });
 };
 
@@ -30,7 +33,12 @@ exports.getOneProduct = (req, res, next) => {
         path: '/products',
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      error.opis = ' Greška xxx';
+      return next(error);
+    });
 };
 
 // mongoose mongoose mongoose mongoose mongoose
@@ -46,7 +54,10 @@ exports.getIndex = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      error.opis = ' Greška xxx';
+      return next(error);
     });
 };
 
@@ -64,7 +75,12 @@ exports.getCart = (req, res, next) => {
         dataRender: user.cart.items,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      error.opis = ' Greška xxx';
+      return next(error);
+    });
 };
 
 //------------------------------------------
@@ -90,7 +106,12 @@ exports.postCartDeleteProduct = (req, res, next) => {
     .then((result) => {
       res.redirect('/cart');
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      error.opis = ' Greška xxx';
+      return next(error);
+    });
 };
 
 // mongoose mongoose mongoose mongoose mongoose
@@ -123,7 +144,12 @@ exports.createOrder = (req, res, next) => {
     .then((result) => {
       res.redirect('/orders');
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      error.opis = ' Greška xxx';
+      return next(error);
+    });
 };
 
 // mongoose mongoose mongoose mongoose mongoose
@@ -140,7 +166,12 @@ exports.getOrders = (req, res, next) => {
         orders: orders,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      error.opis = ' Greška xxx';
+      return next(error);
+    });
 };
 
 // mongoose mongoose mongoose mongoose mongoose
@@ -151,7 +182,12 @@ exports.postDeleteOrders = (req, res, next) => {
       console.log(order);
       res.redirect('/orders');
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      error.opis = ' Greška xxx';
+      return next(error);
+    });
 };
 
 //
