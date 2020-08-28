@@ -1,31 +1,31 @@
 <%- include('../includes/head.ejs') %>
-    <link rel="stylesheet" href="/css/orders.css">
-    </head>
+<link rel="stylesheet" href="/css/orders.css">
+</head>
 
-    <body>
-        <%- include('../includes/navigation.ejs') %>
-        <main>
-            <% if (orders.length <= 0) { %>
-                <h1>Nothing there!</h1>
-            <% } else { %>
-                <ul class="orders">
-                    <% orders.forEach((order, index) => { %>
-                        <li class="orders__item" >
-                            <h1>Narudžba broj <%= index+1 %></h1>
-                            <p>Šifra: <%= order._id %></p>
-                            <ul class="orders__products">
-                                <% order.products.forEach(data => { %>
-                                    <li class="orders__products-item"><%= data.product.title %> Količina: (<%= data.quantity %>)</li>
-                                <% }); %>
-                            </ul>
-                            <form action="/delete-order" method="POST">
-                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                <input type="hidden" name="productId" value="<%= order._id %>">
-                                  <button class="btn" type="submit">Delete</button>
-                            </form>
-                        </li>
-                    <% }); %>
-                </ul>
-            <% } %>
-        </main>
-        <%- include('../includes/end.ejs') %>
+<body>
+  <%- include('../includes/navigation.ejs') %>
+  <main>
+    <% if (orders.length <= 0) { %>
+    <h1>Nothing there!</h1>
+    <% } else { %>
+    <ul class="orders">
+      <% orders.forEach((order, index) => { %>
+      <li class="orders__item">
+        <h1>Narudžba broj <%= index+1 %>  <a href="/orders/<%= order._id %>">Narudzba PDF</a> </h1>
+        <p>Šifra: <%= order._id %> --- User: <%= order.user.email %>   </p>
+        <ul class="orders__products">
+          <% order.products.forEach(data => { %>
+          <li class="orders__products-item"><%= data.product.title %> Količina: (<%= data.quantity %>)  </li>
+          <% }); %>
+        </ul>
+        <form action="/delete-order" method="POST">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <input type="hidden" name="productId" value="<%= order._id %>">
+          <button class="btn" type="submit">Delete</button>
+        </form>
+      </li>
+      <% }); %>
+    </ul>
+    <% } %>
+  </main>
+  <%- include('../includes/end.ejs') %>

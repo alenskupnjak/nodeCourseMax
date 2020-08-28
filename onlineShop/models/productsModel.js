@@ -22,6 +22,10 @@ const productSchema = new Schema({
     type:String,
     required: true
   },
+  image: {
+    type:String,
+    required: true
+  },
   userID: {
     type: Schema.Types.ObjectId,
     // Veza sa UserModel-om, biti ime isto kao i u userModel.js: module.exports = mongoose.model('User', userSchema)

@@ -1,9 +1,8 @@
 const express = require('express'); // setup za router
-const shopController = require('../controllers/shopCtrl')
+const shopController = require('../controllers/shopCtrl');
 const isAuth = require('../middleware/is_auth');
 
 const router = express.Router(); // setup za router
-
 
 //////////////////////////////////////////////////////////
 // PATH /
@@ -24,16 +23,19 @@ router.get('/cart', isAuth, shopController.getCart);
 router.post('/cart', isAuth, shopController.postCart);
 
 // brišem sa liste za kupnju
-router.post('/cart-delete-item', isAuth,shopController.postCartDeleteProduct );
+router.post('/cart-delete-item', isAuth, shopController.postCartDeleteProduct);
 
 // kreiranje narudžbe
-router.post('/create-order', isAuth,shopController.createOrder);
+router.post('/create-order', isAuth, shopController.createOrder);
 
 // povlačenje ordera
-router.get('/orders', isAuth,shopController.getOrders);
+router.get('/orders', isAuth, shopController.getOrders);
 
 // povlačenje ordera
-router.post('/delete-order', isAuth,shopController.postDeleteOrders);
+router.get('/orders/:invoiceId', isAuth, shopController.getInvoice);
+
+// povlačenje ordera
+router.post('/delete-order', isAuth, shopController.postDeleteOrders);
 
 // // kreiranje narudžbe
 // router.get('/checkout', shopController.getCheckout);

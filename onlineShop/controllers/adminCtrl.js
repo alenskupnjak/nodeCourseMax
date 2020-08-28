@@ -1,4 +1,5 @@
 const colors = require('colors');
+const fileHelper = require('../util/file');
 const { validationResult } = require('express-validator');
 
 const BiloKojeImeProduct = require('../models/productsModel');
@@ -22,17 +23,38 @@ exports.getAddProduct = (req, res, next) => {
 exports.postAddProduct = (req, res, next) => {
   const title = req.body.title;
   const imageUrl = req.body.imageUrl;
+  const image = req.file;
   const price = req.body.price;
   const description = req.body.description;
+  console.log(image);
+
+  if (!image) {
+    return res.status(422).render('admin/edit-add-product', {
+      pageTitle: 'Add proizvod',
+      path: '/admin/add-product',
+      errorMessage: 'Attach file is not a image',
+      editing: false,
+      hasError: true,
+      jedanProduct: {
+        title: title,
+        price: price,
+        imageUrl: imageUrl,
+        description: description,
+      },
+      validationErrors: [],
+    });
+  }
+
+  const imageFilePath = image.path;
+
+  console.log('prosao'.red, imageFilePath);
 
   // sve greške iz rutera skuplaju se u ovoj finkciji
   errors = validationResult(req);
-  console.log(errors.array());
-
   if (!errors.isEmpty()) {
     return res.status(422).render('admin/edit-add-product', {
       pageTitle: 'Add proizvod',
-      path: '/admin/edit-product',
+      path: '/admin/add-product',
       errorMessage: errors.array()[0].msg,
       editing: false,
       hasError: true,
@@ -40,6 +62,7 @@ exports.postAddProduct = (req, res, next) => {
         title: title,
         price: price,
         imageUrl: imageUrl,
+        image: image.path,
         description: description,
       },
       validationErrors: errors.array(),
@@ -52,6 +75,7 @@ exports.postAddProduct = (req, res, next) => {
     price: price,
     description: description,
     imageUrl: imageUrl,
+    image: image.path,
     userID: req.user._id,
   });
 
@@ -64,10 +88,10 @@ exports.postAddProduct = (req, res, next) => {
       res.redirect('/admin/products');
     })
     .catch((err) => {
-      const error = new Error(err)
+      const error = new Error(err);
       error.httpStatusCode = 500;
-      error.opis =' Greška u postAddProduct '
-      return next(error)
+      error.opis = ' Greška u adiminCtrl-postAddProduct ';
+      return next(error);
     });
 };
 
@@ -107,11 +131,12 @@ exports.postEditProduct = (req, res, next) => {
   const prodId = req.body.productId;
   const title = req.body.title;
   const imageUrl = req.body.imageUrl;
+  const image = req.file;
   const price = req.body.price;
   const description = req.body.description;
+
   // sve greške iz rutera skuplaju se u ovoj finkciji
   errors = validationResult(req);
-  console.log(errors.array());
 
   if (!errors.isEmpty()) {
     return res.status(422).render('admin/edit-add-product', {
@@ -124,6 +149,7 @@ exports.postEditProduct = (req, res, next) => {
         title: title,
         price: price,
         imageUrl: imageUrl,
+        // image: image.path,
         description: description,
         _id: prodId,
       },
@@ -140,14 +166,17 @@ exports.postEditProduct = (req, res, next) => {
       console.log('req.user._id=', req.user._id, req.user._id.toString());
 
       if (product.userID.toString() !== req.user._id.toString()) {
-        console.log('-------------------------xxxx');
-
         console.log('Korisnik nije kreator ovog proizvoda.');
         return res.redirect('/');
       }
       product.title = title;
       product.price = price;
       product.imageUrl = imageUrl;
+      // updatiram sliku u bazi samo ako postoji!
+      if (image) {
+        fileHelper.deleteFile(product.image);
+        product.image = image.path;
+      }
       product.description = description;
       return product.save().then((result) => {
         console.log('UPDATE Product');
@@ -157,17 +186,49 @@ exports.postEditProduct = (req, res, next) => {
     .catch((err) => {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      error.opis = ' Greška u postEditProduct';
+      error.opis = 'Greška u adminCTRL.js postEditProduct';
       return next(error);
     });
 };
 
 //
-// DELETE zapis
-exports.deleteProduct = (req, res, next) => {
+// dohvacanje svih zapisa iz baze
+// /admin/products => GET
+exports.getProducts = (req, res, next) => {
+  BiloKojeImeProduct.find({ userID: req.user._id })
+    // .select('title price -_id')  // opcija, - minus predstavlja isključivanje
+    // .populate('userID', 'name')  // opcija,
+    .populate('userID')
+    .then((products) => {
+      res.render('admin/products', {
+        prod: products,
+        pageTitle: 'Admin Products',
+        path: '/admin/products',
+      });
+    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      error.opis = 'Greška u getProducts';
+      return next(error);
+    });
+};
+
+// BACKEND BACKEND BACKEND
+// DELETE zapis iz  BACKEND-a !!!!
+exports.postDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
-  // BiloKojeImeProduct.findByIdAndRemove(prodId)
-  BiloKojeImeProduct.deleteOne({ _id: prodId, userID: req.user._id })
+  BiloKojeImeProduct.findById(prodId)
+    .then((product) => {
+      if (!product) {
+        return next(new Error('Product not found'));
+      }
+      fileHelper.deleteFile(product.image);
+      return BiloKojeImeProduct.deleteOne({
+        _id: prodId,
+        userID: req.user._id,
+      });
+    })
     .then(() => {
       console.log('DESTROYED PRODUCT');
       res.redirect('/admin/products');
@@ -180,31 +241,30 @@ exports.deleteProduct = (req, res, next) => {
     });
 };
 
-//
-// dohvacanje svih zapisa iz baze
-// /admin/products => GET
-exports.getProducts = (req, res, next) => {
-  console.log('req.user._id=', req.user._id);
-
-  BiloKojeImeProduct.find({ userID: req.user._id })
-    // .select('title price -_id')  // opcija, - minus predstavlja isključivanje
-    // .populate('userID', 'name')  // opcija,
-    .populate('userID')
-    .then((products) => {
-      console.log('tutut');
-
-      console.log(products);
-
-      res.render('admin/products', {
-        prod: products,
-        pageTitle: 'Admin Products',
-        path: '/admin/products',
+// FRONTEND
+// DELETE zapis iz FRONTEND-a !!!!
+exports.deleteProduct = (req, res, next) => {
+  const prodId = req.params.productId;
+  BiloKojeImeProduct.findById(prodId)
+    .then((product) => {
+      if (!product) {
+        return next(new Error('Product not found'));
+      }
+      fileHelper.deleteFile(product.image);
+      return BiloKojeImeProduct.deleteOne({
+        _id: prodId,
+        userID: req.user._id,
+      });
+    })
+    .then(() => {
+      console.log('DESTROYED PRODUCT FRONTEND');
+      res.status(200).json({
+        message: 'Susess',
       });
     })
     .catch((err) => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      error.opis = ' Greška u getProducts';
-      return next(error);
+      res.status(500).json({
+        message: 'Deleting product failed',
+      });
     });
 };

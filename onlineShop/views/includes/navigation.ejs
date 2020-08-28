@@ -31,9 +31,11 @@
         <a class="<%= path === '/signup' ? 'active' : '' %>" href="/auth/signup">Signup</a>
       </li>
       <% } else { %>
-        <li class="main-header__item">
-          <a>User: <%= userEmail  %></a>
-        </li>
+        <% if (userEmail) { %>
+          <li class="main-header__item">
+            <a>User: <%= userEmail  %></a>
+          </li>
+        <% } %>
       <li class="main-header__item">
         <form action="/auth/logout" method="POST">
           <input type="hidden" name="_csrf" value="<%= csrfToken %>">

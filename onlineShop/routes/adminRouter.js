@@ -43,8 +43,11 @@ router.post(
   adminControler.postEditProduct
 );
 
-// /delete-product => POST
-router.post('/delete-product', isAuth, adminControler.deleteProduct);
+// BACKEND /delete-product => POST
+router.post('/delete-product', isAuth, adminControler.postDeleteProduct);
+
+// FRONTEND /delete-product => POST
+router.delete('/product/:productId', isAuth, adminControler.deleteProduct);
 
 // EXPORT EXPORT EXPORT EXPORT EXPORT
 module.exports = router;
