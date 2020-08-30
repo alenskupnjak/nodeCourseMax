@@ -26,7 +26,7 @@ router.post('/cart', isAuth, shopController.postCart);
 router.post('/cart-delete-item', isAuth, shopController.postCartDeleteProduct);
 
 // kreiranje narudžbe
-router.post('/create-order', isAuth, shopController.createOrder);
+router.post('/create-order', isAuth, shopController.postOrder);
 
 // povlačenje ordera
 router.get('/orders', isAuth, shopController.getOrders);
@@ -37,7 +37,11 @@ router.get('/orders/:invoiceId', isAuth, shopController.getInvoice);
 // povlačenje ordera
 router.post('/delete-order', isAuth, shopController.postDeleteOrders);
 
-// // kreiranje narudžbe
-// router.get('/checkout', shopController.getCheckout);
+// placanje
+router.get('/checkout', isAuth, shopController.getCheckout);
+
+router.get('/checkout/success', isAuth, shopController.getCheckoutSuccess); // kopija  postOrder
+
+router.get('/checkout/cancel', isAuth, shopController.getCheckout);
 
 module.exports = router; // setup za router

@@ -1,5 +1,7 @@
 'use strict';
 const dotenv = require('dotenv');
+const fs = require('fs');
+var compression = require('compression')
 const morgan = require('morgan');
 const colors = require('colors');
 const path = require('path');
@@ -15,8 +17,8 @@ const multer = require('multer');
 const errorController = require('./controllers/errorCtrl');
 const User = require('./models/userModel');
 
-// Usnimavanje env vars
-dotenv.config({ path: './config/config.env' });
+// Usnimavanje env vars za cijelu aplikaciju
+dotenv.config({ path: './.vscode/config.env' });
 
 // ROUTES
 const adminRoutes = require('./routes/adminRouter');
@@ -35,16 +37,20 @@ app.use((req, res, next) => {
 // inicijalizacija za za svaki renderpage, zaštita stranice
 const csrfProtection = csrf();
 
+// compress all responses
+app.use(compression());
+
 // za spremanje fileova
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'images');
   },
   filename: (req, file, cb) => {
-    const linkMath = Math.random().toString().slice(2, 14) + '-' + file.originalname;
-    const link = new Date().toISOString().slice(0, 12) + '-' + file.originalname;
-    console.log('link=', link, 'li=', linkMath);
-    cb(null, linkMath  + '-' + file.originalname);
+    const linkMath =
+      Math.random().toString().slice(2, 14) + '-' + file.originalname;
+    const link =
+      new Date().toISOString().slice(0, 12) + '-' + file.originalname;
+    cb(null, link + '-' + file.originalname);
   },
 });
 
@@ -76,6 +82,17 @@ app.set('view engine', 'ejs'); // za ejs
 // kreiramo stazu odakle cemo vuci template
 app.set('views', path.join(__dirname, 'views'));
 
+// https://medium.com/@adamzerner/how-bodyparser-works-247897a93b90
+// app.use(bodyParser.json()); // for parsing application/json
+// app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+// app.use(multer()); // for parsing multipart/form-data
+
+// Body parser, bez ovoga ne mozemo slati podatke u req.body , starija verzija!!!!!
+// app.use(express.json());
+// isto kao i app.use(express.json());  nova verzija
+app.use(bodyParser.json()) 
+
+
 // body -parser, bez ovoga ne salje SAMO TEXT-DATA automatski kroz req.body (npm i body-parser)
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -87,8 +104,8 @@ app.use(
 // definiranje PATH statičkih tranica za HTML ....
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ako udes u path /images, idi na stazu 
-app.use('/images',express.static(path.join(__dirname, 'images')));
+// ako udes u path /images, idi na stazu
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // SESSION SESSION SESSION SESSION SESSION SESSION
 app.use(
@@ -106,6 +123,7 @@ app.use(csrfProtection);
 
 // The flash is a special area of the session used for storing messages.
 app.use(flash());
+
 
 // podaci vidljivi za sve VIEWS !!!
 app.use((req, res, next) => {
@@ -186,7 +204,7 @@ app.use((error, req, res, next) => {
 });
 
 // definiranje porta
-const PORT = process.env.PORT || 5500;
+const PORT = process.env.PORT || 4000;
 
 // spajanje na databazu
 mongoose
@@ -211,7 +229,7 @@ mongoose
     //   }
     // });
     app.listen(PORT, () => {
-      console.log('App listening on port 5500!');
+      console.log(`'App listening on port ${PORT}'`);
     });
   })
   .catch((err) => {

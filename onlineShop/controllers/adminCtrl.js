@@ -137,7 +137,7 @@ exports.postEditProduct = (req, res, next) => {
 
   // sve greške iz rutera skuplaju se u ovoj finkciji
   errors = validationResult(req);
-
+  // validacij upisanih podataka
   if (!errors.isEmpty()) {
     return res.status(422).render('admin/edit-add-product', {
       pageTitle: 'Edit proizvod',
@@ -223,6 +223,8 @@ exports.postDeleteProduct = (req, res, next) => {
       if (!product) {
         return next(new Error('Product not found'));
       }
+      
+      // brisanje file
       fileHelper.deleteFile(product.image);
       return BiloKojeImeProduct.deleteOne({
         _id: prodId,

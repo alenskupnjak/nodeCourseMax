@@ -5,61 +5,40 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 //definicija izgleda zapisa
-const productSchema = new Schema({
-  title:{
-    type:String,
-    required: true
+const productSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    price: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+    imageUrl: {
+      type: String,
+      required: true,
+    },
+    image: {
+      type: String,
+      required: true,
+    },
+    userID: {
+      type: Schema.Types.ObjectId,
+      // Veza sa UserModel-om, biti ime isto kao i u userModel.js: module.exports = mongoose.model('User', userSchema)
+      ref: 'User',
+      required: true,
+    },
   },
-  price: {
-    type:String,
-    required: true
-  },
-  description: {
-    type:String,
-    required: true
-  },
-  imageUrl: {
-    type:String,
-    required: true
-  },
-  image: {
-    type:String,
-    required: true
-  },
-  userID: {
-    type: Schema.Types.ObjectId,
-    // Veza sa UserModel-om, biti ime isto kao i u userModel.js: module.exports = mongoose.model('User', userSchema)
-    ref:'User',  
-    required: true
-  }
-});
-
+  { timestamps: true }
+);
 
 // mongosse automatski pretvara 'Product' u mala slova =>(product) i kreira zapis u bazi
-module.exports = mongoose.model('Product', productSchema)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+module.exports = mongoose.model('Product', productSchema);
 
 // // verzija bez mongoose, direkno sa mongodb
 // const mongodb = require('mongodb');
@@ -102,7 +81,6 @@ module.exports = mongoose.model('Product', productSchema)
 //         console.log(err);
 //       });
 //   }
-
 
 //   // dohvaćanje svih proizvoda
 //   static fetchAll() {

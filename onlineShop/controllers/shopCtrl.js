@@ -1,10 +1,12 @@
-const fs = require('fs');
 const path = require('path');
+const fs = require('fs');
 const PDFDocument = require('pdfkit');
 const fileHelper = require('../util/file');
+const stripe = require('stripe')(process.env.STRIPE_API_KEY_SECRET);
 
 const Product = require('../models/productsModel');
 const Order = require('../models/orderModel');
+const pistText = require('../util/pisiText');
 
 const ITEMS_PER_PAGE = 2;
 
@@ -33,7 +35,6 @@ exports.getOneProduct = (req, res, next) => {
   const prodId = req.params.id;
   Product.findById(prodId) // ugradena funkcija mongoose
     .then((product) => {
-      console.log(product);
       res.render('shop/product-detail', {
         prod: product,
         pageTitle: product.title,
@@ -51,31 +52,30 @@ exports.getOneProduct = (req, res, next) => {
 //
 // Prikazujemo sve proizvode BAZA
 exports.getIndex = (req, res, next) => {
-  // console.log(req.query);
-  // npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..
   let currentPage;
-  console.log('req.query.page'.blue, Number(req.query.page));
-  console.log('req.query.page'.blue, req.query.page);
-  console.log('req.query.page'.blue, !req.query.page);
+  pistText.pisiText(' ----------------------------exports.getIndex');
+  pistText.pisiText('req.query', req.query);
+  pistText.pisiText('npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..');
+  pistText.pisiText('Number(req.query.page)) ',Number(req.query.page));
+  pistText.pisiText('req.query.page', req.query.page);
+  pistText.pisiText('!req.query.page',!req.query.page);
 
   if (!req.query.page) {
     currentPage = 1;
   } else {
     currentPage = Number(req.query.page);
   }
-  console.log('currentPage='.red, currentPage);
 
   let totalItems;
 
   Product.find()
     .countDocuments()
     .then((numProducts) => {
-      console.log('numProducts=', numProducts);
+      pistText.pisiText('numProducts',numProducts);
       return (totalItems = numProducts);
     })
     .then((data) => {
-      console.log('data='.blue,data);
-      
+      pistText.pisiText('Broj Zapisa',data);
       return Product.find()
         .skip((currentPage - 1) * ITEMS_PER_PAGE) // ugradena mongose funkcija, preskace broj zapisa zapise....
         .limit(ITEMS_PER_PAGE);
@@ -159,7 +159,7 @@ exports.postCartDeleteProduct = (req, res, next) => {
 
 // mongoose mongoose mongoose mongoose mongoose
 // create order
-exports.createOrder = (req, res, next) => {
+exports.postOrder = (req, res, next) => {
   req.user
     .populate('cart.items.productId')
     //https://mongoosejs.com/docs/api.html#document_Document-execPopulate
@@ -201,6 +201,7 @@ exports.getOrders = (req, res, next) => {
   console.log('getOrders - isAutoriziran:= '.red, req.session.isLoggedIn);
   Order.find({ 'user.userId': req.user._id })
     .then((orders) => {
+      pistText.pisiText('brojNarudbi=', orders);
       console.log('brojNarudbi='.green, orders);
 
       res.render('shop/orders', {
@@ -234,11 +235,9 @@ exports.postDeleteOrders = (req, res, next) => {
       const deletefile = 'invoices/invoice-' + order._id + '.pdf';
       console.log(deletefile);
 
-      // fileHelper.deleteFile(deletefile);
-
+      // Provjeravam dali file postoji u /invoice
       if (fs.existsSync(deletefile)) {
-        console.log('da da');
-        next();
+        fileHelper.deleteFile(deletefile);
       }
 
       Order.findByIdAndDelete({ _id: req.body.productId })
@@ -259,14 +258,6 @@ exports.postDeleteOrders = (req, res, next) => {
       error.opis = ' Greška u Invoice';
       return next(error);
     });
-};
-
-//
-exports.getCheckout = async (req, res, next) => {
-  res.render('shop/index', {
-    pageTitle: 'Check out',
-    path: '/cart', // path nam služi za odredivanje aktivnog menija u navbaru, (navigation.ejs)
-  });
 };
 
 exports.getInvoice = (req, res, next) => {
@@ -350,6 +341,98 @@ exports.getInvoice = (req, res, next) => {
       const error = new Error(err);
       error.httpStatusCode = 500;
       error.opis = ' Greška u Invoice';
+      return next(error);
+    });
+};
+
+// Placanje karticom
+exports.getCheckout = async (req, res, next) => {
+  let products;
+  let total;
+  pistText.pisiText(' ---- exports.getCheckout', '  -  controllersshopCtrl.js');
+  pistText.pisiText('req.get(host)=', req.get('host'));
+
+  req.user
+    .populate('cart.items.productId')
+    .execPopulate() // Explicitly executes population and returns a promise
+    .then((user) => {
+      products = user.cart.items;
+      pistText.pisiText('user=', user);
+      pistText.pisiText('products=', products);
+      total = 0;
+      products.forEach((p) => {
+        total += p.quantity * p.productId.price;
+      });
+
+      return stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        line_items: products.map((p) => {
+          // format zapisa koji strip treba
+          return {
+            name: p.productId.title,
+            description: p.productId.description,
+            amount: p.productId.price * 100,
+            currency: 'usd',
+            quantity: p.quantity,
+          };
+        }),
+        success_url:
+          req.protocol + '://' + req.get('host') + '/checkout/success',
+        cancel_url: req.protocol + '://' + req.get('host') + '/checkout/cancel',
+      });
+    })
+    .then((session) => {
+      res.render('shop/checkout', {
+        pageTitle: 'Check out',
+        path: '/checkout',
+        products: products,
+        totalSum: total,
+        STRIPE_API_KEY: process.env.STRIPE_API_KEY_PUBLIC,
+        sessionId: session.id,
+      });
+    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      error.opis = ' Greška xxx';
+      return next(error);
+    });
+};
+
+//
+// create order
+exports.getCheckoutSuccess = (req, res, next) => {
+  req.user
+    .populate('cart.items.productId')
+    //https://mongoosejs.com/docs/api.html#document_Document-execPopulate
+    .execPopulate() // Explicitly executes population and returns a promise
+    .then((user) => {
+      const productsData = user.cart.items.map((i) => {
+        // return { quantity: i.quantity, product: i.productId };
+        return { quantity: i.quantity, product: { ...i.productId._doc } };
+      });
+      // kreiramo novu narudžbu
+      const order = new Order({
+        user: {
+          email: req.user.email,
+          userId: req.user._id,
+        },
+        products: productsData,
+        created: Date.now(),
+      });
+      // snimamo order
+      return order.save();
+    })
+    .then((result) => {
+      return req.user.clearCart();
+    })
+    .then((result) => {
+      res.redirect('/orders');
+    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      error.opis = ' Greška xxx';
       return next(error);
     });
 };

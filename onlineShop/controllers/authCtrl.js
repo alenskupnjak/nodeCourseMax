@@ -188,7 +188,6 @@ exports.postSignup = (req, res, next) => {
           const user = new User({
             email: email,
             password: hasedPassword,
-            passwordTemp: password,
             name: 'neko ime',
             cart: { items: [] },
           });
@@ -200,9 +199,9 @@ exports.postSignup = (req, res, next) => {
           return transporter.sendMail({
             from: 'skupnjaka@gmail.com', // sender address
             to: email, // list of receivers
-            subject: 'Kreiran account', // Subject line
+            subject: 'Kreiran account u aplikaciji OnlineShop', // Subject line
             text: 'Hello world?', // plain text body
-            html: '<p>Uspjesna prijava</p>', // html body
+            html: '<p>Uspjesna prijava novog korisnika</p>', // html body
           });
         })
         .catch((err) => {
@@ -272,10 +271,10 @@ exports.postReset = (req, res, next) => {
         return transporter.sendMail({
           from: 'skupnjaka@gmail.com', // sender address
           to: req.body.email, // list of receivers
-          subject: 'Password reset', // Subject line
-          // text: 'Hello world?', // plain text body
+          subject: 'Password reset za aplikaciju Online Shop', // Subject line
+          text: 'Resetiraj password?', // plain text body
           html: `<p>Resetiraj password<p>
-                <p>Klikni <a href="http://localhost:5500/auth/new-password/${token}">link</a><p>
+                <p>Klikni <a href="${req.protocol}:${req.get('host')}/auth/new-password/${token}">link</a><p>
           `, // html body
         });
       })
@@ -342,7 +341,6 @@ exports.postNewPassword = (req, res, next) => {
     })
     .then((hashedPassword) => {
       resetUser.password = hashedPassword;
-      resetUser.passwordTemp = newPassword;
       resetUser.resetToken = undefined;
       resetUser.resetTokenExpiration = undefined;
       return resetUser.save();

@@ -5,37 +5,38 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 //definicija izgleda zapisa
-const userSchema = new Schema({
-  email: {
-    type: String,
-    required: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  passwordTemp: {
-    type: String,
-  },
-  name: {
-    type: String,
-  },
-  resetToken: String,
-  resetTokenExpiration: Date,
-  cart: {
-    items: [
-      {
-        // ovdje je veza sa productModel!!
-        productId: { // veza 1 isto ime !!!
-          type: Schema.Types.ObjectId,
-          ref: 'Product',
-          required: true,
+const userSchema = new Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    name: {
+      type: String,
+    },
+    resetToken: String,
+    resetTokenExpiration: Date,
+    cart: {
+      items: [
+        {
+          // ovdje je veza sa productModel!!
+          productId: {
+            // veza 1 isto ime !!!
+            type: Schema.Types.ObjectId,
+            ref: 'Product',
+            required: true,
+          },
+          quantity: { type: Number, required: true }, // veza 2 isto ime !!!
         },
-        quantity: { type: Number, required: true }, // veza 2 isto ime !!!
-      },
-    ],
+      ],
+    },
   },
-});
+  { timestamps: true }
+);
 
 ////////////////////////////////////
 // ADD METHOD
