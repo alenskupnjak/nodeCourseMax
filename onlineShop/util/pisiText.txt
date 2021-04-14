@@ -5,742 +5,83 @@ npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= 
 req.query.page= undefined ; ;
 Number(req.query.page)) = NaN ; ;
 !req.query.page= true ; ;
-numProducts= 11 ; ;
-Broj Zapisa= 11 ; ;
-req.query= [object Object] ; ;
+numProducts= 6 ; ;
+Broj Zapisa= 6 ; ;
  ----------------------------exports.getIndex= undefined ; ;
 npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-Number(req.query.page)) = NaN ; ;
-!req.query.page= true ; ;
-req.query.page= undefined ; ;
-numProducts= 11 ; ;
-Broj Zapisa= 11 ; ;
-Number(req.query.page)) = NaN ; ;
-req.query= [object Object] ; ;
- ----------------------------exports.getIndex= undefined ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-req.query.page= undefined ; ;
-!req.query.page= true ; ;
-Broj Zapisa= 11 ; ;
-numProducts= 11 ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f47cdb0d73ca207bc3e9a24,
-  products: [
-    { _id: 5f47cdb0d73ca207bc3e9a25, quantity: 1, product: [Object] },
-    { _id: 5f47cdb0d73ca207bc3e9a26, quantity: 1, product: [Object] }
-  ],
-  created: 2020-08-27T15:13:52.346Z,
-  __v: 0
-},{
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f47d3f8e315b218583ced00,
-  products: [ { _id: 5f47d3f8e315b218583ced01, quantity: 1, product: [Object] } ],
-  created: 2020-08-27T15:40:40.856Z,
-  __v: 0
-},{
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4928f0bc1a550bc0f58146,
-  products: [
-    { _id: 5f4928f0bc1a550bc0f58147, quantity: 2, product: [Object] },
-    { _id: 5f4928f0bc1a550bc0f58148, quantity: 1, product: [Object] }
-  ],
-  created: 2020-08-28T15:55:28.855Z,
-  __v: 0
-},{
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4929825b22ba21140b873b,
-  products: [ { _id: 5f4929825b22ba21140b873c, quantity: 1, product: [Object] } ],
-  created: 2020-08-28T15:57:54.442Z,
-  __v: 0
-},{
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f49321a61deb900046fba16,
-  products: [
-    { _id: 5f49321a61deb900046fba17, quantity: 1, product: [Object] },
-    { _id: 5f49321a61deb900046fba18, quantity: 1, product: [Object] }
-  ],
-  created: 2020-08-28T16:34:34.075Z,
-  __v: 0
-} ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
- ----------------------------exports.getIndex= undefined ; ;
-req.query= [object Object] ; ;
-Number(req.query.page)) = NaN ; ;
-!req.query.page= true ; ;
-req.query.page= undefined ; ;
-numProducts= 11 ; ;
-Broj Zapisa= 11 ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f47cdb0d73ca207bc3e9a24,
-  products: [
-    { _id: 5f47cdb0d73ca207bc3e9a25, quantity: 1, product: [Object] },
-    { _id: 5f47cdb0d73ca207bc3e9a26, quantity: 1, product: [Object] }
-  ],
-  created: 2020-08-27T15:13:52.346Z,
-  __v: 0
-},{
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f47d3f8e315b218583ced00,
-  products: [ { _id: 5f47d3f8e315b218583ced01, quantity: 1, product: [Object] } ],
-  created: 2020-08-27T15:40:40.856Z,
-  __v: 0
-},{
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4928f0bc1a550bc0f58146,
-  products: [
-    { _id: 5f4928f0bc1a550bc0f58147, quantity: 2, product: [Object] },
-    { _id: 5f4928f0bc1a550bc0f58148, quantity: 1, product: [Object] }
-  ],
-  created: 2020-08-28T15:55:28.855Z,
-  __v: 0
-},{
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4929825b22ba21140b873b,
-  products: [ { _id: 5f4929825b22ba21140b873c, quantity: 1, product: [Object] } ],
-  created: 2020-08-28T15:57:54.442Z,
-  __v: 0
-},{
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f49321a61deb900046fba16,
-  products: [
-    { _id: 5f49321a61deb900046fba17, quantity: 1, product: [Object] },
-    { _id: 5f49321a61deb900046fba18, quantity: 1, product: [Object] }
-  ],
-  created: 2020-08-28T16:34:34.075Z,
-  __v: 0
-} ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f47d3f8e315b218583ced00,
-  products: [ { _id: 5f47d3f8e315b218583ced01, quantity: 1, product: [Object] } ],
-  created: 2020-08-27T15:40:40.856Z,
-  __v: 0
-},{
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4928f0bc1a550bc0f58146,
-  products: [
-    { _id: 5f4928f0bc1a550bc0f58147, quantity: 2, product: [Object] },
-    { _id: 5f4928f0bc1a550bc0f58148, quantity: 1, product: [Object] }
-  ],
-  created: 2020-08-28T15:55:28.855Z,
-  __v: 0
-},{
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4929825b22ba21140b873b,
-  products: [ { _id: 5f4929825b22ba21140b873c, quantity: 1, product: [Object] } ],
-  created: 2020-08-28T15:57:54.442Z,
-  __v: 0
-},{
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f49321a61deb900046fba16,
-  products: [
-    { _id: 5f49321a61deb900046fba17, quantity: 1, product: [Object] },
-    { _id: 5f49321a61deb900046fba18, quantity: 1, product: [Object] }
-  ],
-  created: 2020-08-28T16:34:34.075Z,
-  __v: 0
-} ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f47d3f8e315b218583ced00,
-  products: [ { _id: 5f47d3f8e315b218583ced01, quantity: 1, product: [Object] } ],
-  created: 2020-08-27T15:40:40.856Z,
-  __v: 0
-},{
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4928f0bc1a550bc0f58146,
-  products: [
-    { _id: 5f4928f0bc1a550bc0f58147, quantity: 2, product: [Object] },
-    { _id: 5f4928f0bc1a550bc0f58148, quantity: 1, product: [Object] }
-  ],
-  created: 2020-08-28T15:55:28.855Z,
-  __v: 0
-},{
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4929825b22ba21140b873b,
-  products: [ { _id: 5f4929825b22ba21140b873c, quantity: 1, product: [Object] } ],
-  created: 2020-08-28T15:57:54.442Z,
-  __v: 0
-} ; ;
-req.query= [object Object] ; ;
- ----------------------------exports.getIndex= undefined ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-Number(req.query.page)) = NaN ; ;
-req.query.page= undefined ; ;
-!req.query.page= true ; ;
-numProducts= 11 ; ;
-Broj Zapisa= 11 ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f47d3f8e315b218583ced00,
-  products: [ { _id: 5f47d3f8e315b218583ced01, quantity: 1, product: [Object] } ],
-  created: 2020-08-27T15:40:40.856Z,
-  __v: 0
-},{
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4929825b22ba21140b873b,
-  products: [ { _id: 5f4929825b22ba21140b873c, quantity: 1, product: [Object] } ],
-  created: 2020-08-28T15:57:54.442Z,
-  __v: 0
-} ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f47d3f8e315b218583ced00,
-  products: [ { _id: 5f47d3f8e315b218583ced01, quantity: 1, product: [Object] } ],
-  created: 2020-08-27T15:40:40.856Z,
-  __v: 0
-},{
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4929825b22ba21140b873b,
-  products: [ { _id: 5f4929825b22ba21140b873c, quantity: 1, product: [Object] } ],
-  created: 2020-08-28T15:57:54.442Z,
-  __v: 0
-} ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f47d3f8e315b218583ced00,
-  products: [ { _id: 5f47d3f8e315b218583ced01, quantity: 1, product: [Object] } ],
-  created: 2020-08-27T15:40:40.856Z,
-  __v: 0
-},{
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4929825b22ba21140b873b,
-  products: [ { _id: 5f4929825b22ba21140b873c, quantity: 1, product: [Object] } ],
-  created: 2020-08-28T15:57:54.442Z,
-  __v: 0
-},{
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b4d792323020874e0c99f,
-  products: [ { _id: 5f4b4d792323020874e0c9a0, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T06:55:53.800Z,
-  __v: 0
-} ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f47d3f8e315b218583ced00,
-  products: [ { _id: 5f47d3f8e315b218583ced01, quantity: 1, product: [Object] } ],
-  created: 2020-08-27T15:40:40.856Z,
-  __v: 0
-},{
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4929825b22ba21140b873b,
-  products: [ { _id: 5f4929825b22ba21140b873c, quantity: 1, product: [Object] } ],
-  created: 2020-08-28T15:57:54.442Z,
-  __v: 0
-} ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4929825b22ba21140b873b,
-  products: [ { _id: 5f4929825b22ba21140b873c, quantity: 1, product: [Object] } ],
-  created: 2020-08-28T15:57:54.442Z,
-  __v: 0
-} ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b4db82323020874e0c9a2,
-  products: [ { _id: 5f4b4db82323020874e0c9a3, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T06:56:56.551Z,
-  __v: 0
-} ; ;
-brojNarudbi==  ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b4dc92323020874e0c9a5,
-  products: [ { _id: 5f4b4dc92323020874e0c9a6, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T06:57:13.271Z,
-  __v: 0
-} ; ;
-brojNarudbi==  ; ;
- ----------------------------exports.getIndex= undefined ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-req.query= [object Object] ; ;
-Number(req.query.page)) = NaN ; ;
-req.query.page= undefined ; ;
-!req.query.page= true ; ;
-numProducts= 11 ; ;
-Broj Zapisa= 11 ; ;
-Number(req.query.page)) = NaN ; ;
- ----------------------------exports.getIndex= undefined ; ;
-req.query= [object Object] ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-req.query.page= undefined ; ;
-!req.query.page= true ; ;
-numProducts= 11 ; ;
-Broj Zapisa= 11 ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b4de12323020874e0c9a9,
-  products: [
-    { _id: 5f4b4de12323020874e0c9aa, quantity: 1, product: [Object] },
-    { _id: 5f4b4de12323020874e0c9ab, quantity: 1, product: [Object] }
-  ],
-  created: 2020-08-30T06:57:37.683Z,
-  __v: 0
-} ; ;
-brojNarudbi==  ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b4dfe2323020874e0c9ad,
-  products: [ { _id: 5f4b4dfe2323020874e0c9ae, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T06:58:06.136Z,
-  __v: 0
-} ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b4dfe2323020874e0c9ad,
-  products: [ { _id: 5f4b4dfe2323020874e0c9ae, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T06:58:06.136Z,
-  __v: 0
-} ; ;
-brojNarudbi==  ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b4e46abc1951bd82625ce,
-  products: [ { _id: 5f4b4e46abc1951bd82625cf, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T06:59:18.445Z,
-  __v: 0
-} ; ;
-brojNarudbi==  ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b4e57abc1951bd82625d1,
-  products: [ { _id: 5f4b4e57abc1951bd82625d2, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T06:59:35.201Z,
-  __v: 0
-} ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b4e57abc1951bd82625d1,
-  products: [ { _id: 5f4b4e57abc1951bd82625d2, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T06:59:35.201Z,
-  __v: 0
-} ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b4e57abc1951bd82625d1,
-  products: [ { _id: 5f4b4e57abc1951bd82625d2, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T06:59:35.201Z,
-  __v: 0
-},{
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b4e73abc1951bd82625d4,
-  products: [ { _id: 5f4b4e73abc1951bd82625d5, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T07:00:03.397Z,
-  __v: 0
-} ; ;
- ----------------------------exports.getIndex= undefined ; ;
-Number(req.query.page)) = NaN ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-req.query.page= undefined ; ;
-req.query= [object Object] ; ;
-!req.query.page= true ; ;
-numProducts= 11 ; ;
-Broj Zapisa= 11 ; ;
- ----------------------------exports.getIndex= undefined ; ;
-req.query= [object Object] ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-Number(req.query.page)) = NaN ; ;
-req.query.page= undefined ; ;
-!req.query.page= true ; ;
-numProducts= 11 ; ;
-Broj Zapisa= 11 ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b4e73abc1951bd82625d4,
-  products: [ { _id: 5f4b4e73abc1951bd82625d5, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T07:00:03.397Z,
-  __v: 0
-},{
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b4ebc4bce6a3a149ce1b4,
-  products: [ { _id: 5f4b4ebc4bce6a3a149ce1b5, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T07:01:16.118Z,
-  __v: 0
-} ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b4e73abc1951bd82625d4,
-  products: [ { _id: 5f4b4e73abc1951bd82625d5, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T07:00:03.397Z,
-  __v: 0
-},{
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b4ebc4bce6a3a149ce1b4,
-  products: [ { _id: 5f4b4ebc4bce6a3a149ce1b5, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T07:01:16.118Z,
-  __v: 0
-} ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b4e73abc1951bd82625d4,
-  products: [ { _id: 5f4b4e73abc1951bd82625d5, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T07:00:03.397Z,
-  __v: 0
-},{
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b4ebc4bce6a3a149ce1b4,
-  products: [ { _id: 5f4b4ebc4bce6a3a149ce1b5, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T07:01:16.118Z,
-  __v: 0
-} ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b4e73abc1951bd82625d4,
-  products: [ { _id: 5f4b4e73abc1951bd82625d5, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T07:00:03.397Z,
-  __v: 0
-} ; ;
-brojNarudbi==  ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b4ed64bce6a3a149ce1b7,
-  products: [ { _id: 5f4b4ed64bce6a3a149ce1b8, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T07:01:42.874Z,
-  __v: 0
-} ; ;
- ----------------------------exports.getIndex= undefined ; ;
-req.query= [object Object] ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-Number(req.query.page)) = NaN ; ;
-!req.query.page= true ; ;
-req.query.page= undefined ; ;
-numProducts= 11 ; ;
-Broj Zapisa= 11 ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b4ed64bce6a3a149ce1b7,
-  products: [ { _id: 5f4b4ed64bce6a3a149ce1b8, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T07:01:42.874Z,
-  __v: 0
-},{
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b4edc4bce6a3a149ce1ba,
-  products: [ { _id: 5f4b4edc4bce6a3a149ce1bb, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T07:01:48.142Z,
-  __v: 0
-} ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b4ed64bce6a3a149ce1b7,
-  products: [ { _id: 5f4b4ed64bce6a3a149ce1b8, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T07:01:42.874Z,
-  __v: 0
-},{
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b4edc4bce6a3a149ce1ba,
-  products: [ { _id: 5f4b4edc4bce6a3a149ce1bb, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T07:01:48.142Z,
-  __v: 0
-} ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b4ed64bce6a3a149ce1b7,
-  products: [ { _id: 5f4b4ed64bce6a3a149ce1b8, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T07:01:42.874Z,
-  __v: 0
-} ; ;
-brojNarudbi==  ; ;
- ----------------------------exports.getIndex= undefined ; ;
-req.query= [object Object] ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-req.query.page= undefined ; ;
-Number(req.query.page)) = NaN ; ;
-!req.query.page= true ; ;
-numProducts= 11 ; ;
-Broj Zapisa= 11 ; ;
-brojNarudbi==  ; ;
-req.query= [object Object] ; ;
- ----------------------------exports.getIndex= undefined ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-Number(req.query.page)) = NaN ; ;
-req.query.page= undefined ; ;
-!req.query.page= true ; ;
-numProducts= 11 ; ;
-Broj Zapisa= 11 ; ;
-Number(req.query.page)) = NaN ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-req.query.page= undefined ; ;
- ----------------------------exports.getIndex= undefined ; ;
-!req.query.page= true ; ;
-req.query= [object Object] ; ;
-Broj Zapisa= 12 ; ;
-numProducts= 12 ; ;
-brojNarudbi==  ; ;
-req.query= [object Object] ; ;
- ----------------------------exports.getIndex= undefined ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-Number(req.query.page)) = NaN ; ;
-req.query.page= undefined ; ;
-!req.query.page= true ; ;
-numProducts= 12 ; ;
-Broj Zapisa= 12 ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b5161be6cd319a4bfdf71,
-  products: [ { _id: 5f4b5161be6cd319a4bfdf72, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T07:12:33.231Z,
-  createdAt: 2020-08-30T07:12:33.234Z,
-  updatedAt: 2020-08-30T07:12:33.234Z,
-  __v: 0
-} ; ;
- ----------------------------exports.getIndex= undefined ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-req.query.page= undefined ; ;
-req.query= [object Object] ; ;
-Number(req.query.page)) = NaN ; ;
-!req.query.page= true ; ;
-numProducts= 12 ; ;
-Broj Zapisa= 12 ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-Number(req.query.page)) = 6 ; ;
-req.query= [object Object] ; ;
- ----------------------------exports.getIndex= undefined ; ;
-req.query.page= 6 ; ;
-!req.query.page= false ; ;
-Broj Zapisa= 12 ; ;
-numProducts= 12 ; ;
- ----------------------------exports.getIndex= undefined ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-Number(req.query.page)) = 6 ; ;
-req.query= [object Object] ; ;
-req.query.page= 6 ; ;
-!req.query.page= false ; ;
-numProducts= 12 ; ;
-Broj Zapisa= 12 ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
- ----------------------------exports.getIndex= undefined ; ;
-req.query= [object Object] ; ;
-Number(req.query.page)) = NaN ; ;
-!req.query.page= true ; ;
-req.query.page= undefined ; ;
-Broj Zapisa= 12 ; ;
-numProducts= 12 ; ;
- ----------------------------exports.getIndex= undefined ; ;
-req.query.page= undefined ; ;
-req.query= [object Object] ; ;
-Number(req.query.page)) = NaN ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-!req.query.page= true ; ;
-numProducts= 12 ; ;
-Broj Zapisa= 12 ; ;
-req.query= [object Object] ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-Number(req.query.page)) = NaN ; ;
- ----------------------------exports.getIndex= undefined ; ;
-req.query.page= undefined ; ;
-!req.query.page= true ; ;
-numProducts= 12 ; ;
-Broj Zapisa= 12 ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-Number(req.query.page)) = NaN ; ;
-req.query= [object Object] ; ;
- ----------------------------exports.getIndex= undefined ; ;
-req.query.page= undefined ; ;
-!req.query.page= true ; ;
-numProducts= 12 ; ;
-Broj Zapisa= 12 ; ;
-req.query= [object Object] ; ;
- ----------------------------exports.getIndex= undefined ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-req.query.page= undefined ; ;
-Number(req.query.page)) = NaN ; ;
-!req.query.page= true ; ;
-Broj Zapisa= 12 ; ;
-numProducts= 12 ; ;
- ----------------------------exports.getIndex= undefined ; ;
-req.query= [object Object] ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-Number(req.query.page)) = NaN ; ;
-req.query.page= undefined ; ;
-!req.query.page= true ; ;
-numProducts= 12 ; ;
-Broj Zapisa= 12 ; ;
- ----------------------------exports.getIndex= undefined ; ;
-req.query= [object Object] ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-req.query.page= undefined ; ;
-Number(req.query.page)) = NaN ; ;
-!req.query.page= true ; ;
-Broj Zapisa= 12 ; ;
-numProducts= 12 ; ;
-brojNarudbi== {
-  user: { email: 'alenskupnjak@yahoo.com', userId: 5f43c62c350c4d17d85e9be2 },
-  _id: 5f47e6d2ede8f1285cbd31a1,
-  products: [
-    { _id: 5f47e6d2ede8f1285cbd31a2, quantity: 2, product: [Object] },
-    { _id: 5f47e6d2ede8f1285cbd31a3, quantity: 1, product: [Object] }
-  ],
-  created: 2020-08-27T17:01:06.587Z,
-  __v: 0
-} ; ;
-brojNarudbi==  ; ;
-brojNarudbi==  ; ;
-brojNarudbi==  ; ;
- ----------------------------exports.getIndex= undefined ; ;
-req.query= [object Object] ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-Number(req.query.page)) = NaN ; ;
-req.query.page= undefined ; ;
-!req.query.page= true ; ;
-numProducts= 10 ; ;
-Broj Zapisa= 10 ; ;
- ----------------------------exports.getIndex= undefined ; ;
-Number(req.query.page)) = NaN ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-req.query.page= undefined ; ;
-req.query= [object Object] ; ;
-!req.query.page= true ; ;
-Broj Zapisa= 10 ; ;
-numProducts= 10 ; ;
-req.query= [object Object] ; ;
- ----------------------------exports.getIndex= undefined ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-req.query.page= undefined ; ;
-Number(req.query.page)) = NaN ; ;
-!req.query.page= true ; ;
-numProducts= 10 ; ;
-Broj Zapisa= 10 ; ;
-brojNarudbi== {
-  user: { email: 'test01@mailsac.com', userId: 5f43cd8dffa7793cc03a6700 },
-  _id: 5f47654cf712560efc6b7bbc,
-  products: [
-    { _id: 5f47654cf712560efc6b7bbd, quantity: 1, product: [Object] },
-    { _id: 5f47654cf712560efc6b7bbe, quantity: 2, product: [Object] }
-  ],
-  created: 2020-08-27T07:48:28.757Z,
-  __v: 0
-} ; ;
-brojNarudbi==  ; ;
- ----------------------------exports.getIndex= undefined ; ;
-req.query= [object Object] ; ;
-Number(req.query.page)) = NaN ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-req.query.page= undefined ; ;
-!req.query.page= true ; ;
-numProducts= 8 ; ;
-Broj Zapisa= 8 ; ;
- ----------------------------exports.getIndex= undefined ; ;
-req.query= [object Object] ; ;
-Number(req.query.page)) = NaN ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-!req.query.page= true ; ;
-req.query.page= undefined ; ;
-numProducts= 8 ; ;
-Broj Zapisa= 8 ; ;
-Number(req.query.page)) = NaN ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-req.query= [object Object] ; ;
- ----------------------------exports.getIndex= undefined ; ;
-!req.query.page= true ; ;
-req.query.page= undefined ; ;
-Broj Zapisa= 8 ; ;
-numProducts= 8 ; ;
- ----------------------------exports.getIndex= undefined ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-req.query.page= undefined ; ;
-req.query= [object Object] ; ;
-Number(req.query.page)) = NaN ; ;
-!req.query.page= true ; ;
-Broj Zapisa= 8 ; ;
-numProducts= 8 ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b5161be6cd319a4bfdf71,
-  products: [ { _id: 5f4b5161be6cd319a4bfdf72, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T07:12:33.231Z,
-  createdAt: 2020-08-30T07:12:33.234Z,
-  updatedAt: 2020-08-30T07:12:33.234Z,
-  __v: 0
-} ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b5161be6cd319a4bfdf71,
-  products: [ { _id: 5f4b5161be6cd319a4bfdf72, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T07:12:33.231Z,
-  createdAt: 2020-08-30T07:12:33.234Z,
-  updatedAt: 2020-08-30T07:12:33.234Z,
-  __v: 0
-} ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4b5161be6cd319a4bfdf71,
-  products: [ { _id: 5f4b5161be6cd319a4bfdf72, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T07:12:33.231Z,
-  createdAt: 2020-08-30T07:12:33.234Z,
-  updatedAt: 2020-08-30T07:12:33.234Z,
-  __v: 0
-} ; ;
-brojNarudbi==  ; ;
-brojNarudbi==  ; ;
-brojNarudbi==  ; ;
-brojNarudbi==  ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4bc7c9d86f8328c85dce90,
-  products: [ { _id: 5f4bc7c9d86f8328c85dce91, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T15:37:45.195Z,
-  createdAt: 2020-08-30T15:37:45.197Z,
-  updatedAt: 2020-08-30T15:37:45.197Z,
-  __v: 0
-} ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4bc7c9d86f8328c85dce90,
-  products: [ { _id: 5f4bc7c9d86f8328c85dce91, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T15:37:45.195Z,
-  createdAt: 2020-08-30T15:37:45.197Z,
-  updatedAt: 2020-08-30T15:37:45.197Z,
-  __v: 0
-},{
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4bc7e9d86f8328c85dce93,
-  products: [ { _id: 5f4bc7e9d86f8328c85dce94, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T15:38:17.522Z,
-  createdAt: 2020-08-30T15:38:17.523Z,
-  updatedAt: 2020-08-30T15:38:17.523Z,
-  __v: 0
-} ; ;
-brojNarudbi== {
-  user: { email: 'test02@mailsac.com', userId: 5f460c00f80a8b40f42ecc02 },
-  _id: 5f4bc7c9d86f8328c85dce90,
-  products: [ { _id: 5f4bc7c9d86f8328c85dce91, quantity: 1, product: [Object] } ],
-  created: 2020-08-30T15:37:45.195Z,
-  createdAt: 2020-08-30T15:37:45.197Z,
-  updatedAt: 2020-08-30T15:37:45.197Z,
-  __v: 0
-} ; ;
-brojNarudbi==  ; ;
-Number(req.query.page)) = NaN ; ;
- ----------------------------exports.getIndex= undefined ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-req.query= [object Object] ; ;
-req.query.page= undefined ; ;
-!req.query.page= true ; ;
-numProducts= 8 ; ;
-Broj Zapisa= 8 ; ;
-req.query= [object Object] ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
-!req.query.page= false ; ;
 Number(req.query.page)) = 2 ; ;
- ----------------------------exports.getIndex= undefined ; ;
+req.query= [object Object] ; ;
 req.query.page= 2 ; ;
-numProducts= 8 ; ;
-Broj Zapisa= 8 ; ;
+!req.query.page= false ; ;
+numProducts= 6 ; ;
+Broj Zapisa= 6 ; ;
  ----------------------------exports.getIndex= undefined ; ;
+req.query= [object Object] ; ;
+npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
+Number(req.query.page)) = NaN ; ;
+!req.query.page= true ; ;
+req.query.page= undefined ; ;
+Broj Zapisa= 6 ; ;
+numProducts= 6 ; ;
+ ----------------------------exports.getIndex= undefined ; ;
+req.query= [object Object] ; ;
+npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
+Number(req.query.page)) = NaN ; ;
+req.query.page= undefined ; ;
+!req.query.page= true ; ;
+numProducts= 7 ; ;
+Broj Zapisa= 7 ; ;
+ ----------------------------exports.getIndex= undefined ; ;
+Number(req.query.page)) = 2 ; ;
 npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
 !req.query.page= false ; ;
+req.query= [object Object] ; ;
+req.query.page= 2 ; ;
+numProducts= 7 ; ;
+Broj Zapisa= 7 ; ;
+ ----------------------------exports.getIndex= undefined ; ;
+npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
+req.query= [object Object] ; ;
 Number(req.query.page)) = 3 ; ;
 req.query.page= 3 ; ;
-req.query= [object Object] ; ;
-numProducts= 8 ; ;
-Broj Zapisa= 8 ; ;
- ----------------------------exports.getIndex= undefined ; ;
-req.query= [object Object] ; ;
-Number(req.query.page)) = 4 ; ;
-npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
 !req.query.page= false ; ;
-req.query.page= 4 ; ;
-numProducts= 8 ; ;
-Broj Zapisa= 8 ; ;
+Broj Zapisa= 7 ; ;
+numProducts= 7 ; ;
+npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
+req.query= [object Object] ; ;
+ ----------------------------exports.getIndex= undefined ; ;
+Number(req.query.page)) = 2 ; ;
+req.query.page= 2 ; ;
+!req.query.page= false ; ;
+numProducts= 7 ; ;
+Broj Zapisa= 7 ; ;
+ ----------------------------exports.getIndex= undefined ; ;
+npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
+Number(req.query.page)) = NaN ; ;
+req.query= [object Object] ; ;
+req.query.page= undefined ; ;
+!req.query.page= true ; ;
+Broj Zapisa= 7 ; ;
+numProducts= 7 ; ;
+ ----------------------------exports.getIndex= undefined ; ;
+npr. http://localhost:5500/?page=1  upitnik u linku predstavlja oznaku query..= undefined ; ;
+Number(req.query.page)) = NaN ; ;
+req.query= [object Object] ; ;
+!req.query.page= true ; ;
+req.query.page= undefined ; ;
+numProducts= 7 ; ;
+Broj Zapisa= 7 ; ;
+brojNarudbi==  ; ;
+brojNarudbi==  ; ;
+brojNarudbi== {
+  user: { email: 'alen@mailsac.com', userId: 5fa2fb4954f4750868587097 },
+  _id: 5fa2fbb654f475086858709a,
+  products: [
+    { _id: 5fa2fbb654f475086858709b, quantity: 1, product: [Object] },
+    { _id: 5fa2fbb654f475086858709c, quantity: 1, product: [Object] }
+  ],
+  created: 2020-11-04T19:06:30.025Z,
+  createdAt: 2020-11-04T19:06:30.027Z,
+  updatedAt: 2020-11-04T19:06:30.027Z,
+  __v: 0
+} ; ;

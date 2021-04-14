@@ -1,19 +1,26 @@
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
+const sgMail = require('@sendgrid/mail');
 const { validationResult } = require('express-validator');
 const sgTransport = require('nodemailer-sendgrid-transport');
 
 const User = require('../models/userModel');
 
+
+
+
 // TRANSPORTER SENDGRID setup
 // const transporter = nodemailer.createTransport(
 //   sgTransport({
 //     auth: {
-//       api_key: process.env.API_KEY_SENDGRID,
+//       api_key: process.env.SENDGRID_API_KEY_HEROKU,
 //     },
 //   })
 // );
+
+// postavka za sendgrid
+sgMail.setApiKey(process.env.SENDGRID_API_KEY_HEROKU);
 
 //
 // TRANSPORTER MAILTRAP setup
@@ -196,6 +203,7 @@ exports.postSignup = (req, res, next) => {
         })
         .then((result) => {
           res.redirect('/auth/login');
+
           return transporter.sendMail({
             from: 'skupnjaka@gmail.com', // sender address
             to: email, // list of receivers
@@ -203,6 +211,8 @@ exports.postSignup = (req, res, next) => {
             text: 'Hello world?', // plain text body
             html: '<p>Uspjesna prijava novog korisnika</p>', // html body
           });
+
+
         })
         .catch((err) => {
           const error = new Error(err);
@@ -268,15 +278,26 @@ exports.postReset = (req, res, next) => {
         console.log('user:'.red, user, 'req.body.email'.red, req.body.email);
 
         res.redirect('/');
-        return transporter.sendMail({
-          from: 'skupnjaka@gmail.com', // sender address
-          to: req.body.email, // list of receivers
-          subject: 'Password reset za aplikaciju Online Shop', // Subject line
-          text: 'Resetiraj password?', // plain text body
+
+        // return transporter.sendMail({
+        //   from: 'skupnjaka@gmail.com', // sender address
+        //   to: req.body.email, // list of receivers
+        //   subject: 'Password reset za aplikaciju Online Shop', // Subject line
+        //   text: 'Resetiraj password?', // plain text body
+          // html: `<p>Resetiraj password<p>
+          //       <p>Klikni <a href="${req.protocol}:${req.get('host')}/auth/new-password/${token}">link</a><p>
+          // `, // html body
+        // });
+
+        const msg = {
+          to: req.body.email,
+          from: 'skupnjaka@gmail.com',
+          subject: 'Password reset za aplikaciju Online Shop',
+          text: 'Resetiraj password',
           html: `<p>Resetiraj password<p>
-                <p>Klikni <a href="${req.protocol}:${req.get('host')}/auth/new-password/${token}">link</a><p>
-          `, // html body
-        });
+          <p>Klikni <a href="${req.protocol}:${req.get('host')}/auth/new-password/${token}">link</a><p>`
+        };
+        return sgMail.send(msg);
       })
       .catch((err) => {
         const error = new Error(err);

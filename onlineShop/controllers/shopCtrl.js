@@ -273,7 +273,7 @@ exports.getInvoice = (req, res, next) => {
         return next(new Error('Neautoriziran za gledanje'));
       }
 
-      // file sekcija
+      // Kreiranje PDF dokumenta
       const invoiceName = 'invoice-' + orderId + '.pdf';
       const invoicePath = path.join('invoices', invoiceName);
 

@@ -223,7 +223,7 @@ exports.postDeleteProduct = (req, res, next) => {
       if (!product) {
         return next(new Error('Product not found'));
       }
-      
+      console.log('product.image=',product.image);
       // brisanje file
       fileHelper.deleteFile(product.image);
       return BiloKojeImeProduct.deleteOne({
@@ -249,9 +249,13 @@ exports.deleteProduct = (req, res, next) => {
   const prodId = req.params.productId;
   BiloKojeImeProduct.findById(prodId)
     .then((product) => {
+      console.log('------------------------');
+      
       if (!product) {
         return next(new Error('Product not found'));
       }
+      console.log('product.image=',product.image);
+      
       fileHelper.deleteFile(product.image);
       return BiloKojeImeProduct.deleteOne({
         _id: prodId,

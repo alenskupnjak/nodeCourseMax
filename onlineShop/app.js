@@ -40,6 +40,8 @@ const csrfProtection = csrf();
 // compress all responses
 app.use(compression());
 
+//
+// MULER MULTER
 // za spremanje fileova
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -54,7 +56,7 @@ const fileStorage = multer.diskStorage({
   },
 });
 
-// filtriramo ectentije slika koje mozemo koristiti u programu
+// filtriramo extenzije slika koje mozemo koristiti u programu
 const fileFilter = (req, file, cb) => {
   if (
     file.mimetype === 'image/png' ||
@@ -67,6 +69,8 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
+
+//
 // definiranje session veze u bazi, constructor
 let store = new MongoDBStore({
   uri: process.env.SHOP_DATABASE_MONGOOSE,
@@ -132,7 +136,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// ako smo logirani kreiramo User.model za pozrebe razvoja programa
+// ako smo logirani kreiramo User.model za potrebe razvoja programa
 app.use((req, res, next) => {
   // ako korisnik NIJE logiran preskače kreiranje usera
   if (!req.session.user) {
